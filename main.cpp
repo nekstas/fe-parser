@@ -1,6 +1,6 @@
 #include "app/application.h"
 
-int main() {
-    Application app;
+int main(int argc, char** argv) {
+    Application app(argc, argv);
     return app.Run();
 }
