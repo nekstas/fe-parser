@@ -4,7 +4,5 @@ class Application {
 public:
     Application() = default;
 
-    int32_t Run() {
-        return 0;
-    }
+    int32_t Run();
 };

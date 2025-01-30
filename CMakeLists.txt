@@ -5,4 +5,6 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(fe_parser main.cpp
         app/application.cpp
-        app/application.h)
+        app/application.h
+        core/tokenizer/tokenizer.cpp
+        core/tokenizer/tokenizer.h)
