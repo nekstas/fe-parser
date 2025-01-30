@@ -1,6 +1,6 @@
 #pragma once
 #include "../token_types.h"
-#include "base_token.h"
+#include "abstract_token.h"
 
 enum class OperatorType {
     PLUS,
@@ -10,7 +10,7 @@ enum class OperatorType {
     POWER
 };
 
-struct OperatorToken : public BaseToken {
+struct OperatorToken : public AbstractToken {
 public:
     TokenType GetType() const override {
         return TokenType::OPERATOR;

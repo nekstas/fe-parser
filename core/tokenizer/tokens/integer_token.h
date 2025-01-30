@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 
-#include "base_token.h"
+#include "abstract_token.h"
 
-struct IntegerToken : public BaseToken {
+struct IntegerToken : public AbstractToken {
 public:
     std::string number;
 

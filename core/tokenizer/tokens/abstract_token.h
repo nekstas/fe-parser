@@ -1,9 +1,9 @@
 #pragma once
 #include "../token_types.h"
 
-struct BaseToken {
+struct AbstractToken {
 public:
-    virtual ~BaseToken() {
+    virtual ~AbstractToken() {
     }
 
     virtual TokenType GetType() const = 0;
