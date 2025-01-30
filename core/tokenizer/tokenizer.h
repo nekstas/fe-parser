@@ -1,8 +1,11 @@
+#pragma once
+#include <memory>
 #include <vector>
 
-struct TokenType {};
+#include "tokens/base_token.h"
 
-using Tokens = std::vector<TokenType>;
+using Token = std::shared_ptr<BaseToken>;
+using Tokens = std::vector<Token>;
 
 class Tokenizer {
 public:
