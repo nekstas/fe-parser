@@ -14,4 +14,15 @@ add_executable(fe_parser main.cpp
         core/tokenizer/token_types.h
         utils/istream.cpp
         utils/istream.h
+        core/tokenizer/parsers/abstract_parser.h
+        core/tokenizer/tokenizer_context.h
+        core/tokenizer/tokenizer_factory.cpp
+        core/tokenizer/tokenizer_factory.h
+        core/tokenizer/parsers/integer_parser.cpp
+        core/tokenizer/parsers/integer_parser.h
+        core/tokenizer/parsers/non_empty_parser.cpp
+        core/tokenizer/parsers/non_empty_parser.h
+        utils/utils.cpp
+        utils/utils.h
+        utils/FormatStream.h
 )
