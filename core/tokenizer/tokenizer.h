@@ -3,14 +3,20 @@
 #include <vector>
 
 #include "../../utils/istream.h"
+#include "parsers/abstract_parser.h"
 #include "tokens/abstract_token.h"
 
-using Token = std::shared_ptr<AbstractToken>;
 using Tokens = std::vector<Token>;
 
 class Tokenizer {
 public:
     Tokenizer(std::istream& input);
+
+    template <typename Parser>
+    void AddParser() {
+        parsers_.push_back(std::make_unique<Parser>());
+    }
+
 
     Tokens Tokenize();
 
@@ -18,4 +24,6 @@ public:
 
 private:
     IStream input_;
+    TokenizerContext context_;
+    std::vector<TokenizerParser> parsers_;
 };
