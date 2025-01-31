@@ -4,7 +4,6 @@
 
 std::optional<Token> IntegerParser::TryParse(IStream& stream) const {
     std::string number_str;
-    number_str.push_back(stream.Get());
     while (IsNumberSymbol(stream.Peek())) {
         number_str.push_back(stream.Get());
     }
