@@ -1,13 +1,23 @@
 #pragma once
 #include <string>
 
+#include "../../../utils/FormatStream.h"
 #include "abstract_token.h"
 
 struct IntegerToken : public AbstractToken {
 public:
-    std::string number;
+    IntegerToken(const std::string& number) : number_(number) {
+    }
 
+public:
     TokenType GetType() const override {
         return TokenType::INTEGER;
     }
+
+    std::string ToString() const override {
+        return FormatStream() << "Integer {" << number_ << "}";
+    }
+
+private:
+    std::string number_;
 };
