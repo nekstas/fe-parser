@@ -26,3 +26,6 @@ void IStream::Ignore() {
     stream_.ignore();
 }
 
+void IStream::Skip(size_t rel_pos) {
+    stream_.seekg(rel_pos, std::ios::cur);
+}

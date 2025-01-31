@@ -16,6 +16,8 @@ public:
 
     void Ignore();
 
+    void Skip(size_t rel_pos);
+
 private:
     std::istream& stream_;
 };
