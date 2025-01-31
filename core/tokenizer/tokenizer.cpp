@@ -4,21 +4,28 @@ Tokenizer::Tokenizer(std::istream& input) : input_(input) {
 }
 
 Tokens Tokenizer::Tokenize() {
-    for (const auto& parser : parsers_) {
-        if (!parser->IsActive(context_)) {
-            continue;
-        }
+    Tokens tokens;
 
-        std::optional<Token> token = parser->TryParse(input_);
-        if (!token.has_value()) {
-            continue;
+    while (!IsEnd()) {
+        std::optional<Token> token = std::nullopt;
+
+        for (const auto& parser : parsers_) {
+            if (!parser->IsActive(context_)) {
+                continue;
+            }
+
+            token = parser->TryParse(input_);
+            if (token.has_value()) {
+                parser->ChangeContext(context_);
+                break;
+            }
         }
 
         std::cerr << "Token: " << token.value() << "\n";
-        parser->ChangeContext(context_);
+        tokens.push_back(token.value());
     }
 
-    return Tokens();
+    return tokens;
 }
 
 bool Tokenizer::IsEnd() {
