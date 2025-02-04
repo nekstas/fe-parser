@@ -8,6 +8,9 @@ enum class OperatorType { PLUS, MINUS, MULTIPLY, DIVIDE, POWER };
 
 struct OperatorToken : public AbstractToken {
 public:
+    using SubType = OperatorType;
+
+public:
     OperatorToken(OperatorType type) : type_(type) {
     }
 
