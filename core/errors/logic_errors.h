@@ -2,6 +2,14 @@
 
 #include <stdexcept>
 
-class UnknownOperatorType : public std::logic_error {
+class UnknownTokenSubType : public std::logic_error {
     using std::logic_error::logic_error;
+};
+
+class UnknownOperatorType : public UnknownTokenSubType {
+    using UnknownTokenSubType::UnknownTokenSubType;
+};
+
+class UnknownIndentType : public UnknownTokenSubType {
+    using UnknownTokenSubType::UnknownTokenSubType;
 };
