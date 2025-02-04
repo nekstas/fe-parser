@@ -8,5 +8,3 @@ public:
 
     virtual void ChangeContext(TokenizerContext& context) const override;
 };
-
-using TokenizerParser = std::unique_ptr<AbstractParser>;
