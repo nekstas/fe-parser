@@ -21,6 +21,16 @@ Tokens Tokenizer::Tokenize() {
             }
         }
 
+        if (!token.has_value()) {
+            std::cerr << "No token.\n";
+            // TODO: throw something
+            break;
+        }
+
+        if (!token.value()) {
+            continue;
+        }
+
         std::cerr << "Token: " << token.value() << "\n";
         tokens.push_back(token.value());
     }

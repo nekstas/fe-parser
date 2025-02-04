@@ -8,4 +8,7 @@ public:
     Tokenizer Create(std::istream& input) const;
 
 private:
+    void AddOperatorParsers(Tokenizer& tokenizer) const;
+
+    void AddIndentParsers(Tokenizer& tokenizer) const;
 };

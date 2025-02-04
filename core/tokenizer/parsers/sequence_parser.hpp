@@ -2,19 +2,19 @@
 #include "../tokens/operator_token.h"
 #include "non_empty_parser.h"
 
-template <OperatorType type>
-class OperatorParser : public NonEmptyParser {
+template <typename ParentParser, typename TokenT, TokenT::SubType type>
+class SequenceParser : public ParentParser {
 private:
-    static constexpr std::string kOperatorString = OperatorToken::TypeToString(type);
+    static constexpr std::string kSequenceString = TokenT::TypeToString(type);
 
 public:
     virtual std::optional<Token> TryParse(IStream& stream) const override {
-        if (!CheckMatch(stream, kOperatorString)) {
+        if (!CheckMatch(stream, kSequenceString)) {
             return std::nullopt;
         }
-        stream.Skip(kOperatorString.size());
 
-        return MakeToken<OperatorToken>(type);
+        stream.Skip(kSequenceString.size());
+        return MakeToken<TokenT>(type);
     }
 
 private:
@@ -24,7 +24,6 @@ private:
                 return false;
             }
         }
-
         return true;
     }
 };

@@ -1,15 +1,27 @@
-#include "tokenizer_factory.h"
+#include "tokenizer_creator.h"
 
 #include "parsers/integer_parser.h"
-#include "parsers/operator_parser.hpp"
+#include "parsers/sequence_parsers.h"
+#include "parsers/space_parser.h"
 
 Tokenizer TokenizerCreator::Create(std::istream& input) const {
     Tokenizer tokenizer = Tokenizer(input);
     tokenizer.AddParser<IntegerParser>();
+    tokenizer.AddParser<SpaceParser>();
+    AddIndentParsers(tokenizer);
+    AddOperatorParsers(tokenizer);
+    return tokenizer;
+}
+
+void TokenizerCreator::AddOperatorParsers(Tokenizer& tokenizer) const {
     tokenizer.AddParser<OperatorParser<OperatorType::PLUS>>();
     tokenizer.AddParser<OperatorParser<OperatorType::MINUS>>();
     tokenizer.AddParser<OperatorParser<OperatorType::MULTIPLY>>();
     tokenizer.AddParser<OperatorParser<OperatorType::DIVIDE>>();
     tokenizer.AddParser<OperatorParser<OperatorType::POWER>>();
-    return tokenizer;
+}
+
+void TokenizerCreator::AddIndentParsers(Tokenizer& tokenizer) const {
+    tokenizer.AddParser<IndentParser<IndentType::SPACE>>();
+    tokenizer.AddParser<IndentParser<IndentType::TAB>>();
 }

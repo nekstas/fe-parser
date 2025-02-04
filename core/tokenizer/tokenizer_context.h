@@ -1,5 +1,5 @@
 #pragma once
 
 struct TokenizerContext {
-    bool is_indent;
+    bool is_indent = true;
 };

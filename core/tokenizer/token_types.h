@@ -2,5 +2,6 @@
 
 enum class TokenType {
     INTEGER,
-    OPERATOR
+    OPERATOR,
+    INDENT
 };
