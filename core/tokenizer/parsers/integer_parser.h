@@ -9,5 +9,5 @@ public:
     virtual std::optional<Token> TryParse(IStream& stream) const override;
 
 private:
-    bool IsNumberSymbol(int c) const;
+    bool IsNumberSymbol(int32_t c) const;
 };

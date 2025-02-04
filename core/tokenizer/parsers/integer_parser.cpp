@@ -14,6 +14,6 @@ std::optional<Token> IntegerParser::TryParse(IStream& stream) const {
     return MakeToken<IntegerToken>(number_str);
 }
 
-bool IntegerParser::IsNumberSymbol(int c) const {
+bool IntegerParser::IsNumberSymbol(int32_t c) const {
     return std::isdigit(c);
 }
