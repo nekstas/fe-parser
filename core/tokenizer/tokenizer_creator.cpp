@@ -2,12 +2,10 @@
 
 #include "parsers/integer_parser.h"
 #include "parsers/sequence_parsers.h"
-#include "parsers/space_parser.h"
 
 Tokenizer TokenizerCreator::Create(std::istream& input) const {
     Tokenizer tokenizer = Tokenizer(input);
     tokenizer.AddParser<IntegerParser>();
-    tokenizer.AddParser<SpaceParser>();
     AddIndentParsers(tokenizer);
     AddOperatorParsers(tokenizer);
     return tokenizer;

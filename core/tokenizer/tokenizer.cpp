@@ -10,13 +10,8 @@ Tokens Tokenizer::Tokenize() {
         std::optional<Token> token = std::nullopt;
 
         for (const auto& parser : parsers_) {
-            if (!parser->IsActive(context_)) {
-                continue;
-            }
-
             token = parser->TryParse(input_);
             if (token.has_value()) {
-                parser->ChangeContext(context_);
                 break;
             }
         }

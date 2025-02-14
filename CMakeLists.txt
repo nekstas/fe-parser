@@ -15,13 +15,10 @@ add_executable(fe_parser main.cpp
         utils/istream.cpp
         utils/istream.h
         core/tokenizer/parsers/abstract_parser.h
-        core/tokenizer/tokenizer_context.h
         core/tokenizer/tokenizer_creator.cpp
         core/tokenizer/tokenizer_creator.h
         core/tokenizer/parsers/integer_parser.cpp
         core/tokenizer/parsers/integer_parser.h
-        core/tokenizer/parsers/non_empty_parser.cpp
-        core/tokenizer/parsers/non_empty_parser.h
         utils/utils.cpp
         utils/utils.h
         utils/FormatStream.h
@@ -29,8 +26,4 @@ add_executable(fe_parser main.cpp
         core/errors/logic_errors.h
         core/tokenizer/tokens/indent_token.h
         core/tokenizer/parsers/sequence_parsers.h
-        core/tokenizer/parsers/empty_parser.h
-        core/tokenizer/parsers/empty_parser.cpp
-        core/tokenizer/parsers/space_parser.cpp
-        core/tokenizer/parsers/space_parser.h
 )

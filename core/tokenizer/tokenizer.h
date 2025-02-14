@@ -24,6 +24,5 @@ public:
 
 private:
     IStream input_;
-    TokenizerContext context_;
     std::vector<TokenizerParser> parsers_;
 };

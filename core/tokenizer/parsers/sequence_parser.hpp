@@ -1,9 +1,9 @@
 #pragma once
 #include "../tokens/operator_token.h"
-#include "non_empty_parser.h"
+#include "abstract_parser.h"
 
-template <typename ParentParser, typename TokenT, TokenT::SubType type>
-class SequenceParser : public ParentParser {
+template <typename TokenT, TokenT::SubType type>
+class SequenceParser : public AbstractParser {
 private:
     static constexpr std::string kSequenceString = TokenT::TypeToString(type);
 
