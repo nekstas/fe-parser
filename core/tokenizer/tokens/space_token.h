@@ -9,12 +9,12 @@
 
 enum class IndentType { SPACE, TAB };
 
-struct IndentToken : public AbstractToken {
+struct SpaceToken : public AbstractToken {
 public:
     using SubType = IndentType;
 
 public:
-    IndentToken(IndentType type) : type_(type) {
+    SpaceToken(IndentType type) : type_(type) {
     }
 
 public:

@@ -20,6 +20,6 @@ void TokenizerCreator::AddOperatorParsers(Tokenizer& tokenizer) const {
 }
 
 void TokenizerCreator::AddIndentParsers(Tokenizer& tokenizer) const {
-    tokenizer.AddParser<IndentParser<IndentType::SPACE>>();
-    tokenizer.AddParser<IndentParser<IndentType::TAB>>();
+    tokenizer.AddParser<SpaceParser<IndentType::SPACE>>();
+    tokenizer.AddParser<SpaceParser<IndentType::TAB>>();
 }
