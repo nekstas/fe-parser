@@ -8,7 +8,7 @@ private:
     static constexpr std::string kSequenceString = TokenT::TypeToString(type);
 
 public:
-    virtual std::optional<Token> TryParse(IStream& stream) const override {
+    virtual std::optional<Token> TryParse(CodeStream& stream) const override {
         if (!CheckMatch(stream, kSequenceString)) {
             return std::nullopt;
         }
@@ -18,7 +18,7 @@ public:
     }
 
 private:
-    bool CheckMatch(IStream& stream, const std::string substr) const {
+    bool CheckMatch(CodeStream& stream, const std::string substr) const {
         for (size_t i = 0; i < substr.size(); ++i) {
             if (stream.Peek(i) != substr[i]) {
                 return false;

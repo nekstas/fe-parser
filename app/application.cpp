@@ -14,8 +14,8 @@ Application::Application(size_t argc, char **argv) {
 }
 
 int32_t Application::Run() {
-    std::stringstream input_code("  \t2 + 2 * 2\t");
-    Tokenizer tokenizer = TokenizerCreator().Create(input_code);
+    code_ = std::string{"  \t2 + 2 * 2\t"};
+    Tokenizer tokenizer = TokenizerCreator().Create(code_);
     Tokens tokens = tokenizer.Tokenize();
     return 0;
 }

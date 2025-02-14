@@ -5,7 +5,7 @@ class TokenizerCreator {
 public:
     TokenizerCreator() = default;
 
-    Tokenizer Create(std::istream& input) const;
+    Tokenizer Create(const std::string& code) const;
 
 private:
     void AddOperatorParsers(Tokenizer& tokenizer) const;

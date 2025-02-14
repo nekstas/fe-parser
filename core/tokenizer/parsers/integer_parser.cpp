@@ -2,7 +2,7 @@
 
 #include "../tokens/integer_token.h"
 
-std::optional<Token> IntegerParser::TryParse(IStream& stream) const {
+std::optional<Token> IntegerParser::TryParse(CodeStream& stream) const {
     std::string number_str;
     while (IsNumberSymbol(stream.Peek())) {
         number_str.push_back(stream.Get());

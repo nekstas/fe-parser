@@ -1,6 +1,6 @@
 #include "tokenizer.h"
 
-Tokenizer::Tokenizer(std::istream& input) : input_(input) {
+Tokenizer::Tokenizer(const CodeStream& input) : input_(input) {
 }
 
 Tokens Tokenizer::Tokenize() {

@@ -3,8 +3,8 @@
 #include "parsers/integer_parser.h"
 #include "parsers/sequence_parsers.h"
 
-Tokenizer TokenizerCreator::Create(std::istream& input) const {
-    Tokenizer tokenizer = Tokenizer(input);
+Tokenizer TokenizerCreator::Create(const std::string& code) const {
+    Tokenizer tokenizer{CodeStream(code)};
     tokenizer.AddParser<IntegerParser>();
     AddIndentParsers(tokenizer);
     AddOperatorParsers(tokenizer);
