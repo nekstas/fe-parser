@@ -24,6 +24,6 @@ add_executable(fe_parser main.cpp
         utils/FormatStream.h
         core/errors/syntax_errors.h
         core/errors/logic_errors.h
-        core/tokenizer/tokens/indent_token.h
+        core/tokenizer/tokens/space_token.h
         core/tokenizer/parsers/sequence_parsers.h
 )
