@@ -8,7 +8,7 @@ public:
     virtual ~AbstractParser() {
     }
 
-    virtual std::optional<Token> TryParse(CodeStream &stream) const = 0;
+    virtual Token TryParse(CodeStream &stream) const = 0;
 };
 
 using TokenizerParser = std::unique_ptr<AbstractParser>;

@@ -14,14 +14,20 @@ class Tokenizer {
 public:
     Tokenizer(const CodeStream& input);
 
-    template <typename Parser>
-    void AddParser() {
-        parsers_.push_back(std::make_unique<Parser>());
-    }
-
     Tokens Tokenize();
 
     bool IsEnd();
+
+private:
+    friend class TokenizerCreator;
+
+    template <typename Parser, typename... Args>
+    Parser* AddParser(Args&&... args) {
+        auto parser = std::make_unique<Parser>(std::forward<Args>(args)...);
+        auto parser_ptr = parser.get();
+        parsers_.push_back(std::move(parser));
+        return parser_ptr;
+    }
 
 private:
     CodeStream input_;

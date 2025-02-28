@@ -7,27 +7,23 @@ Tokens Tokenizer::Tokenize() {
     Tokens tokens;
 
     while (!IsEnd()) {
-        std::optional<Token> token = std::nullopt;
+        Token token{};
 
         for (const auto& parser : parsers_) {
             token = parser->TryParse(input_);
-            if (token.has_value()) {
+            if (token) {
                 break;
             }
         }
 
-        if (!token.has_value()) {
+        if (!token) {
             std::cerr << "No token.\n";
             // TODO: throw something
             break;
         }
 
-        if (!token.value()) {
-            continue;
-        }
-
-        std::cerr << "Token: " << token.value() << "\n";
-        tokens.push_back(token.value());
+        std::cerr << "Token: " << token->ToString() << "\n";
+        tokens.push_back(token);
     }
 
     return tokens;
