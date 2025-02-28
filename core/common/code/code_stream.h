@@ -23,6 +23,6 @@ private:
 
 private:
     const std::string &code_;
-    size_t pos_;
+    size_t pos_ = 0;
 };
 
