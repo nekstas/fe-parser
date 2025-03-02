@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../../../utils/utils.h"
 #include "../../common/code/code_stream.h"
 #include "abstract_parser.h"
 
@@ -10,5 +9,5 @@ public:
     virtual Token TryParse(CodeStream &stream) const override;
 
 private:
-    bool IsNumberSymbol(int32_t c) const;
+    bool IsNumberSymbol(char c) const;
 };

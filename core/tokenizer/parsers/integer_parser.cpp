@@ -14,6 +14,6 @@ Token IntegerParser::TryParse(CodeStream& stream) const {
     return MakeToken<IntegerToken>(number_str);
 }
 
-bool IntegerParser::IsNumberSymbol(int32_t c) const {
+bool IntegerParser::IsNumberSymbol(char c) const {
     return std::isdigit(c);
 }

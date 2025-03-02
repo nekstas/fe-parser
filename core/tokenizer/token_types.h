@@ -1,3 +1,3 @@
 #pragma once
 
-enum class TokenType { INTEGER, OPERATOR, INDENT, NEW_LINE };
+enum class TokenType { INTEGER, NAME, OPERATOR, INDENT, NEW_LINE };
