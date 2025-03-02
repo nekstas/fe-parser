@@ -19,9 +19,7 @@ Tokens Tokenizer::Tokenize() {
         }
 
         if (!token) {
-            std::cerr << "No token.\n";
-            // TODO: throw something
-            break;
+            throw TokenizerUnknownSequence{input_.GetPos(), input_.Peek()};
         }
 
         std::cerr << "Token: " << token->ToString() << "\n";

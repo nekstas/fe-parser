@@ -4,8 +4,11 @@
 #include <string>
 
 #include "../../../utils/FormatStream.h"
-#include "../../errors/logic_errors.h"
 #include "abstract_token.h"
+
+class UnknownIndentType : public std::logic_error {
+    using std::logic_error::logic_error;
+};
 
 enum class IndentType { SPACE, TAB };
 

@@ -3,10 +3,20 @@
 #include <memory>
 #include <vector>
 
+#include "../../utils/FormatStream.h"
 #include "../../utils/istream.h"
 #include "../common/code/code_stream.h"
 #include "parsers/abstract_parser.h"
 #include "tokens/abstract_token.h"
+
+class TokenizerUnknownSequence : public std::runtime_error {
+public:
+    // TODO: add more information here.
+    TokenizerUnknownSequence(size_t pos, char ch)
+        : std::runtime_error{FormatStream() << "Unknown char or sequence of chars. Pos: " << pos
+                                            << ", char: " << ch << "\n"} {
+    }
+};
 
 using Tokens = std::vector<Token>;
 

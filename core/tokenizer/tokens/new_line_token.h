@@ -4,7 +4,6 @@
 #include <string>
 
 #include "../../../utils/FormatStream.h"
-#include "../../errors/logic_errors.h"
 #include "abstract_token.h"
 
 struct NewLineToken : public AbstractToken {
