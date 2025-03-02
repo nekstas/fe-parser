@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tokenizer.h"
+
 class TokenizerCreator {
 public:
     TokenizerCreator() = default;
@@ -8,7 +9,7 @@ public:
     Tokenizer Create(const std::string& code) const;
 
 private:
-    void AddOperatorParsers(Tokenizer& tokenizer) const;
+    void AddOperatorParser(Tokenizer& tokenizer) const;
 
     void AddIndentParsers(Tokenizer& tokenizer) const;
 };

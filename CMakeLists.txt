@@ -28,4 +28,7 @@ add_executable(fe_parser main.cpp
         core/tokenizer/parsers/sequence_parsers.h
         core/common/code/code_stream.cpp
         core/common/code/code_stream.h
+        core/tokenizer/parsers/operator_parser.cpp
+        core/tokenizer/parsers/operator_parser.h
+        core/algo/search_set.hpp
 )

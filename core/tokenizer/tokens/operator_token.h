@@ -4,44 +4,23 @@
 #include "../token_types.h"
 #include "abstract_token.h"
 
-enum class OperatorType { PLUS, MINUS, MULTIPLY, DIVIDE, POWER };
-
 struct OperatorToken : public AbstractToken {
 public:
-    using SubType = OperatorType;
-
-public:
-    OperatorToken(OperatorType type) : type_(type) {
+    OperatorToken(const std::string& code) : code_(code) {
     }
 
     TokenType GetType() const override {
         return TokenType::OPERATOR;
     }
 
-    std::string ToString() const override {
-        return FormatStream() << "Operator {" << TypeToString(type_) << "}";
+    std::string GetCode() const {
+        return code_;
     }
 
-public:
-    static constexpr std::string TypeToString(OperatorType type) {
-        switch (type) {
-            case OperatorType::PLUS:
-                return "+";
-            case OperatorType::MINUS:
-                return "-";
-            case OperatorType::MULTIPLY:
-                return "*";
-            case OperatorType::DIVIDE:
-                return "/";
-            case OperatorType::POWER:
-                return "^";
-            default:
-                throw UnknownOperatorType{
-                    FormatStream() << "There is not string representation for operator type ["
-                                   << static_cast<size_t>(type) << "]"};
-        }
+    std::string ToString() const override {
+        return FormatStream() << "Operator {" << code_ << "}";
     }
 
 private:
-    OperatorType type_;
+    std::string code_;
 };
