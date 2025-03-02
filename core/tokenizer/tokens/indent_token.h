@@ -9,12 +9,13 @@
 
 enum class IndentType { SPACE, TAB };
 
-struct SpaceToken : public AbstractToken {
+struct IndentToken : public AbstractToken {
 public:
-    using SubType = IndentType;
+    static constexpr char kSpaceChar = ' ';
+    static constexpr char kTabChar = '\t';
 
 public:
-    SpaceToken(IndentType type) : type_(type) {
+    IndentToken(IndentType type) : type_(type) {
     }
 
 public:
@@ -27,12 +28,12 @@ public:
     }
 
 public:
-    static constexpr std::string TypeToString(IndentType type) {
+    static constexpr char TypeToChar(IndentType type) {
         switch (type) {
             case IndentType::SPACE:
-                return " ";
+                return kSpaceChar;
             case IndentType::TAB:
-                return "\t";
+                return kTabChar;
             default:
                 throw UnknownIndentType{FormatStream() << "There is not a char for indent type ["
                                                        << static_cast<size_t>(type) << "]"};

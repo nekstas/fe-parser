@@ -7,11 +7,11 @@ class CodeStream {
 public:
     CodeStream(const std::string &code);
 
-    bool Eof();
+    bool Eof() const;
 
-    char Peek();
+    char Peek() const;
 
-    char Peek(size_t offset);
+    char Peek(size_t offset) const;
 
     char Get();
 
@@ -19,7 +19,9 @@ public:
 
     void Skip(size_t offset);
 
-private:
+    size_t GetPos() const;
+
+    void Restore(size_t pos);
 
 private:
     const std::string &code_;

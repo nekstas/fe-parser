@@ -8,12 +8,14 @@ Tokens Tokenizer::Tokenize() {
 
     while (!IsEnd()) {
         Token token{};
+        size_t saved_pos = input_.GetPos();
 
         for (const auto& parser : parsers_) {
             token = parser->TryParse(input_);
             if (token) {
                 break;
             }
+            input_.Restore(saved_pos);
         }
 
         if (!token) {

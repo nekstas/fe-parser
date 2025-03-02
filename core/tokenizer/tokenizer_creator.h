@@ -10,6 +10,4 @@ public:
 
 private:
     void AddOperatorParser(Tokenizer& tokenizer) const;
-
-    void AddIndentParsers(Tokenizer& tokenizer) const;
 };

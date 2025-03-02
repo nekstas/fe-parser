@@ -24,11 +24,11 @@ add_executable(fe_parser main.cpp
         utils/FormatStream.h
         core/errors/syntax_errors.h
         core/errors/logic_errors.h
-        core/tokenizer/tokens/space_token.h
-        core/tokenizer/parsers/sequence_parsers.h
+        core/tokenizer/tokens/indent_token.h
         core/common/code/code_stream.cpp
         core/common/code/code_stream.h
         core/tokenizer/parsers/operator_parser.cpp
         core/tokenizer/parsers/operator_parser.h
         core/algo/search_set.hpp
+        core/tokenizer/parsers/whitespace_parser.cpp
 )
