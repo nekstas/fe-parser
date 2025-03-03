@@ -3,7 +3,7 @@
 #pragma once
 #include <string>
 
-#include "../../../utils/FormatStream.h"
+#include "../../../utils/format_stream.h"
 #include "abstract_token.h"
 
 class UnknownIndentType : public std::logic_error {

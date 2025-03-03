@@ -1,7 +1,7 @@
 #include <exception>
 #include <set>
 
-#include "../../utils/FormatStream.h"
+#include "../../utils/format_stream.h"
 
 class SearchSetError : public std::runtime_error {
     using std::runtime_error::runtime_error;

@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 #include "../token_types.h"
 
 struct AbstractToken {

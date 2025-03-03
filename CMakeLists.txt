@@ -21,10 +21,8 @@ add_executable(fe_parser main.cpp
         core/tokenizer/parsers/integer_parser.h
         utils/utils.cpp
         utils/utils.h
-        utils/FormatStream.h
+        utils/format_stream.h
         core/tokenizer/tokens/indent_token.h
-        core/common/code/code_stream.cpp
-        core/common/code/code_stream.h
         core/tokenizer/parsers/operator_parser.cpp
         core/tokenizer/parsers/operator_parser.h
         core/algo/search_set.hpp
@@ -32,4 +30,8 @@ add_executable(fe_parser main.cpp
         core/tokenizer/parsers/name_parser.h
         core/tokenizer/parsers/name_parser.cpp
         core/tokenizer/tokens/name_token.h
+        core/tokens_preprocessor/tokens_preprocessor.cpp
+        core/tokens_preprocessor/preprocessor_context.h
+        utils/container_stream.hpp
+        utils/useful_streams.h
 )

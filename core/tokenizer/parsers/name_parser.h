@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../common/code/code_stream.h"
+#include "../../../utils/useful_streams.h"
 #include "abstract_parser.h"
 
 class NameParser : public AbstractParser {

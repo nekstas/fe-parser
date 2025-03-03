@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../utils/FormatStream.h"
+#include "../../../utils/format_stream.h"
 #include "../token_types.h"
 #include "abstract_token.h"
 

@@ -3,9 +3,9 @@
 #include <memory>
 #include <vector>
 
-#include "../../utils/FormatStream.h"
+#include "../../utils/format_stream.h"
 #include "../../utils/istream.h"
-#include "../common/code/code_stream.h"
+#include "../../utils/useful_streams.h"
 #include "parsers/abstract_parser.h"
 #include "tokens/abstract_token.h"
 
