@@ -17,7 +17,13 @@ public:
     Tokens Process();
 
 private:
+    LineIndent CalculateLineIndent();
+
+    void ProcessBrackets(const LineIndent& indent);
+    void ProcessLineWithoutIndent();
+
 private:
     TokensStream tokens_;
     std::vector<LineIndent> indents_;
+    Tokens result_;
 };
