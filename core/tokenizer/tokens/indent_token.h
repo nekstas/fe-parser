@@ -1,8 +1,4 @@
 #pragma once
-
-#pragma once
-#include <string>
-
 #include "../../../utils/format_stream.h"
 #include "abstract_token.h"
 
@@ -21,13 +17,12 @@ public:
     IndentToken(IndentType type) : type_(type) {
     }
 
-public:
-    TokenType GetType() const override {
-        return TokenType::INDENT;
+    std::string ToString() const override {
+        return FormatStream() << "INDENT {" << TypeToName(type_) << "}";
     }
 
-    std::string ToString() const override {
-        return FormatStream() << "Indent {" << TypeToName(type_) << "}";
+    IndentType GetIndentType() const {
+        return type_;
     }
 
 public:

@@ -1,6 +1,4 @@
 #pragma once
-
-#pragma once
 #include <string>
 
 #include "../../../utils/format_stream.h"
@@ -15,11 +13,7 @@ public:
     }
 
 public:
-    TokenType GetType() const override {
-        return TokenType::NEW_LINE;
-    }
-
     std::string ToString() const override {
-        return FormatStream() << "New line {}";
+        return FormatStream() << "NEW_LINE";
     }
 };

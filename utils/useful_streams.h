@@ -5,4 +5,4 @@
 #include "container_stream.hpp"
 
 using CodeStream = ContainerStream<std::string>;
-using TokensStream = ContainerStream<Token>;
+using TokensStream = ContainerStream<std::vector<Token>>;

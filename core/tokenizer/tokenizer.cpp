@@ -21,8 +21,6 @@ Tokens Tokenizer::Tokenize() {
         if (!token) {
             throw TokenizerUnknownSequence{input_.GetPos(), input_.Peek()};
         }
-
-        std::cerr << "Token: " << token->ToString() << "\n";
         tokens.push_back(token);
     }
 

@@ -1,6 +1,4 @@
 #pragma once
-#include <string>
-
 #include "../../../utils/format_stream.h"
 #include "abstract_token.h"
 
@@ -10,12 +8,8 @@ public:
     }
 
 public:
-    TokenType GetType() const override {
-        return TokenType::INTEGER;
-    }
-
     std::string ToString() const override {
-        return FormatStream() << "Integer {" << number_ << "}";
+        return FormatStream() << "INTEGER {" << number_ << "}";
     }
 
 private:
