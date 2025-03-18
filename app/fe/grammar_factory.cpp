@@ -2,6 +2,7 @@
 
 #include "../../core/parser/grammar/rules/named_rule.h"
 #include "../../core/parser/grammar/rules/optional_rule.h"
+#include "../../core/parser/grammar/rules/repeat_rule.h"
 #include "../../core/parser/grammar/rules/sequence_rule.h"
 #include "../../core/parser/grammar/rules/token_type_rule.hpp"
 #include "../../core/parser/grammar/rules/token_value_rule.hpp"
@@ -15,6 +16,7 @@ Grammar fe::GrammarFactory::Create() const {
     using grammar_rules::MakeRule;
     using grammar_rules::NamedRule;
     using grammar_rules::OptionalRule;
+    using grammar_rules::RepeatRule;
     using grammar_rules::SequenceRule;
     using grammar_rules::TokenTypeRule;
     using grammar_rules::TokenValueRule;
@@ -25,11 +27,11 @@ Grammar fe::GrammarFactory::Create() const {
     grammar.AddRule("number", MakeRule<TokenTypeRule<IntegerToken>>());
     grammar.AddRule("identifier", MakeRule<TokenTypeRule<NameToken>>());
 
-    grammar.AddRule("expression", MakeRule<SequenceRule>({
-                                      MakeRule<NamedRule>("atom"),
-                                      MakeRule<NamedRule>("operator"),
-                                      MakeRule<NamedRule>("atom"),
-                                  }));
+    grammar.AddRule("expression",
+                    MakeRule<SequenceRule>(
+                        {MakeRule<NamedRule>("atom"),
+                         MakeRule<RepeatRule>(MakeRule<SequenceRule>(
+                             {MakeRule<NamedRule>("operator"), MakeRule<NamedRule>("atom")}))}));
 
     grammar.AddRule("atom", MakeRule<VariantRule>({
                                 MakeRule<TokenTypeRule<IntegerToken>>(),
