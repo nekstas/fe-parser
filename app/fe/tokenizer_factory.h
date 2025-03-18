@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../tokenizer/tokenizer.h"
+#include "../../core/tokenizer/tokenizer.h"
 
 namespace fe {
 
