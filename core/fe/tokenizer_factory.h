@@ -1,13 +1,17 @@
 #pragma once
 
-#include "tokenizer.h"
+#include "../tokenizer/tokenizer.h"
 
-class TokenizerCreator {
+namespace fe {
+
+class TokenizerFactory {
 public:
-    TokenizerCreator() = default;
+    TokenizerFactory() = default;
 
     Tokenizer Create(const std::string& code) const;
 
 private:
     void AddOperatorParser(Tokenizer& tokenizer) const;
 };
+
+};  // namespace fe

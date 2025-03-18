@@ -28,9 +28,6 @@ public:
 
     bool IsEnd();
 
-private:
-    friend class TokenizerCreator;
-
     template <typename Parser, typename... Args>
     void AddParser(Args&&... args) {
         parsers_.push_back(std::make_unique<Parser>(std::forward<Args>(args)...));
