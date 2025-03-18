@@ -7,6 +7,7 @@
 #include "../../core/parser/grammar/rules/variant_rule.h"
 #include "../../core/tokenizer/tokens/integer_token.h"
 #include "../../core/tokenizer/tokens/name_token.h"
+#include "../../core/tokenizer/tokens/new_line_token.h"
 #include "../../core/tokenizer/tokens/operator_token.h"
 
 Grammar fe::GrammarFactory::Create() const {
@@ -38,7 +39,8 @@ Grammar fe::GrammarFactory::Create() const {
                                     MakeRule<TokenValueRule<OperatorToken>>("-"),
                                 }));
 
-    grammar.AddRule("program", MakeRule<NamedRule>("expression"));
+    grammar.AddRule("program", MakeRule<SequenceRule>({MakeRule<NamedRule>("expression"),
+                                                       MakeRule<TokenTypeRule<NewLineToken>>()}));
 
     grammar.SetMainRule("program");
     return grammar;
