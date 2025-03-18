@@ -54,7 +54,11 @@ add_executable(fe_parser main.cpp
         app/fe/parser_factory.h
         app/fe/grammar_factory.cpp
         app/fe/grammar_factory.h
-        core/parser/grammar/rules/token_type_rule.h
+        core/parser/grammar/rules/token_type_rule.hpp
         core/parser/grammar/syntax_tree/token_node.h
         core/parser/grammar/syntax_tree/token_node.cpp
+        core/parser/grammar/rules/named_rule.cpp
+        core/parser/grammar/rules/named_rule.h
+        core/parser/grammar/syntax_tree/named_node.cpp
+        core/parser/grammar/syntax_tree/named_node.h
 )

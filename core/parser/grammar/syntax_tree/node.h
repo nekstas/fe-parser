@@ -47,7 +47,7 @@ protected:
 
 template <typename T, typename... Args>
 NodePtr MakeNode(Args&&... args) {
-    return std::make_shared<T>(args...);
+    return std::make_shared<T>(std::forward<Args>(args)...);
 };
 
 }  // namespace syntax_tree

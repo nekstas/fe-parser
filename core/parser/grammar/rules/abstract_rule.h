@@ -21,7 +21,12 @@ using GrammarRule = std::shared_ptr<AbstractRule>;
 
 template <typename T, typename... Args>
 GrammarRule MakeRule(Args&&... args) {
-    return std::make_shared<T>(args...);
+    return std::make_shared<T>(std::forward<Args>(args)...);
+};
+
+template <typename T>
+GrammarRule MakeRule(std::initializer_list<GrammarRule> args) {
+    return std::make_shared<T>(args);
 };
 
 }  // namespace grammar_rules

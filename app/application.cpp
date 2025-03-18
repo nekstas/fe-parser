@@ -41,7 +41,7 @@ int32_t Application::Run() {
 //        "\n"
 //        "  import math"};
 
-    code_ = "1 + 2 + 3";
+    code_ = "1 + 2";
 
     Tokenizer tokenizer = fe::TokenizerFactory().Create(code_);
     Tokens tokens = tokenizer.Tokenize();
@@ -55,7 +55,7 @@ int32_t Application::Run() {
     syntax_tree::NodePtr result = parser.Parse();
 
     std::cerr << "SyntaxTree from Parser.\n";
-    std::cerr << syntax_tree::Node::GetStringRepresentation(result) << "\n";
+    std::cerr << syntax_tree::Node::GetStringRepresentation(result);
 
     return 0;
 }

@@ -11,5 +11,10 @@ syntax_tree::NodePtr grammar_rules::NamedRule::Parse(TokensStream& tokens, const
     if (!another_rule) {
         throw EmptyRuleError{FormatStream() << "Rule with name \"" << name_ << "\" not found."};
     }
-    return MakeNode<syntax_tree::NamedNode>(name_, another_rule->Parse(tokens, grammar));
+
+    syntax_tree::NodePtr another_node = another_rule->Parse(tokens, grammar);
+    if (!another_node) {
+        return {};
+    }
+    return MakeNode<syntax_tree::NamedNode>(name_, another_node);
 }
