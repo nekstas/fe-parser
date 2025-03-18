@@ -15,11 +15,15 @@ public:
 
 class Grammar {
 public:
-    void AddRule(const std::string& name, const GrammarRule& rule);
+    Grammar() = default;
+
+    void AddRule(const std::string& name, const grammar_rules::GrammarRule& rule);
 
     void SetMainRule(const std::string& name);
 
+    grammar_rules::GrammarRule GetMainRule() const;
+
 private:
-    std::map<std::string, GrammarRule> rules_;
+    std::map<std::string, grammar_rules::GrammarRule> rules_;
     std::string main_rule_;
 };
