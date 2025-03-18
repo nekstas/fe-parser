@@ -1,13 +1,12 @@
 #include "application.h"
 
 #include <iostream>
-#include <sstream>
 
+#include "../core/parser/parser.h"
 #include "../core/tokenizer/tokenizer.h"
-#include "../core/tokenizer/tokenizer_creator.h"
 #include "../core/tokens_preprocessor/tokens_preprocessor.h"
-
-class Parser;
+#include "fe/parser_factory.h"
+#include "fe/tokenizer_factory.h"
 
 class Formatter;
 
@@ -29,6 +28,8 @@ int32_t Application::Run() {
         "\n"
         "   let solve(A, b  )   :=   LA.solve( A  ,  b  )\n"
         "\n"
+        "\n"
+        "   let d := e"
         "   import numpy.linalg as LA\n"
         "\n"
         "\n"
@@ -40,11 +41,16 @@ int32_t Application::Run() {
         "\n"
         "  import math"};
 
-    Tokenizer tokenizer = TokenizerCreator().Create(code_);
+    Tokenizer tokenizer = fe::TokenizerFactory().Create(code_);
     Tokens tokens = tokenizer.Tokenize();
     DebugTokensList("Tokens from Tokenizer.", tokens);
+
     TokensPreprocessor preprocessor(tokens);
     Tokens new_tokens = preprocessor.Process();
     DebugTokensList("Tokens from Preprocessor.", new_tokens);
+
+//    Parser parser = fe::ParserFactory().Create(new_tokens);
+//    syntax_tree::NodePtr result = parser.Parse();
+
     return 0;
 }
