@@ -13,10 +13,17 @@ using NodePtr = std::shared_ptr<Node>;
 
 class Node {
 public:
+    Node() = default;
+
+    Node(const std::vector<NodePtr>& children) : children_(children) {
+    }
+
     virtual ~Node() {
     }
 
-    virtual std::vector<NodePtr> GetChildren() const = 0;
+    const std::vector<NodePtr>& GetChildren() const {
+        return children_;
+    }
 
     virtual std::string ToString() const = 0;
 
@@ -33,6 +40,9 @@ public:
         }
         return stream;
     }
+
+protected:
+    std::vector<NodePtr> children_;
 };
 
 template <typename T, typename... Args>

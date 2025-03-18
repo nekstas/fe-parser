@@ -3,9 +3,19 @@
 void Grammar::AddRule(const std::string& name, const grammar_rules::GrammarRule& rule) {
     if (rules_.contains(name)) {
         throw RuleAlreadyExistsError{name};
+    } else if (!rule) {
+        throw EmptyRuleError{FormatStream() << "Attempt to add empty rule to grammar with name \""
+                                            << name << "\""};
     }
 
     rules_[name] = rule;
+}
+
+grammar_rules::GrammarRule Grammar::GetRule(const std::string& name) const {
+    if (!rules_.contains(name)) {
+        return {};
+    }
+    return rules_.at(name);
 }
 
 void Grammar::SetMainRule(const std::string& name) {
@@ -13,8 +23,5 @@ void Grammar::SetMainRule(const std::string& name) {
 }
 
 grammar_rules::GrammarRule Grammar::GetMainRule() const {
-    if (!rules_.contains(main_rule_)) {
-        return {};
-    }
-    return rules_.at(main_rule_);
+    return GetRule(main_rule_);
 }

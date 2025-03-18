@@ -13,11 +13,18 @@ public:
     }
 };
 
+struct EmptyRuleError : public std::runtime_error {
+public:
+    using std::runtime_error::runtime_error;
+};
+
 class Grammar {
 public:
     Grammar() = default;
 
     void AddRule(const std::string& name, const grammar_rules::GrammarRule& rule);
+
+    grammar_rules::GrammarRule GetRule(const std::string& name) const;
 
     void SetMainRule(const std::string& name);
 

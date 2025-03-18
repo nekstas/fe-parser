@@ -5,17 +5,17 @@
 
 namespace syntax_tree {
 
-class TokenNode : public Node {
+class NamedNode : public Node {
 public:
-    TokenNode(Token token);
+    NamedNode(const std::string& name, NodePtr result);
 
 public:
     std::string ToString() const override;
 
-    Token GetToken() const;
+    std::string GetName() const;
 
 private:
-    Token token_;
+    std::string name_;
 };
 
 }  // namespace syntax_tree
