@@ -1,10 +1,11 @@
 #pragma once
 
 #include "../../../../utils/useful_streams.h"
-#include "../grammar.h"
 #include "../syntax_tree/node.h"
 
 class Grammar;
+
+namespace grammar_rules {
 
 class AbstractRule {
 public:
@@ -17,3 +18,5 @@ private:
 };
 
 using GrammarRule = std::shared_ptr<AbstractRule>;
+
+}  // namespace grammar
