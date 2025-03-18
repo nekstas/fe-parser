@@ -1,6 +1,10 @@
 #pragma once
+
 #include <memory>
 #include <string>
+
+struct AbstractToken;
+using Token = std::shared_ptr<AbstractToken>;
 
 struct AbstractToken {
 public:
@@ -8,6 +12,14 @@ public:
     }
 
     virtual std::string ToString() const = 0;
+
+public:
+    static std::string GetStringRepresentation(Token token) {
+        if (!token) {
+            return "<No token>";
+        }
+        return token->ToString();
+    }
 };
 
 using Token = std::shared_ptr<AbstractToken>;

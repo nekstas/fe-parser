@@ -1,7 +1,10 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <vector>
+
+#include "../../../../utils/format_stream.h"
 
 namespace syntax_tree {
 
@@ -15,11 +18,21 @@ public:
 
     virtual std::vector<NodePtr> GetChildren() const = 0;
 
-    bool IsLeaf() const {
-        return GetChildren().empty();
-    }
+    virtual std::string ToString() const = 0;
 
-private:
+public:
+    static std::string GetStringRepresentation(NodePtr node, const std::string& indent = "") {
+        if (!node) {
+            return indent + "[EmptyNode]";
+        }
+
+        FormatStream stream;
+        stream << indent << node->ToString() << "\n";
+        for (NodePtr another_node : node->GetChildren()) {
+            stream << GetStringRepresentation(another_node, indent + "  ");
+        }
+        return stream;
+    }
 };
 
 template <typename T, typename... Args>

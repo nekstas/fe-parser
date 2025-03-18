@@ -19,4 +19,9 @@ private:
 
 using GrammarRule = std::shared_ptr<AbstractRule>;
 
-}  // namespace grammar
+template <typename T, typename... Args>
+GrammarRule MakeRule(Args&&... args) {
+    return std::make_shared<T>(args...);
+};
+
+}  // namespace grammar_rules

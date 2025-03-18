@@ -10,5 +10,11 @@ syntax_tree::NodePtr Parser::Parse() {
         throw MainRuleDoesNotExistError{};
     }
 
-    return main_rule->Parse(tokens_, grammar_);
+    syntax_tree::NodePtr result = main_rule->Parse(tokens_, grammar_);
+    // TODO: uncomment it
+    // if (!tokens_.Eof()) {
+    //     throw ExtraTokensInCodeError{};
+    // }
+
+    return result;
 }

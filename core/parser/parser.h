@@ -20,6 +20,12 @@ public:
     }
 };
 
+struct ExtraTokensInCodeError : public std::runtime_error {
+public:
+    ExtraTokensInCodeError() : std::runtime_error{"The are extra tokens after parsing code."} {
+    }
+};
+
 class Parser {
 public:
     Parser(const Grammar& grammar, const std::vector<Token>& tokens);

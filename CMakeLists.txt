@@ -14,8 +14,8 @@ add_executable(fe_parser main.cpp
         utils/istream.cpp
         utils/istream.h
         core/tokenizer/parsers/abstract_parser.h
-        core/tokenizer/tokenizer_creator.cpp
-        core/tokenizer/tokenizer_creator.h
+        app/fe/tokenizer_factory.cpp
+        app/fe/tokenizer_factory.h
         core/tokenizer/parsers/integer_parser.cpp
         core/tokenizer/parsers/integer_parser.h
         utils/utils.cpp
@@ -36,4 +36,25 @@ add_executable(fe_parser main.cpp
         core/tokens_preprocessor/line_indent.cpp
         core/tokenizer/tokens/open_bracket.h
         core/tokenizer/tokens/close_bracket.h
+        core/parser/parser.cpp
+        core/parser/parser.h
+        core/parser/grammar/grammar.cpp
+        core/parser/grammar/grammar.h
+        core/parser/grammar/rules/abstract_rule.h
+        core/parser/grammar/syntax_tree/node.h
+        core/parser/grammar/rules/or_rule.cpp
+        core/parser/grammar/rules/or_rule.h
+        core/parser/grammar/rules/sequence_rule.cpp
+        core/parser/grammar/rules/sequence_rule.h
+        core/parser/grammar/syntax_tree/or_node.cpp
+        core/parser/grammar/syntax_tree/or_node.h
+        core/parser/grammar/syntax_tree/sequence_node.cpp
+        core/parser/grammar/syntax_tree/sequence_node.h
+        app/fe/parser_factory.cpp
+        app/fe/parser_factory.h
+        app/fe/grammar_factory.cpp
+        app/fe/grammar_factory.h
+        core/parser/grammar/rules/token_type_rule.h
+        core/parser/grammar/syntax_tree/token_node.h
+        core/parser/grammar/syntax_tree/token_node.cpp
 )
