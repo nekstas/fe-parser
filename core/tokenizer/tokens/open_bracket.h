@@ -12,4 +12,8 @@ public:
     std::string ToString() const override {
         return FormatStream() << "OPEN_BRACKET";
     }
+
+    bool operator==(const OpenBracketToken& other) {
+        return true;
+    }
 };

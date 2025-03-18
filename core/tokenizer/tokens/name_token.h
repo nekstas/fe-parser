@@ -16,6 +16,10 @@ public:
         return FormatStream() << "NAME {" << name_ << "}";
     }
 
+    bool operator==(const NameToken& other) {
+        return name_ == other.name_;
+    }
+
 private:
     std::string name_;
 };

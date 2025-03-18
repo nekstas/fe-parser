@@ -25,6 +25,10 @@ public:
         return type_;
     }
 
+    bool operator==(const IndentToken& other) {
+        return type_ == other.type_;
+    }
+
 public:
     static constexpr char TypeToChar(IndentType type) {
         switch (type) {

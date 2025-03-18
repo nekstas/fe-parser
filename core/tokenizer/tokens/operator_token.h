@@ -15,6 +15,10 @@ public:
         return FormatStream() << "OPERATOR \"" << code_ << "\"";
     }
 
+    bool operator==(const OperatorToken& other) {
+        return code_ == other.code_;
+    }
+
 private:
     std::string code_;
 };

@@ -8,6 +8,10 @@ public:
     CloseBracketToken() {
     }
 
+    bool operator==(const CloseBracketToken& other) {
+        return true;
+    }
+
 public:
     std::string ToString() const override {
         return FormatStream() << "CLOSE_BRACKET";

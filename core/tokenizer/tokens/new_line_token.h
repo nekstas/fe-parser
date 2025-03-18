@@ -16,4 +16,8 @@ public:
     std::string ToString() const override {
         return FormatStream() << "NEW_LINE";
     }
+
+    bool operator==(const NewLineToken& other) {
+        return true;
+    }
 };

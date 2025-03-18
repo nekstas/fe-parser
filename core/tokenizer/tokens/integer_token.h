@@ -12,6 +12,10 @@ public:
         return FormatStream() << "INTEGER {" << number_ << "}";
     }
 
+    bool operator==(const IntegerToken& other) {
+        return number_ == other.number_;
+    }
+
 private:
     std::string number_;
 };
