@@ -1,6 +1,7 @@
 #include "grammar_factory.h"
 
 #include "../../core/parser/grammar/rules/named_rule.h"
+#include "../../core/parser/grammar/rules/optional_rule.h"
 #include "../../core/parser/grammar/rules/sequence_rule.h"
 #include "../../core/parser/grammar/rules/token_type_rule.hpp"
 #include "../../core/parser/grammar/rules/token_value_rule.hpp"
@@ -13,6 +14,7 @@
 Grammar fe::GrammarFactory::Create() const {
     using grammar_rules::MakeRule;
     using grammar_rules::NamedRule;
+    using grammar_rules::OptionalRule;
     using grammar_rules::SequenceRule;
     using grammar_rules::TokenTypeRule;
     using grammar_rules::TokenValueRule;
@@ -39,7 +41,13 @@ Grammar fe::GrammarFactory::Create() const {
                                     MakeRule<TokenValueRule<OperatorToken>>("-"),
                                 }));
 
+    grammar.AddRule("where", MakeRule<OptionalRule>(MakeRule<SequenceRule>({
+                                 MakeRule<TokenValueRule<NameToken>>("where"),
+                                 MakeRule<NamedRule>("atom"),
+                             })));
+
     grammar.AddRule("program", MakeRule<SequenceRule>({MakeRule<NamedRule>("expression"),
+                                                       MakeRule<NamedRule>("where"),
                                                        MakeRule<TokenTypeRule<NewLineToken>>()}));
 
     grammar.SetMainRule("program");

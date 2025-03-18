@@ -62,4 +62,8 @@ add_executable(fe_parser main.cpp
         core/parser/grammar/syntax_tree/named_node.cpp
         core/parser/grammar/syntax_tree/named_node.h
         core/parser/grammar/rules/token_value_rule.hpp
+        core/parser/grammar/rules/optional_rule.cpp
+        core/parser/grammar/rules/optional_rule.h
+        core/parser/grammar/syntax_tree/optional_node.cpp
+        core/parser/grammar/syntax_tree/optional_node.h
 )

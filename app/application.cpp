@@ -41,7 +41,7 @@ int32_t Application::Run() {
 //        "\n"
 //        "  import math"};
 
-    code_ = "1 + abc";
+    code_ = "1 + abc where 3";
 
     Tokenizer tokenizer = fe::TokenizerFactory().Create(code_);
     Tokens tokens = tokenizer.Tokenize();
