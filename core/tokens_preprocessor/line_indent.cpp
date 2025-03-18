@@ -16,3 +16,36 @@ IndentsMismatchError::IndentsMismatchError(const LineIndent& indent1, const Line
     : std::runtime_error(FormatStream()
                          << indent1 << ", " << indent2 << ". Indents should be the same.") {
 }
+
+bool LineIndent::IsNormal() const {
+    return !(spaces > 0 && tabs > 0);
+}
+
+bool LineIndent::IsCorrectWith(const LineIndent& other) const {
+    return !(spaces > 0 && other.tabs > 0 || tabs > 0 && other.spaces > 0);
+}
+
+bool LineIndent::IsLess(const LineIndent& other) const {
+    if (!IsCorrectWith(other)) {
+        throw DifferentIndentTypesError(*this, other);
+    }
+
+    return spaces < other.spaces || tabs < other.tabs;
+}
+
+bool LineIndent::IsGreater(const LineIndent& other) const {
+    if (!IsCorrectWith(other)) {
+        throw MixedIndentError(*this);
+    }
+
+    return spaces >= other.spaces + kMinSpacesDiff || tabs >= other.tabs + kMinTabsDiff;
+}
+
+bool LineIndent::operator==(const LineIndent& other) const {
+    return spaces == other.spaces && tabs == other.tabs;
+}
+
+std::ostream& operator<<(std::ostream& out, const LineIndent& line_indent) {
+    out << "LineIndent[spaces=" << line_indent.spaces << ", tabs=" << line_indent.tabs << "]";
+    return out;
+}

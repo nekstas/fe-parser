@@ -30,36 +30,15 @@ public:
     size_t spaces{0};
     size_t tabs{0};
 
-    bool IsNormal() const {
-        return !(spaces > 0 && tabs > 0);
-    }
+    bool IsNormal() const;
 
-    bool IsCorrectWith(const LineIndent& other) const {
-        return !(spaces > 0 && other.tabs > 0 || tabs > 0 && other.spaces > 0);
-    }
+    bool IsCorrectWith(const LineIndent& other) const;
 
-    bool IsLess(const LineIndent& other) const {
-        if (!IsCorrectWith(other)) {
-            throw DifferentIndentTypesError(*this, other);
-        }
+    bool IsLess(const LineIndent& other) const;
 
-        return spaces < other.spaces || tabs < other.tabs;
-    }
+    bool IsGreater(const LineIndent& other) const;
 
-    bool IsGreater(const LineIndent& other) const {
-        if (!IsCorrectWith(other)) {
-            throw MixedIndentError(*this);
-        }
-
-        return spaces >= other.spaces + kMinSpacesDiff || tabs >= other.tabs + kMinTabsDiff;
-    }
-
-    bool operator==(const LineIndent& other) const {
-        return spaces == other.spaces && tabs == other.tabs;
-    }
+    bool operator==(const LineIndent& other) const;
 };
 
-inline std::ostream& operator<<(std::ostream& out, const LineIndent& line_indent) {
-    out << "LineIndent[spaces=" << line_indent.spaces << ", tabs=" << line_indent.tabs << "]";
-    return out;
-}
+std::ostream& operator<<(std::ostream& out, const LineIndent& line_indent);
