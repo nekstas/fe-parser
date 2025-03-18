@@ -42,12 +42,12 @@ add_executable(fe_parser main.cpp
         core/parser/grammar/grammar.h
         core/parser/grammar/rules/abstract_rule.h
         core/parser/grammar/syntax_tree/node.h
-        core/parser/grammar/rules/or_rule.cpp
-        core/parser/grammar/rules/or_rule.h
+        core/parser/grammar/rules/variant_rule.cpp
+        core/parser/grammar/rules/variant_rule.h
         core/parser/grammar/rules/sequence_rule.cpp
         core/parser/grammar/rules/sequence_rule.h
-        core/parser/grammar/syntax_tree/or_node.cpp
-        core/parser/grammar/syntax_tree/or_node.h
+        core/parser/grammar/syntax_tree/variant_node.cpp
+        core/parser/grammar/syntax_tree/variant_node.h
         core/parser/grammar/syntax_tree/sequence_node.cpp
         core/parser/grammar/syntax_tree/sequence_node.h
         app/fe/parser_factory.cpp
@@ -61,4 +61,5 @@ add_executable(fe_parser main.cpp
         core/parser/grammar/rules/named_rule.h
         core/parser/grammar/syntax_tree/named_node.cpp
         core/parser/grammar/syntax_tree/named_node.h
+        core/parser/grammar/rules/token_value_rule.hpp
 )
