@@ -41,7 +41,8 @@ int32_t Application::Run() {
 //        "\n"
 //        "  import math"};
 
-    code_ = "1 + 2 + 3 + 4 where 5";
+    code_ = "a(0, b, c.d(e, -2, +1), (f))";
+//    code_ = "a(b)";
 
     Tokenizer tokenizer = fe::TokenizerFactory().Create(code_);
     Tokens tokens = tokenizer.Tokenize();

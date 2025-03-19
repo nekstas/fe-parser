@@ -70,4 +70,6 @@ add_executable(fe_parser main.cpp
         core/parser/grammar/syntax_tree/repeat_node.h
         core/parser/grammar/rules/repeat_rule.cpp
         core/parser/grammar/rules/repeat_rule.h
+        core/parser/grammar/rules/virtual_rules.cpp
+        core/parser/grammar/rules/virtual_rules.h
 )
