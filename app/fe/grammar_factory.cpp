@@ -10,7 +10,6 @@
 #include "../../core/parser/grammar/rules/virtual_rules.h"
 #include "../../core/tokenizer/tokens/integer_token.h"
 #include "../../core/tokenizer/tokens/name_token.h"
-#include "../../core/tokenizer/tokens/new_line_token.h"
 
 Grammar fe::GrammarFactory::Create() const {
     using grammar_rules::MakeRule;
@@ -81,22 +80,110 @@ Grammar fe::GrammarFactory::Create() const {
         )
     );
     grammar.AddRule(
-        "expression_p4", MakeRule<VariantRule>({
-                             MakeRule<NamedRule>("number"),
-                             MakeRule<NamedRule>("function_call"),
-                             MakeRule<NamedRule>("variable"),
-                             MakeRule<NamedRule>("brackets_expression"),
-                             MakeRule<NamedRule>("unary_operation"),
-                         })
+        "expression_p4",
+        VirtualRules::Choice(
+            {"number", "function_call", "variable", "brackets_expression", "unary_operation"}
+        )
     );
-
-    grammar.AddRule("expression", MakeRule<NamedRule>("expression_p4"));
 
     grammar.AddRule(
-        "program", MakeRule<SequenceRule>(
-                       {MakeRule<NamedRule>("expression"), MakeRule<TokenTypeRule<NewLineToken>>()}
-                   )
+        "expression_p3",
+        VirtualRules::SeparatorRule(
+            MakeRule<NamedRule>("expression_p4"), VirtualRules::OperatorRule("^"), true
+        )
     );
+
+    grammar.AddRule(
+        "expression_p2",
+        VirtualRules::SeparatorRule(
+            MakeRule<NamedRule>("expression_p3"),
+            MakeRule<VariantRule>({VirtualRules::OperatorRule("*"), VirtualRules::OperatorRule("/")}
+            ),
+            true
+        )
+    );
+
+    grammar.AddRule(
+        "expression_p1",
+        VirtualRules::SeparatorRule(
+            MakeRule<NamedRule>("expression_p2"),
+            MakeRule<VariantRule>({VirtualRules::OperatorRule("+"), VirtualRules::OperatorRule("-")}
+            ),
+            true
+        )
+    );
+
+    grammar.AddRule("expression", MakeRule<NamedRule>("expression_p1"));
+
+    grammar.AddRule(
+        "where_part", MakeRule<SequenceRule>({
+                          VirtualRules::KeywordRule("where"),
+                          VirtualRules::OpenBracket(),
+                          MakeRule<NamedRule>("module"),
+                          VirtualRules::CloseBracket(),
+                      })
+    );
+    grammar.AddRule(
+        "as_part",
+        MakeRule<SequenceRule>({VirtualRules::KeywordRule("as"), MakeRule<NamedRule>("identifier")})
+    );
+
+    grammar.AddRule(
+        "import_statement",
+        MakeRule<SequenceRule>(
+            {VirtualRules::KeywordRule("import"), MakeRule<NamedRule>("extended_identifier"),
+             MakeRule<OptionalRule>(VirtualRules::Choice({
+                 "as_part",
+                 "identifier_args_list",
+             }))}
+        )
+    );
+
+    grammar.AddRule(
+        "define_variable_statement", MakeRule<SequenceRule>({
+                                         VirtualRules::KeywordRule("let"),
+                                         MakeRule<NamedRule>("identifier"),
+                                         VirtualRules::OperatorRule(":="),
+                                         MakeRule<NamedRule>("expression"),
+                                     })
+    );
+
+    grammar.AddRule(
+        "define_function_statement",
+        MakeRule<SequenceRule>(
+            {VirtualRules::KeywordRule("let"), MakeRule<NamedRule>("identifier"),
+             MakeRule<NamedRule>("identifier_args_list"), VirtualRules::OperatorRule(":="),
+             MakeRule<NamedRule>("expression"),
+             MakeRule<OptionalRule>(MakeRule<NamedRule>("where_part"))}
+        )
+    );
+
+    grammar.AddRule(
+        "define_module_statement",
+        MakeRule<SequenceRule>(
+            {VirtualRules::KeywordRule("module"), MakeRule<NamedRule>("identifier"),
+             MakeRule<NamedRule>("where_part")}
+        )
+    );
+
+    grammar.AddRule(
+        "statement", VirtualRules::Choice(
+                         {"import_statement", "define_variable_statement",
+                          "define_function_statement", "define_module_statement"}
+                     )
+    );
+
+    grammar.AddRule(
+        "module",
+        MakeRule<RepeatRule>(
+            MakeRule<SequenceRule>(
+                {MakeRule<NamedRule>("statement"), VirtualRules::NewLine()}
+            ),
+            true
+        )
+    );
+
+    grammar.AddRule("program", MakeRule<NamedRule>("module"));
 
     grammar.SetMainRule("program");
     return grammar;

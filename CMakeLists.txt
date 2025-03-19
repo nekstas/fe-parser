@@ -34,8 +34,8 @@ add_executable(fe_parser main.cpp
         utils/container_stream.hpp
         utils/useful_streams.h
         core/tokens_preprocessor/line_indent.cpp
-        core/tokenizer/tokens/open_bracket.h
-        core/tokenizer/tokens/close_bracket.h
+        core/tokenizer/tokens/open_bracket_token.h
+        core/tokenizer/tokens/close_bracket_token.h
         core/parser/parser.cpp
         core/parser/parser.h
         core/parser/grammar/grammar.cpp

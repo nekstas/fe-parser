@@ -36,7 +36,7 @@ public:
         FormatStream stream;
         stream << indent << node->ToString() << "\n";
         for (NodePtr another_node : node->GetChildren()) {
-            stream << GetStringRepresentation(another_node, indent + "  ");
+            stream << GetStringRepresentation(another_node, indent + " ");
         }
         return stream;
     }

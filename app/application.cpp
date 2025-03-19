@@ -18,31 +18,49 @@ void DebugTokensList(const std::string& hint, const Tokens& tokens) {
     std::cerr << "\n";
 }
 
-Application::Application(size_t argc, char **argv) {
+Application::Application(size_t argc, char** argv) {
 }
 
 int32_t Application::Run() {
-//    code_ = std::string{
-//        "module MyLinalg where\n"
-//        "   import Unused\n"
-//        "\n"
-//        "   let solve(A, b  )   :=   LA.solve( A  ,  b  )\n"
-//        "\n"
-//        "\n"
-//        "   let d := e"
-//        "   import numpy.linalg as LA\n"
-//        "\n"
-//        "\n"
-//        "let some_root(a , b  , c  ) :=   (  b +   math.sqrt(( discriminant(a, b, c ) ) )) / a "
-//        "where\n"
-//        "\n"
-//        "  let discriminant(   a, b,c   ) := (b ^ 2) - 4 * (a * c)\n"
-//        "\n"
-//        "\n"
-//        "  import math"};
+    code_ = std::string{
+        "module MyLinalg where\n"
+        "   import Unused\n"
+        "\n"
+        "   let solve(A, b  )   :=   LA.solve( A  ,  b  )\n"
+        "\n"
+        "\n"
+        "   let d := e"
+        "   import numpy.linalg as LA\n"
+        "\n"
+        "\n"
+        "let some_root(a , b  , c  ) :=   (  b +   math.sqrt(( discriminant(a, b, c ) ) )) / a "
+        "where\n"
+        "\n"
+        "  let discriminant(   a, b,c   ) := (b ^ 2) - 4 * (a * c)\n"
+        "\n"
+        "\n"
+        "  import math"
+    };
 
-    code_ = "a(0, b, c.d(e, -2, +1), (f))";
-//    code_ = "a(b)";
+    code_ = std::string{
+        "module MyLinalg where\n"
+        "   import Unused\n"
+        "\n"
+        "   let solve(A, b  )   :=   LA.solve( A  ,  b  )\n"
+        "\n"
+        "\n"
+        "   let d := e\n"
+        "   import numpy.linalg as LA\n"
+        "\n"
+        "\n"
+        "let some_root(a , b  , c  ) :=   (  b +   math.sqrt(( discriminant(a, b, c ) ) )) / a "
+        "where\n"
+        "\n"
+        "  let discriminant(   a, b,c   ) := (b ^ 2) - 4 * (a * c)\n"
+        "\n"
+        "\n"
+        "  import math"
+    };
 
     Tokenizer tokenizer = fe::TokenizerFactory().Create(code_);
     Tokens tokens = tokenizer.Tokenize();
