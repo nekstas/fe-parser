@@ -1,9 +1,9 @@
 #include "tokens_preprocessor.h"
 
-#include "../tokenizer/tokens/close_bracket.h"
+#include "../tokenizer/tokens/close_bracket_token.h"
 #include "../tokenizer/tokens/indent_token.h"
 #include "../tokenizer/tokens/new_line_token.h"
-#include "../tokenizer/tokens/open_bracket.h"
+#include "../tokenizer/tokens/open_bracket_token.h"
 
 TokensPreprocessor::TokensPreprocessor(const TokensStream& tokens) : tokens_(tokens) {
 }
@@ -27,7 +27,7 @@ Tokens TokensPreprocessor::Process() {
 
     while (indents_.size() > 1) {
         indents_.pop_back();
-        result_.push_back(MakeToken<CloseBracketToken>());
+        AddCloseBracket();
     }
 
     return result_;
@@ -56,7 +56,7 @@ LineIndent TokensPreprocessor::CalculateLineIndent() {
 void TokensPreprocessor::ProcessBrackets(const LineIndent& indent) {
     while (indent.IsLess(indents_.back())) {
         indents_.pop_back();
-        result_.push_back(MakeToken<CloseBracketToken>());
+        AddCloseBracket();
     }
 
     if (indent.IsGreater(indents_.back())) {
@@ -82,4 +82,9 @@ void TokensPreprocessor::ProcessLineWithoutIndent() {
     if (!tokens_.Eof()) {
         tokens_.Ignore();
     }
+}
+
+void TokensPreprocessor::AddCloseBracket() {
+    result_.push_back(MakeToken<CloseBracketToken>());
+    result_.push_back(MakeToken<NewLineToken>());
 }

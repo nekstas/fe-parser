@@ -20,7 +20,10 @@ private:
     LineIndent CalculateLineIndent();
 
     void ProcessBrackets(const LineIndent& indent);
+
     void ProcessLineWithoutIndent();
+
+    void AddCloseBracket();
 
 private:
     TokensStream tokens_;
