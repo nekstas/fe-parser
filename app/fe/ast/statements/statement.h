@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../ast_node.h"
+#include "../node.h"
 
 namespace ast {
 
-class Statement : public AstNode {
+class Statement : public Node {
 public:
 private:
 };

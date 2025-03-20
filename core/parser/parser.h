@@ -5,12 +5,6 @@
 #include "grammar/grammar.h"
 #include "grammar/syntax_tree/node.h"
 
-/*
- // должны быть правила для парсинга левосторонней рекурсии (циклическое может быть)
- RuleHandler* {} ()  // абстрактный класс обработчика результата применения правила
- // может быть это надо вынести в другое место, пока не очень понятно
- */
-
 struct MainRuleDoesNotExistError : public std::runtime_error {
 public:
     MainRuleDoesNotExistError() : std::runtime_error{"Main rule of given grammar does not exist."} {

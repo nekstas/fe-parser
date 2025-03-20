@@ -6,8 +6,8 @@
 #include "../core/tokenizer/tokenizer.h"
 #include "../core/tokens_preprocessor/tokens_preprocessor.h"
 #include "../utils/utils.h"
-#include "fe/parser_factory.h"
-#include "fe/tokenizer_factory.h"
+#include "fe/factories/parser_factory.h"
+#include "fe/factories/tokenizer_factory.h"
 
 class Formatter;
 

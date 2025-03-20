@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../core/parser/grammar/grammar.h"
+#include "../../../core/parser/grammar/grammar.h"
 
 namespace fe {
 

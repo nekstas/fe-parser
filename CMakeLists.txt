@@ -14,8 +14,8 @@ add_executable(fe_parser main.cpp
         utils/istream.cpp
         utils/istream.h
         core/tokenizer/parsers/abstract_parser.h
-        app/fe/tokenizer_factory.cpp
-        app/fe/tokenizer_factory.h
+        app/fe/factories/tokenizer_factory.cpp
+        app/fe/factories/tokenizer_factory.h
         core/tokenizer/parsers/integer_parser.cpp
         core/tokenizer/parsers/integer_parser.h
         utils/utils.cpp
@@ -50,10 +50,10 @@ add_executable(fe_parser main.cpp
         core/parser/grammar/syntax_tree/variant_node.h
         core/parser/grammar/syntax_tree/sequence_node.cpp
         core/parser/grammar/syntax_tree/sequence_node.h
-        app/fe/parser_factory.cpp
-        app/fe/parser_factory.h
-        app/fe/grammar_factory.cpp
-        app/fe/grammar_factory.h
+        app/fe/factories/parser_factory.cpp
+        app/fe/factories/parser_factory.h
+        app/fe/factories/grammar_factory.cpp
+        app/fe/factories/grammar_factory.h
         core/parser/grammar/rules/token_type_rule.hpp
         core/parser/grammar/syntax_tree/token_node.h
         core/parser/grammar/syntax_tree/token_node.cpp
@@ -72,10 +72,10 @@ add_executable(fe_parser main.cpp
         core/parser/grammar/rules/repeat_rule.h
         core/parser/grammar/rules/virtual_rules.cpp
         core/parser/grammar/rules/virtual_rules.h
-        core/ast/ast_builder.cpp
-        core/ast/ast_builder.h
-        core/ast/expressions/expression.h
-        core/ast/ast_node.h
-        core/ast/ast_visitor.h
-        core/ast/statements/statement.h
+        app/fe/ast/ast_builder.cpp
+        app/fe/ast/ast_builder.h
+        app/fe/ast/expressions/expression.h
+        app/fe/ast/node.h
+        app/fe/ast/visitors/visitor.h
+        app/fe/ast/statements/statement.h
 )
