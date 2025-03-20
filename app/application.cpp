@@ -5,6 +5,7 @@
 #include "../core/parser/parser.h"
 #include "../core/tokenizer/tokenizer.h"
 #include "../core/tokens_preprocessor/tokens_preprocessor.h"
+#include "../utils/utils.h"
 #include "fe/parser_factory.h"
 #include "fe/tokenizer_factory.h"
 
@@ -22,45 +23,7 @@ Application::Application(size_t argc, char** argv) {
 }
 
 int32_t Application::Run() {
-    code_ = std::string{
-        "module MyLinalg where\n"
-        "   import Unused\n"
-        "\n"
-        "   let solve(A, b  )   :=   LA.solve( A  ,  b  )\n"
-        "\n"
-        "\n"
-        "   let d := e"
-        "   import numpy.linalg as LA\n"
-        "\n"
-        "\n"
-        "let some_root(a , b  , c  ) :=   (  b +   math.sqrt(( discriminant(a, b, c ) ) )) / a "
-        "where\n"
-        "\n"
-        "  let discriminant(   a, b,c   ) := (b ^ 2) - 4 * (a * c)\n"
-        "\n"
-        "\n"
-        "  import math"
-    };
-
-    code_ = std::string{
-        "module MyLinalg where\n"
-        "   import Unused\n"
-        "\n"
-        "   let solve(A, b  )   :=   LA.solve( A  ,  b  )\n"
-        "\n"
-        "\n"
-        "   let d := e\n"
-        "   import numpy.linalg as LA\n"
-        "\n"
-        "\n"
-        "let some_root(a , b  , c  ) :=   (  b +   math.sqrt(( discriminant(a, b, c ) ) )) / a "
-        "where\n"
-        "\n"
-        "  let discriminant(   a, b,c   ) := (b ^ 2) - 4 * (a * c)\n"
-        "\n"
-        "\n"
-        "  import math"
-    };
+    code_ = ReadFile("../example.code");
 
     Tokenizer tokenizer = fe::TokenizerFactory().Create(code_);
     Tokens tokens = tokenizer.Tokenize();
