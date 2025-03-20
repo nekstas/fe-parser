@@ -16,6 +16,10 @@ public:
         return number_ == other.number_;
     }
 
+    const std::string& GetValue() const {
+        return number_;
+    }
+
 private:
     std::string number_;
 };

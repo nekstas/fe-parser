@@ -1,10 +1,18 @@
 #pragma once
 
+#include <exception>
 #include <memory>
+#include <stdexcept>
 #include <string>
 
 struct AbstractToken;
 using Token = std::shared_ptr<AbstractToken>;
+
+class ImpossibleTokenCastError : public std::runtime_error {
+public:
+    ImpossibleTokenCastError() : std::runtime_error{"Impossible to cast token to another type."} {
+    }
+};
 
 struct AbstractToken {
 public:
@@ -32,6 +40,15 @@ Token MakeToken(Args&&... args) {
 template <typename T>
 std::shared_ptr<T> ConvertTokenTo(Token token) {
     return std::dynamic_pointer_cast<T>(token);
+}
+
+template <typename T>
+std::shared_ptr<T> CastToken(Token token) {
+    auto result = ConvertTokenTo<T>(token);
+    if (!result) {
+        throw ImpossibleTokenCastError{};
+    }
+    return result;
 }
 
 template <typename T>

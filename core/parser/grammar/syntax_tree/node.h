@@ -11,6 +11,13 @@ namespace syntax_tree {
 class Node;
 using NodePtr = std::shared_ptr<Node>;
 
+class ImpossibleNodeCastError : public std::runtime_error {
+public:
+    ImpossibleNodeCastError()
+        : std::runtime_error{"Impossible to cast syntax tree node to another type."} {
+    }
+};
+
 class Node {
 public:
     Node() = default;
@@ -49,5 +56,24 @@ template <typename T, typename... Args>
 NodePtr MakeNode(Args&&... args) {
     return std::make_shared<T>(std::forward<Args>(args)...);
 };
+
+template <typename T>
+std::shared_ptr<T> To(NodePtr node) {
+    return std::dynamic_pointer_cast<T>(node);
+}
+
+template <typename T>
+std::shared_ptr<T> Cast(NodePtr node) {
+    auto result = To<T>(node);
+    if (!result) {
+        throw ImpossibleNodeCastError{};
+    }
+    return result;
+}
+
+template <typename T>
+bool Is(NodePtr token) {
+    return static_cast<bool>(To<T>(token));
+}
 
 }  // namespace syntax_tree
