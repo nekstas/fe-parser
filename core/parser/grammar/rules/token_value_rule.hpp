@@ -21,7 +21,7 @@ private:
 template <typename TokenType>
 syntax_tree::NodePtr TokenValueRule<TokenType>::Parse(TokensStream& tokens,
                                                       const Grammar& grammar) {
-    auto token = ConvertTokenTo<TokenType>(tokens.Get());
+    auto token = ConvertTokenTo<TokenType>(tokens.SafeGet());
     if (!token || *token != token_) {
         return {};
     }

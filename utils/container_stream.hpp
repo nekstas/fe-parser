@@ -31,6 +31,13 @@ public:
         return values_[pos_++];
     }
 
+    ElementType SafeGet() {
+        if (pos_ >= values_.size()) {
+            return ElementType();
+        }
+        return values_[pos_++];
+    }
+
     void Ignore() {
         ++pos_;
     }

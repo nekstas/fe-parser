@@ -16,7 +16,7 @@ public:
 
 template <typename TokenType>
 syntax_tree::NodePtr TokenTypeRule<TokenType>::Parse(TokensStream& tokens, const Grammar& grammar) {
-    auto token = tokens.Get();
+    auto token = tokens.SafeGet();
     if (IsToken<TokenType>(token)) {
         return syntax_tree::MakeNode<syntax_tree::TokenNode>(token);
     }
