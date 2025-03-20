@@ -72,4 +72,10 @@ add_executable(fe_parser main.cpp
         core/parser/grammar/rules/repeat_rule.h
         core/parser/grammar/rules/virtual_rules.cpp
         core/parser/grammar/rules/virtual_rules.h
+        core/ast/ast_builder.cpp
+        core/ast/ast_builder.h
+        core/ast/expressions/expression.h
+        core/ast/ast_node.h
+        core/ast/ast_visitor.h
+        core/ast/statements/statement.h
 )
