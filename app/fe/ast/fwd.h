@@ -7,6 +7,7 @@ class Expression;
 class Statement;
 
 class NumberExpression;
+class VariableExpression;
 
 class Visitor;
 

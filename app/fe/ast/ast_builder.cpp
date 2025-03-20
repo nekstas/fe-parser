@@ -1,10 +1,13 @@
 #include "ast_builder.h"
 
 #include "../../../core/parser/grammar/syntax_tree/named_node.h"
+#include "../../../core/parser/grammar/syntax_tree/repeat_node.h"
 #include "../../../core/parser/grammar/syntax_tree/variant_node.h"
 #include "../../../core/tokenizer/tokens/integer_token.h"
+#include "../../../core/tokenizer/tokens/name_token.h"
 #include "expressions/expression.h"
 #include "expressions/number_expression.h"
+#include "expressions/variable_expression.h"
 
 AstBuilder::AstBuilder(const syntax_tree::NodePtr& root) : root_(root) {
 }
@@ -43,6 +46,36 @@ std::pair<size_t, syntax_tree::NodePtr> AstBuilder::UnpackVariantNode(syntax_tre
     return {node->GetOption(), node->GetChildren()[0]};
 }
 
+std::pair<size_t, std::vector<syntax_tree::NodePtr>> AstBuilder::UnpackRepeatNode(
+    syntax_tree::NodePtr root
+) {
+    auto node = syntax_tree::Cast<syntax_tree::RepeatNode>(root);
+
+    return {node->GetNodesCount(), node->GetChildren()};
+}
+
+std::string AstBuilder::GetIdentifier(syntax_tree::NodePtr root) {
+    auto node = UnpackNamedNode(root, "identifier");
+    auto token = ExtractToken<NameToken>(node);
+    return token.GetName();
+}
+
+std::string AstBuilder::GetExtendedIdentifier(syntax_tree::NodePtr root) {
+    auto node = UnpackNamedNode(root, "extended_identifier");
+    auto [count, sequence] = UnpackRepeatNode(GetChild(node, 1));
+
+    std::string result = GetIdentifier(GetChild(node, 0));
+
+    for (size_t i = 0; i < count; ++i) {
+        auto child = sequence[i];
+        std::string identifier = GetIdentifier(GetChild(child, 1));
+        result += kExtendedIdentifierSeparator;
+        result += identifier;
+    }
+
+    return result;
+}
+
 std::shared_ptr<ast::Expression> AstBuilder::BuildExpression(syntax_tree::NodePtr root) {
     auto node = UnpackNamedNode(root, "expression");
     return BuildBinaryExpression(node, 1);
@@ -64,7 +97,6 @@ std::shared_ptr<ast::Expression> AstBuilder::BuildBinaryExpression(
 
 std::shared_ptr<ast::Expression> AstBuilder::BuildExpressionAtom(syntax_tree::NodePtr root) {
     auto [option, node] = UnpackVariantNode(root);
-    // "number", "function_call", "variable", "brackets_expression", "unary_operation"
     Require(
         option < kExpressionAtomOptionsCount,
         "BuildExpressionAtom: Unknown option of atom of expression."
@@ -87,8 +119,8 @@ std::shared_ptr<ast::Expression> AstBuilder::BuildExpressionAtom(syntax_tree::No
 }
 
 std::shared_ptr<ast::Expression> AstBuilder::BuildNumberExpression(syntax_tree::NodePtr root) {
-    auto node = ExtractToken<IntegerToken>(UnpackNamedNode(root, "number"));
-    return ast::MakeNode<ast::NumberExpression>(node.GetValue());
+    auto token = ExtractToken<IntegerToken>(UnpackNamedNode(root, "number"));
+    return ast::MakeNode<ast::NumberExpression>(token.GetValue());
 }
 
 std::shared_ptr<ast::Expression> AstBuilder::BuildFunctionCallExpression(syntax_tree::NodePtr root
@@ -97,7 +129,8 @@ std::shared_ptr<ast::Expression> AstBuilder::BuildFunctionCallExpression(syntax_
 }
 
 std::shared_ptr<ast::Expression> AstBuilder::BuildVariableExpression(syntax_tree::NodePtr root) {
-    return std::shared_ptr<ast::Expression>();
+    auto node = UnpackNamedNode(root, "variable");
+    return ast::MakeNode<ast::VariableExpression>(GetExtendedIdentifier(node));
 }
 
 std::shared_ptr<ast::Expression> AstBuilder::BuildBracketsExpression(syntax_tree::NodePtr root) {

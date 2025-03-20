@@ -83,4 +83,6 @@ add_executable(fe_parser main.cpp
         app/fe/ast/fwd.h
         app/fe/ast/visitors/format_visitor.cpp
         app/fe/ast/visitors/format_visitor.h
+        app/fe/ast/expressions/variable_expression.cpp
+        app/fe/ast/expressions/variable_expression.h
 )

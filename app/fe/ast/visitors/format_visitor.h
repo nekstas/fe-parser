@@ -9,6 +9,7 @@ namespace ast {
 class FormatVisitor : public Visitor {
 public:
     void Visit(const NumberExpression& number) override;
+    void Visit(const VariableExpression& number) override;
 
     const std::string& GetResult() const {
         return result_;

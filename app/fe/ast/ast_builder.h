@@ -15,6 +15,7 @@ class AstBuilder {
 public:
     static constexpr size_t kMaxExpressionPriority = 4;
     static constexpr size_t kExpressionAtomOptionsCount = 5;
+    static constexpr char kExtendedIdentifierSeparator = '.';
 
 public:
     AstBuilder(const syntax_tree::NodePtr& root);
@@ -30,12 +31,20 @@ private:
 
     static std::pair<size_t, syntax_tree::NodePtr> UnpackVariantNode(syntax_tree::NodePtr root);
 
+    static std::pair<size_t, std::vector<syntax_tree::NodePtr>> UnpackRepeatNode(
+        syntax_tree::NodePtr root
+    );
+
     template <typename T>
     static const T& ExtractToken(syntax_tree::NodePtr root) {
         auto node = syntax_tree::Cast<syntax_tree::TokenNode>(root);
         auto token = CastToken<T>(node->GetToken());
         return *token;
     }
+
+    static std::string GetIdentifier(syntax_tree::NodePtr root);
+
+    static std::string GetExtendedIdentifier(syntax_tree::NodePtr root);
 
     std::shared_ptr<ast::Expression> BuildExpression(syntax_tree::NodePtr root);
 
