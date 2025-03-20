@@ -20,11 +20,14 @@ void DebugTokensList(const std::string& hint, const Tokens& tokens) {
 }
 
 Application::Application(size_t argc, char** argv) {
+    // TODO: change it later
+    if (argc < 2) {
+        throw std::runtime_error{"Incorrect number of cmd args."};
+    }
+    code_ = ReadFile(argv[1]);
 }
 
 int32_t Application::Run() {
-    code_ = ReadFile("../example.code");
-
     Tokenizer tokenizer = fe::TokenizerFactory().Create(code_);
     Tokens tokens = tokenizer.Tokenize();
     DebugTokensList("Tokens from Tokenizer.", tokens);
