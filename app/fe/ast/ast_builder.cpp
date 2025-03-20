@@ -137,13 +137,17 @@ std::shared_ptr<ast::Expression> AstBuilder::BuildFunctionCallExpression(syntax_
     return std::shared_ptr<ast::Expression>();
 }
 
-std::shared_ptr<ast::VariableExpression> AstBuilder::BuildVariableExpression(syntax_tree::NodePtr root) {
+std::shared_ptr<ast::VariableExpression> AstBuilder::BuildVariableExpression(
+    syntax_tree::NodePtr root
+) {
     auto node = UnpackNamedNode(root, "variable");
     return ast::MakeNode<ast::VariableExpression>(GetExtendedIdentifier(node));
 }
 
 std::shared_ptr<ast::Expression> AstBuilder::BuildBracketsExpression(syntax_tree::NodePtr root) {
-    return std::shared_ptr<ast::Expression>();
+    auto node = UnpackNamedNode(root, "brackets_expression");
+    auto expr_node = GetChild(node, 1);
+    return BuildExpression(expr_node);
 }
 
 std::shared_ptr<ast::NumberExpression> AstBuilder::BuildUnaryExpression(syntax_tree::NodePtr root) {
