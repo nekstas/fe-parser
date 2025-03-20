@@ -1,6 +1,10 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
+#include <string>
+#include <string_view>
+#include <vector>
 
 #include "../../../core/parser/grammar/syntax_tree/node.h"
 #include "../../../core/parser/grammar/syntax_tree/token_node.h"
@@ -15,7 +19,7 @@ class AstBuilder {
 public:
     static constexpr size_t kMaxExpressionPriority = 4;
     static constexpr size_t kExpressionAtomOptionsCount = 5;
-    static constexpr char kExtendedIdentifierSeparator = '.';
+    static constexpr std::string kExtendedIdentifierSeparator = ".";
 
 public:
     AstBuilder(const syntax_tree::NodePtr& root);
@@ -35,6 +39,8 @@ private:
         syntax_tree::NodePtr root
     );
 
+    static syntax_tree::NodePtr UnpackOptionalNode(syntax_tree::NodePtr root);
+
     template <typename T>
     static const T& ExtractToken(syntax_tree::NodePtr root) {
         auto node = syntax_tree::Cast<syntax_tree::TokenNode>(root);
@@ -48,23 +54,29 @@ private:
 
     static std::string GetUnaryOperator(syntax_tree::NodePtr root);
 
-    std::shared_ptr<ast::Expression> BuildExpression(syntax_tree::NodePtr root);
+    static std::vector<std::shared_ptr<ast::Expression>> GetExpressionArgsList(
+        syntax_tree::NodePtr root
+    );
 
-    std::shared_ptr<ast::Expression> BuildBinaryExpression(
+    static std::shared_ptr<ast::Expression> BuildExpression(syntax_tree::NodePtr root);
+
+    static std::shared_ptr<ast::Expression> BuildBinaryExpression(
         syntax_tree::NodePtr root, size_t priority
     );
 
-    std::shared_ptr<ast::Expression> BuildExpressionAtom(syntax_tree::NodePtr root);
+    static std::shared_ptr<ast::Expression> BuildExpressionAtom(syntax_tree::NodePtr root);
 
-    std::shared_ptr<ast::NumberExpression> BuildNumberExpression(syntax_tree::NodePtr root);
+    static std::shared_ptr<ast::NumberExpression> BuildNumberExpression(syntax_tree::NodePtr root);
 
-    std::shared_ptr<ast::Expression> BuildFunctionCallExpression(syntax_tree::NodePtr root);
+    static std::shared_ptr<ast::Expression> BuildFunctionCallExpression(syntax_tree::NodePtr root);
 
-    std::shared_ptr<ast::VariableExpression> BuildVariableExpression(syntax_tree::NodePtr root);
+    static std::shared_ptr<ast::VariableExpression> BuildVariableExpression(
+        syntax_tree::NodePtr root
+    );
 
-    std::shared_ptr<ast::Expression> BuildBracketsExpression(syntax_tree::NodePtr root);
+    static std::shared_ptr<ast::Expression> BuildBracketsExpression(syntax_tree::NodePtr root);
 
-    std::shared_ptr<ast::NumberExpression> BuildUnaryExpression(syntax_tree::NodePtr root);
+    static std::shared_ptr<ast::NumberExpression> BuildUnaryExpression(syntax_tree::NodePtr root);
 
 private:
     syntax_tree::NodePtr root_;

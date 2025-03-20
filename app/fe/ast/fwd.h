@@ -8,6 +8,7 @@ class Statement;
 
 class NumberExpression;
 class VariableExpression;
+class CallExpression;
 
 class Visitor;
 

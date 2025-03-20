@@ -1,11 +1,14 @@
 #include "ast_builder.h"
 
 #include "../../../core/parser/grammar/syntax_tree/named_node.h"
+#include "../../../core/parser/grammar/syntax_tree/optional_node.h"
 #include "../../../core/parser/grammar/syntax_tree/repeat_node.h"
 #include "../../../core/parser/grammar/syntax_tree/variant_node.h"
 #include "../../../core/tokenizer/tokens/integer_token.h"
 #include "../../../core/tokenizer/tokens/name_token.h"
 #include "../../../core/tokenizer/tokens/operator_token.h"
+#include "../../../utils/utils.h"
+#include "expressions/call_expression.h"
 #include "expressions/expression.h"
 #include "expressions/number_expression.h"
 #include "expressions/variable_expression.h"
@@ -55,6 +58,15 @@ std::pair<size_t, std::vector<syntax_tree::NodePtr>> AstBuilder::UnpackRepeatNod
     return {node->GetNodesCount(), node->GetChildren()};
 }
 
+syntax_tree::NodePtr AstBuilder::UnpackOptionalNode(syntax_tree::NodePtr root) {
+    auto node = syntax_tree::Cast<syntax_tree::OptionalNode>(root);
+
+    if (node->HasNode()) {
+        return node->GetResult();
+    }
+    return {};
+}
+
 std::string AstBuilder::GetIdentifier(syntax_tree::NodePtr root) {
     auto node = UnpackNamedNode(root, "identifier");
     auto token = ExtractToken<NameToken>(node);
@@ -63,18 +75,16 @@ std::string AstBuilder::GetIdentifier(syntax_tree::NodePtr root) {
 
 std::string AstBuilder::GetExtendedIdentifier(syntax_tree::NodePtr root) {
     auto node = UnpackNamedNode(root, "extended_identifier");
-    auto [count, sequence] = UnpackRepeatNode(GetChild(node, 1));
 
-    std::string result = GetIdentifier(GetChild(node, 0));
+    std::vector<std::string> identifiers = {GetIdentifier(GetChild(node, 0))};
+    auto [count, sequence] = UnpackRepeatNode(GetChild(node, 1));
 
     for (size_t i = 0; i < count; ++i) {
         auto child = sequence[i];
-        std::string identifier = GetIdentifier(GetChild(child, 1));
-        result += kExtendedIdentifierSeparator;
-        result += identifier;
+        identifiers.push_back(GetIdentifier(GetChild(child, 1)));
     }
 
-    return result;
+    return utils::Join(identifiers, kExtendedIdentifierSeparator);
 }
 
 std::string AstBuilder::GetUnaryOperator(syntax_tree::NodePtr root) {
@@ -82,6 +92,27 @@ std::string AstBuilder::GetUnaryOperator(syntax_tree::NodePtr root) {
     auto [_, token_node] = UnpackVariantNode(node);
     auto token = ExtractToken<OperatorToken>(token_node);
     return token.GetCode();
+}
+
+std::vector<std::shared_ptr<ast::Expression>> AstBuilder::GetExpressionArgsList(
+    syntax_tree::NodePtr root
+) {
+    auto node = UnpackNamedNode(root, "expression_args_list");
+    auto list = UnpackOptionalNode(GetChild(node, 1));
+
+    if (!list) {
+        return {};
+    }
+
+    std::vector<std::shared_ptr<ast::Expression>> args = {BuildExpression(GetChild(list, 0))};
+    auto [count, sequence] = UnpackRepeatNode(GetChild(list, 1));
+
+    for (size_t i = 0; i < count; ++i) {
+        auto child = sequence[i];
+        args.push_back(BuildExpression(GetChild(child, 1)));
+    }
+
+    return args;
 }
 
 std::shared_ptr<ast::Expression> AstBuilder::BuildExpression(syntax_tree::NodePtr root) {
@@ -134,7 +165,11 @@ std::shared_ptr<ast::NumberExpression> AstBuilder::BuildNumberExpression(syntax_
 
 std::shared_ptr<ast::Expression> AstBuilder::BuildFunctionCallExpression(syntax_tree::NodePtr root
 ) {
-    return std::shared_ptr<ast::Expression>();
+    auto node = UnpackNamedNode(root, "function_call");
+    auto callee = BuildVariableExpression(GetChild(node, 0));
+    auto args = GetExpressionArgsList(GetChild(node, 1));
+
+    return ast::MakeNode<ast::CallExpression>(callee, args);
 }
 
 std::shared_ptr<ast::VariableExpression> AstBuilder::BuildVariableExpression(

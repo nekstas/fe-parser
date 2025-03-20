@@ -14,7 +14,7 @@ syntax_tree::NodePtr syntax_tree::OptionalNode::GetResult() const {
     if (!HasNode()) {
         throw OptionalChildNodeBadAccessError{};
     }
-    return syntax_tree::NodePtr();
+    return children_.front();
 }
 
 std::string syntax_tree::OptionalNode::ToString() const {

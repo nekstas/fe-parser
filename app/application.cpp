@@ -24,7 +24,7 @@ Application::Application(size_t argc, char** argv) {
     if (argc < 2) {
         throw std::runtime_error{"Incorrect number of cmd args."};
     }
-    code_ = ReadFile(argv[1]);
+    code_ = utils::ReadFile(argv[1]);
 }
 
 int32_t Application::Run() {

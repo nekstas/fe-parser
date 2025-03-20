@@ -11,6 +11,7 @@ public:
 
     virtual void Visit(const NumberExpression& number) = 0;
     virtual void Visit(const VariableExpression& number) = 0;
+    virtual void Visit(const CallExpression& number) = 0;
 
 private:
 

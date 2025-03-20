@@ -57,10 +57,10 @@ Grammar fe::GrammarFactory::Create() const {
 
     grammar.AddRule("variable", MakeRule<NamedRule>("extended_identifier"));
     grammar.AddRule(
-        "function_call", MakeRule<SequenceRule>(
-                             {MakeRule<NamedRule>("extended_identifier"),
-                              MakeRule<NamedRule>("expression_args_list")}
-                         )
+        "function_call",
+        MakeRule<SequenceRule>(
+            {MakeRule<NamedRule>("variable"), MakeRule<NamedRule>("expression_args_list")}
+        )
     );
     grammar.AddRule(
         "brackets_expression",
