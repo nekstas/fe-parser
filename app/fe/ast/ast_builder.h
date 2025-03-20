@@ -46,6 +46,8 @@ private:
 
     static std::string GetExtendedIdentifier(syntax_tree::NodePtr root);
 
+    static std::string GetUnaryOperator(syntax_tree::NodePtr root);
+
     std::shared_ptr<ast::Expression> BuildExpression(syntax_tree::NodePtr root);
 
     std::shared_ptr<ast::Expression> BuildBinaryExpression(
@@ -54,15 +56,15 @@ private:
 
     std::shared_ptr<ast::Expression> BuildExpressionAtom(syntax_tree::NodePtr root);
 
-    std::shared_ptr<ast::Expression> BuildNumberExpression(syntax_tree::NodePtr root);
+    std::shared_ptr<ast::NumberExpression> BuildNumberExpression(syntax_tree::NodePtr root);
 
     std::shared_ptr<ast::Expression> BuildFunctionCallExpression(syntax_tree::NodePtr root);
 
-    std::shared_ptr<ast::Expression> BuildVariableExpression(syntax_tree::NodePtr root);
+    std::shared_ptr<ast::VariableExpression> BuildVariableExpression(syntax_tree::NodePtr root);
 
     std::shared_ptr<ast::Expression> BuildBracketsExpression(syntax_tree::NodePtr root);
 
-    std::shared_ptr<ast::Expression> BuildUnaryExpression(syntax_tree::NodePtr root);
+    std::shared_ptr<ast::NumberExpression> BuildUnaryExpression(syntax_tree::NodePtr root);
 
 private:
     syntax_tree::NodePtr root_;

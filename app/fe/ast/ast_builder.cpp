@@ -5,6 +5,7 @@
 #include "../../../core/parser/grammar/syntax_tree/variant_node.h"
 #include "../../../core/tokenizer/tokens/integer_token.h"
 #include "../../../core/tokenizer/tokens/name_token.h"
+#include "../../../core/tokenizer/tokens/operator_token.h"
 #include "expressions/expression.h"
 #include "expressions/number_expression.h"
 #include "expressions/variable_expression.h"
@@ -76,6 +77,13 @@ std::string AstBuilder::GetExtendedIdentifier(syntax_tree::NodePtr root) {
     return result;
 }
 
+std::string AstBuilder::GetUnaryOperator(syntax_tree::NodePtr root) {
+    auto node = UnpackNamedNode(root, "unary_operator");
+    auto [_, token_node] = UnpackVariantNode(node);
+    auto token = ExtractToken<OperatorToken>(token_node);
+    return token.GetCode();
+}
+
 std::shared_ptr<ast::Expression> AstBuilder::BuildExpression(syntax_tree::NodePtr root) {
     auto node = UnpackNamedNode(root, "expression");
     return BuildBinaryExpression(node, 1);
@@ -118,7 +126,8 @@ std::shared_ptr<ast::Expression> AstBuilder::BuildExpressionAtom(syntax_tree::No
     throw std::logic_error{"Expected more case handlers of atom expression."};
 }
 
-std::shared_ptr<ast::Expression> AstBuilder::BuildNumberExpression(syntax_tree::NodePtr root) {
+std::shared_ptr<ast::NumberExpression> AstBuilder::BuildNumberExpression(syntax_tree::NodePtr root
+) {
     auto token = ExtractToken<IntegerToken>(UnpackNamedNode(root, "number"));
     return ast::MakeNode<ast::NumberExpression>(token.GetValue());
 }
@@ -128,7 +137,7 @@ std::shared_ptr<ast::Expression> AstBuilder::BuildFunctionCallExpression(syntax_
     return std::shared_ptr<ast::Expression>();
 }
 
-std::shared_ptr<ast::Expression> AstBuilder::BuildVariableExpression(syntax_tree::NodePtr root) {
+std::shared_ptr<ast::VariableExpression> AstBuilder::BuildVariableExpression(syntax_tree::NodePtr root) {
     auto node = UnpackNamedNode(root, "variable");
     return ast::MakeNode<ast::VariableExpression>(GetExtendedIdentifier(node));
 }
@@ -137,6 +146,16 @@ std::shared_ptr<ast::Expression> AstBuilder::BuildBracketsExpression(syntax_tree
     return std::shared_ptr<ast::Expression>();
 }
 
-std::shared_ptr<ast::Expression> AstBuilder::BuildUnaryExpression(syntax_tree::NodePtr root) {
-    return std::shared_ptr<ast::Expression>();
+std::shared_ptr<ast::NumberExpression> AstBuilder::BuildUnaryExpression(syntax_tree::NodePtr root) {
+    auto node = UnpackNamedNode(root, "unary_operation");
+    auto unary_operator = GetUnaryOperator(GetChild(node, 0));
+    auto number = BuildNumberExpression(GetChild(node, 1));
+
+    Require(unary_operator == "+" || unary_operator == "-", "Unknown unary operator.");
+
+    if (unary_operator == "+") {
+        return number;
+    } else {
+        return ast::MakeNode<ast::NumberExpression>("-" + number->GetValue());
+    }
 }
