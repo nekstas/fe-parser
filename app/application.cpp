@@ -6,7 +6,7 @@
 #include "../core/tokenizer/tokenizer.h"
 #include "../core/tokens_preprocessor/tokens_preprocessor.h"
 #include "../utils/utils.h"
-#include "fe/ast/ast_builder.h"
+#include "fe/ast/builders/full_ast_builder.h"
 #include "fe/ast/visitors/format_visitor.h"
 #include "fe/factories/parser_factory.h"
 #include "fe/factories/tokenizer_factory.h"
@@ -44,8 +44,8 @@ int32_t Application::Run() {
     std::cerr << "SyntaxTree from Parser.\n";
     std::cerr << syntax_tree::Node::GetStringRepresentation(syntax_tree) << "\n";
 
-    AstBuilder ast_builder(syntax_tree);
-    ast::NodePtr ast_result = ast_builder.Build();
+    ast::FullAstBuilder ast_builder;
+    ast::NodePtr ast_result = ast_builder.Build(syntax_tree);
     std::cerr << "Transformed to AST.\n";
 
     ast::FormatVisitor visitor;

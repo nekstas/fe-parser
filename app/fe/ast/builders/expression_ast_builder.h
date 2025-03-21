@@ -1,60 +1,18 @@
 #pragma once
 
-#include <cstdint>
-#include <memory>
-#include <string>
-#include <string_view>
-#include <vector>
+#include "basic_ast_builder.h"
 
-#include "../../../core/parser/grammar/syntax_tree/node.h"
-#include "../../../core/parser/grammar/syntax_tree/token_node.h"
-#include "expressions_info.h"
-#include "node.h"
+namespace ast {
 
-class AstBuilderError : public std::runtime_error {
-public:
-    using std::runtime_error::runtime_error;
-};
-
-class AstBuilder {
-public:
+class ExpressionAstBuilder : public BasicAstBuilder {
+protected:
     static constexpr size_t kMaxExpressionPriority = 4;
     static constexpr size_t kExpressionAtomOptionsCount = 5;
-    static constexpr std::string kExtendedIdentifierSeparator = ".";
 
 public:
-    AstBuilder(const syntax_tree::NodePtr& root);
+    ExpressionAstBuilder();
 
-    ast::NodePtr Build();
-
-private:
-    static void Require(bool condition, std::string message);
-
-    static syntax_tree::NodePtr GetChild(syntax_tree::NodePtr root, size_t index);
-
-    static syntax_tree::NodePtr UnpackNamedNode(syntax_tree::NodePtr root, const std::string& name);
-
-    static std::pair<size_t, syntax_tree::NodePtr> UnpackVariantNode(syntax_tree::NodePtr root);
-
-    static std::pair<size_t, std::vector<syntax_tree::NodePtr>> UnpackRepeatNode(
-        syntax_tree::NodePtr root
-    );
-
-    static syntax_tree::NodePtr UnpackOptionalNode(syntax_tree::NodePtr root);
-
-    template <typename T>
-    static const T& ExtractToken(syntax_tree::NodePtr root) {
-        auto node = syntax_tree::Cast<syntax_tree::TokenNode>(root);
-        auto token = CastToken<T>(node->GetToken());
-        return *token;
-    }
-
-    static std::string GetIdentifier(syntax_tree::NodePtr root);
-
-    static std::string GetExtendedIdentifier(syntax_tree::NodePtr root);
-
-    static std::string GetUnaryOperator(syntax_tree::NodePtr root);
-
+protected:
     std::vector<std::shared_ptr<ast::Expression>> GetExpressionArgsList(syntax_tree::NodePtr root);
 
     std::shared_ptr<ast::Expression> ConstructLeftBinaryExpression(
@@ -90,7 +48,8 @@ private:
 
     std::shared_ptr<ast::NumberExpression> BuildUnaryExpression(syntax_tree::NodePtr root);
 
-private:
-    syntax_tree::NodePtr root_;
+protected:
     ast::ExpressionsInfo expressions_info_;
 };
+
+}  // namespace ast

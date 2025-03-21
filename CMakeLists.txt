@@ -72,8 +72,8 @@ add_executable(fe_parser main.cpp
         core/parser/grammar/rules/repeat_rule.h
         core/parser/grammar/rules/virtual_rules.cpp
         core/parser/grammar/rules/virtual_rules.h
-        app/fe/ast/ast_builder.cpp
-        app/fe/ast/ast_builder.h
+        app/fe/ast/builders/basic_ast_builder.cpp
+        app/fe/ast/builders/basic_ast_builder.h
         app/fe/ast/expressions/expression.h
         app/fe/ast/node.h
         app/fe/ast/visitors/visitor.h
@@ -94,4 +94,10 @@ add_executable(fe_parser main.cpp
         app/fe/factories/expressions_info_factory.cpp
         app/fe/factories/expressions_info_factory.h
         app/fe/ast/expressions/atom_expression.h
+        app/fe/ast/statements/define_variable_statement.cpp
+        app/fe/ast/statements/define_variable_statement.h
+        app/fe/ast/builders/expression_ast_builder.cpp
+        app/fe/ast/builders/expression_ast_builder.h
+        app/fe/ast/builders/full_ast_builder.cpp
+        app/fe/ast/builders/full_ast_builder.h
 )
