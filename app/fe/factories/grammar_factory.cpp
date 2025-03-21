@@ -87,10 +87,10 @@ Grammar fe::GrammarFactory::Create() const {
     );
 
     grammar.AddRule(
-        "expression_p3",
-        VirtualRules::SeparatorRule(
-            MakeRule<NamedRule>("expression_p4"), VirtualRules::OperatorRule("^"), true
-        )
+        "expression_p3", VirtualRules::SeparatorRule(
+                             MakeRule<NamedRule>("expression_p4"),
+                             MakeRule<VariantRule>({VirtualRules::OperatorRule("^")}), true
+                         )
     );
 
     grammar.AddRule(

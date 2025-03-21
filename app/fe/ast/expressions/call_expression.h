@@ -3,11 +3,11 @@
 #include <string>
 #include <vector>
 
-#include "expression.h"
+#include "atom_expression.h"
 
 namespace ast {
 
-class CallExpression : public Expression {
+class CallExpression : public AtomExpression {
 public:
     CallExpression(
         std::shared_ptr<Expression> callee, const std::vector<std::shared_ptr<Expression>>& args

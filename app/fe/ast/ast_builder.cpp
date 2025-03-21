@@ -8,12 +8,15 @@
 #include "../../../core/tokenizer/tokens/name_token.h"
 #include "../../../core/tokenizer/tokens/operator_token.h"
 #include "../../../utils/utils.h"
+#include "../factories/expressions_info_factory.h"
+#include "expressions/binary_expression.h"
 #include "expressions/call_expression.h"
 #include "expressions/expression.h"
 #include "expressions/number_expression.h"
 #include "expressions/variable_expression.h"
 
-AstBuilder::AstBuilder(const syntax_tree::NodePtr& root) : root_(root) {
+AstBuilder::AstBuilder(const syntax_tree::NodePtr& root)
+    : root_(root), expressions_info_(fe::ExpressionsInfoFactory().Create()) {
 }
 
 ast::NodePtr AstBuilder::Build() {
@@ -115,6 +118,53 @@ std::vector<std::shared_ptr<ast::Expression>> AstBuilder::GetExpressionArgsList(
     return args;
 }
 
+std::shared_ptr<ast::Expression> AstBuilder::ConstructLeftBinaryExpression(
+    const std::vector<std::shared_ptr<ast::Expression>>& expressions,
+    const std::vector<std::string>& codes
+) {
+    std::shared_ptr<ast::Expression> result = expressions.front();
+
+    for (size_t i = 0; i < codes.size(); ++i) {
+        result = ast::MakeNode<ast::BinaryExpression>(codes[i], result, expressions[i + 1]);
+    }
+
+    return result;
+}
+
+std::shared_ptr<ast::Expression> AstBuilder::ConstructRightBinaryExpression(
+    const std::vector<std::shared_ptr<ast::Expression>>& expressions,
+    const std::vector<std::string>& codes
+) {
+    std::shared_ptr<ast::Expression> result = expressions.back();
+
+    for (size_t i = codes.size(); i > 0; --i) {
+        result = ast::MakeNode<ast::BinaryExpression>(codes[i - 1], expressions[i - 1], result);
+    }
+
+    return result;
+}
+
+ast::ExpressionsInfo::Info AstBuilder::ParseBinaryExpressionParts(
+    syntax_tree::NodePtr root, std::vector<std::shared_ptr<ast::Expression>>& expressions,
+    std::vector<std::string>& codes
+) {
+    auto [count, sequence] = UnpackRepeatNode(root);
+    ast::ExpressionsInfo::Info info;
+
+    for (size_t i = 0; i < count; ++i) {
+        auto child = sequence[i];
+        auto code_token = ExtractToken<OperatorToken>(UnpackVariantNode(GetChild(child, 0)).second);
+        auto code = code_token.GetCode();
+
+        codes.push_back(code);
+        info = info.Merge(expressions_info_.GetInfo(code));
+
+        expressions.push_back(BuildBinaryExpression(GetChild(child, 1), info.priority + 1));
+    }
+
+    return info;
+}
+
 std::shared_ptr<ast::Expression> AstBuilder::BuildExpression(syntax_tree::NodePtr root) {
     auto node = UnpackNamedNode(root, "expression");
     return BuildBinaryExpression(node, 1);
@@ -130,8 +180,23 @@ std::shared_ptr<ast::Expression> AstBuilder::BuildBinaryExpression(
         return BuildExpressionAtom(node);
     }
 
-    auto first_expression = BuildBinaryExpression(GetChild(node, 0), priority + 1);
-    return first_expression;
+    std::vector<std::shared_ptr<ast::Expression>> expressions = {
+        BuildBinaryExpression(GetChild(node, 0), priority + 1)
+    };
+    std::vector<std::string> codes;
+
+    ast::ExpressionsInfo::Info info =
+        ParseBinaryExpressionParts(GetChild(node, 1), expressions, codes);
+
+    switch (info.associativity) {
+        case ast::ExpressionsInfo::Associativity::LEFT:
+        case ast::ExpressionsInfo::Associativity::BOTH:
+            return ConstructLeftBinaryExpression(expressions, codes);
+        case ast::ExpressionsInfo::Associativity::RIGHT:
+            return ConstructRightBinaryExpression(expressions, codes);
+        default:
+            return expressions.front();
+    }
 }
 
 std::shared_ptr<ast::Expression> AstBuilder::BuildExpressionAtom(syntax_tree::NodePtr root) {

@@ -87,4 +87,11 @@ add_executable(fe_parser main.cpp
         app/fe/ast/expressions/variable_expression.h
         app/fe/ast/expressions/call_expression.cpp
         app/fe/ast/expressions/call_expression.h
+        app/fe/ast/expressions/binary_expression.cpp
+        app/fe/ast/expressions/binary_expression.h
+        app/fe/ast/expressions_info.cpp
+        app/fe/ast/expressions_info.h
+        app/fe/factories/expressions_info_factory.cpp
+        app/fe/factories/expressions_info_factory.h
+        app/fe/ast/expressions/atom_expression.h
 )

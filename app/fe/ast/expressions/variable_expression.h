@@ -2,11 +2,11 @@
 
 #include <string>
 
-#include "expression.h"
+#include "atom_expression.h"
 
 namespace ast {
 
-class VariableExpression : public Expression {
+class VariableExpression : public AtomExpression {
 public:
     VariableExpression(const std::string& name);
 

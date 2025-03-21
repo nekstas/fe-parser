@@ -2,11 +2,11 @@
 
 #include <string>
 
-#include "expression.h"
+#include "atom_expression.h"
 
 namespace ast {
 
-class NumberExpression : public Expression {
+class NumberExpression : public AtomExpression {
 public:
     NumberExpression(const std::string& number);
 
