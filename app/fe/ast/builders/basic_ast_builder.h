@@ -46,12 +46,6 @@ protected:
         auto token = CastToken<T>(node->GetToken());
         return *token;
     }
-
-    static std::string GetIdentifier(syntax_tree::NodePtr root);
-
-    static std::string GetExtendedIdentifier(syntax_tree::NodePtr root);
-
-    static std::string GetUnaryOperator(syntax_tree::NodePtr root);
 };
 
 }  // namespace ast

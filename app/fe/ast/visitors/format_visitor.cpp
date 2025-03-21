@@ -4,6 +4,9 @@
 #include "../../factories/expressions_info_factory.h"
 #include "../expressions/number_expression.h"
 #include "../expressions/variable_expression.h"
+#include "../statements/common_import_statement.h"
+#include "../statements/define_function_statement.h"
+#include "../statements/define_variable_statement.h"
 
 ast::FormatVisitor::FormatVisitor() : expressions_info_(fe::ExpressionsInfoFactory().Create()) {
 }
@@ -16,6 +19,17 @@ void ast::FormatVisitor::Visit(const ast::VariableExpression& variable) {
     result_ = variable.GetName();
 }
 
+std::string ast::FormatVisitor::FormatExpressionsList(
+    const std::vector<std::shared_ptr<Expression>>& list
+) {
+    std::vector<std::string> args;
+    for (auto arg : list) {
+        arg->Accept(*this);
+        args.push_back(result_);
+    }
+    return "(" + utils::Join(args, ", ") + ")";
+}
+
 void ast::FormatVisitor::Visit(const ast::CallExpression& call_expression) {
     auto callee = call_expression.GetCallee();
     callee->Accept(*this);
@@ -25,15 +39,7 @@ void ast::FormatVisitor::Visit(const ast::CallExpression& call_expression) {
     if (!Is<VariableExpression>(callee)) {
         result_ = "(" + result_ + ")";
     }
-    new_result << result_;
-
-    std::vector<std::string> args;
-    for (auto arg : call_expression.GetArgs()) {
-        arg->Accept(*this);
-        args.push_back(result_);
-    }
-
-    new_result << "(" << utils::Join(args, ", ") << ")";
+    new_result << result_ << FormatExpressionsList(call_expression.GetArgs());
     result_ = new_result;
 }
 
@@ -82,3 +88,26 @@ void ast::FormatVisitor::Visit(const ast::DefineVariableStatement& statement) {
     expression->Accept(*this);
     result_ = (FormatStream() << "let " << name << " := " << result_);
 }
+
+std::string ast::FormatVisitor::FormatIdentifiersList(const std::vector<std::string>& list) {
+    return "(" + utils::Join(list, ", ") + ")";
+}
+
+void ast::FormatVisitor::Visit(const ast::DefineFunctionStatement& statement) {
+    auto name = statement.GetName();
+    auto args = statement.GetArgs();
+    auto expression = statement.GetExpression();
+
+    expression->Accept(*this);
+
+    auto args_str = FormatIdentifiersList(args);
+    result_ = (FormatStream() << "let " << name << args_str << " := " << result_);
+}
+
+void ast::FormatVisitor::Visit(const ast::CommonImportStatement& statement) {
+    auto name = statement.GetName();
+
+    result_ = "import " + name;
+}
+
+// TODO: Add indents processing.

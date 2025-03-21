@@ -102,4 +102,10 @@ add_executable(fe_parser main.cpp
         app/fe/ast/builders/full_ast_builder.h
         app/fe/ast/builders/statement_ast_builder.cpp
         app/fe/ast/builders/statement_ast_builder.h
+        app/fe/ast/statements/define_function_statement.cpp
+        app/fe/ast/statements/define_function_statement.h
+        app/fe/ast/statements/import_statement.h
+        app/fe/ast/statements/common_import_statement.cpp
+        app/fe/ast/statements/common_import_statement.h
+        app/fe/ast/statements/import_statement.cpp
 )

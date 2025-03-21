@@ -12,7 +12,15 @@ public:
 protected:
     std::shared_ptr<ast::Statement> BuildStatement(syntax_tree::NodePtr root);
 
-    std::shared_ptr<ast::Statement> BuildDefineVariableStatement(syntax_tree::NodePtr root);
+    std::shared_ptr<ast::DefineVariableStatement> BuildDefineVariableStatement(
+        syntax_tree::NodePtr root
+    );
+
+    std::shared_ptr<ast::DefineFunctionStatement> BuildDefineFunctionStatement(
+        syntax_tree::NodePtr root
+    );
+
+    std::shared_ptr<ast::ImportStatement> BuildImportStatement(syntax_tree::NodePtr root);
 
 protected:
 };

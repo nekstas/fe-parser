@@ -1,6 +1,7 @@
 #include "expression_ast_builder.h"
 
 #include "../../../../core/tokenizer/tokens/integer_token.h"
+#include "../../../../core/tokenizer/tokens/name_token.h"
 #include "../../../../core/tokenizer/tokens/operator_token.h"
 #include "../../../../utils/utils.h"
 #include "../../factories/expressions_info_factory.h"
@@ -11,6 +12,52 @@
 
 ast::ExpressionAstBuilder::ExpressionAstBuilder()
     : expressions_info_(fe::ExpressionsInfoFactory().Create()) {
+}
+
+std::string ast::ExpressionAstBuilder::GetIdentifier(syntax_tree::NodePtr root) {
+    auto node = UnpackNamedNode(root, "identifier");
+    auto token = ExtractToken<NameToken>(node);
+    return token.GetName();
+}
+
+std::string ast::ExpressionAstBuilder::GetExtendedIdentifier(syntax_tree::NodePtr root) {
+    auto node = UnpackNamedNode(root, "extended_identifier");
+
+    std::vector<std::string> identifiers = {GetIdentifier(GetChild(node, 0))};
+    auto [count, sequence] = UnpackRepeatNode(GetChild(node, 1));
+
+    for (size_t i = 0; i < count; ++i) {
+        auto child = sequence[i];
+        identifiers.push_back(GetIdentifier(GetChild(child, 1)));
+    }
+
+    return utils::Join(identifiers, kExtendedIdentifierSeparator);
+}
+
+std::string ast::ExpressionAstBuilder::GetUnaryOperator(syntax_tree::NodePtr root) {
+    auto node = UnpackNamedNode(root, "unary_operator");
+    auto [_, token_node] = UnpackVariantNode(node);
+    auto token = ExtractToken<OperatorToken>(token_node);
+    return token.GetCode();
+}
+
+std::vector<std::string> ast::ExpressionAstBuilder::GetIdentifierArgsList(syntax_tree::NodePtr root
+) {
+    auto node = UnpackNamedNode(root, "identifier_args_list");
+    auto list = UnpackOptionalNode(GetChild(node, 1));
+
+    if (!list) {
+        return {};
+    }
+
+    std::vector<std::string> args = {GetIdentifier(GetChild(list, 0))};
+    auto [count, sequence] = UnpackRepeatNode(GetChild(list, 1));
+
+    for (size_t i = 0; i < count; ++i) {
+        args.push_back(GetIdentifier(GetChild(sequence[i], 1)));
+    }
+
+    return args;
 }
 
 std::vector<std::shared_ptr<ast::Expression>> ast::ExpressionAstBuilder::GetExpressionArgsList(
@@ -27,8 +74,7 @@ std::vector<std::shared_ptr<ast::Expression>> ast::ExpressionAstBuilder::GetExpr
     auto [count, sequence] = UnpackRepeatNode(GetChild(list, 1));
 
     for (size_t i = 0; i < count; ++i) {
-        auto child = sequence[i];
-        args.push_back(BuildExpression(GetChild(child, 1)));
+        args.push_back(BuildExpression(GetChild(sequence[i], 1)));
     }
 
     return args;

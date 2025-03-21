@@ -2,7 +2,6 @@
 
 #include "../expressions/binary_expression.h"
 #include "../fwd.h"
-#include "../statements/define_variable_statement.h"
 
 namespace ast {
 
@@ -16,6 +15,8 @@ public:
     virtual void Visit(const CallExpression& call_expression) = 0;
     virtual void Visit(const BinaryExpression& binary_expression) = 0;
     virtual void Visit(const DefineVariableStatement& statement) = 0;
+    virtual void Visit(const DefineFunctionStatement& statement) = 0;
+    virtual void Visit(const CommonImportStatement& statement) = 0;
 
 private:
 };

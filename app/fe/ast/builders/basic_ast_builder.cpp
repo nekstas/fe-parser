@@ -4,8 +4,6 @@
 #include "../../../../core/parser/grammar/syntax_tree/optional_node.h"
 #include "../../../../core/parser/grammar/syntax_tree/repeat_node.h"
 #include "../../../../core/parser/grammar/syntax_tree/variant_node.h"
-#include "../../../../core/tokenizer/tokens/name_token.h"
-#include "../../../../core/tokenizer/tokens/operator_token.h"
 #include "../../../../utils/utils.h"
 #include "../expressions/variable_expression.h"
 
@@ -54,31 +52,4 @@ syntax_tree::NodePtr ast::BasicAstBuilder::UnpackOptionalNode(syntax_tree::NodeP
         return node->GetResult();
     }
     return {};
-}
-
-std::string ast::BasicAstBuilder::GetIdentifier(syntax_tree::NodePtr root) {
-    auto node = UnpackNamedNode(root, "identifier");
-    auto token = ExtractToken<NameToken>(node);
-    return token.GetName();
-}
-
-std::string ast::BasicAstBuilder::GetExtendedIdentifier(syntax_tree::NodePtr root) {
-    auto node = UnpackNamedNode(root, "extended_identifier");
-
-    std::vector<std::string> identifiers = {GetIdentifier(GetChild(node, 0))};
-    auto [count, sequence] = UnpackRepeatNode(GetChild(node, 1));
-
-    for (size_t i = 0; i < count; ++i) {
-        auto child = sequence[i];
-        identifiers.push_back(GetIdentifier(GetChild(child, 1)));
-    }
-
-    return utils::Join(identifiers, kExtendedIdentifierSeparator);
-}
-
-std::string ast::BasicAstBuilder::GetUnaryOperator(syntax_tree::NodePtr root) {
-    auto node = UnpackNamedNode(root, "unary_operator");
-    auto [_, token_node] = UnpackVariantNode(node);
-    auto token = ExtractToken<OperatorToken>(token_node);
-    return token.GetCode();
 }

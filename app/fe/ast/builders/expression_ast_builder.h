@@ -12,6 +12,14 @@ public:
     ExpressionAstBuilder();
 
 protected:
+    static std::string GetIdentifier(syntax_tree::NodePtr root);
+
+    static std::string GetExtendedIdentifier(syntax_tree::NodePtr root);
+
+    static std::string GetUnaryOperator(syntax_tree::NodePtr root);
+
+    std::vector<std::string> GetIdentifierArgsList(syntax_tree::NodePtr root);
+
     std::vector<std::shared_ptr<ast::Expression>> GetExpressionArgsList(syntax_tree::NodePtr root);
 
     std::shared_ptr<ast::Expression> ConstructLeftBinaryExpression(

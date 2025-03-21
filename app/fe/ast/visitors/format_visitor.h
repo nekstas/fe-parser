@@ -17,6 +17,8 @@ public:
     void Visit(const CallExpression& call_expression) override;
     void Visit(const BinaryExpression& binary_expression) override;
     void Visit(const DefineVariableStatement& statement) override;
+    void Visit(const DefineFunctionStatement& statement) override;
+    void Visit(const CommonImportStatement& statement) override;
 
     const std::string& GetResult() const {
         return result_;
@@ -27,6 +29,10 @@ private:
         FormatStream& new_result, std::shared_ptr<Expression> expression,
         const ast::ExpressionsInfo::Info& info, ExpressionsInfo::Associativity place
     );
+
+    std::string FormatExpressionsList(const std::vector<std::shared_ptr<Expression>>& list);
+
+    std::string FormatIdentifiersList(const std::vector<std::string>& list);
 
 private:
     std::string result_;
