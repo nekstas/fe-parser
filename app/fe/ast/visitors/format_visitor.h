@@ -16,6 +16,7 @@ public:
     void Visit(const VariableExpression& variable) override;
     void Visit(const CallExpression& call_expression) override;
     void Visit(const BinaryExpression& binary_expression) override;
+    void Visit(const DefineVariableStatement& statement) override;
 
     const std::string& GetResult() const {
         return result_;

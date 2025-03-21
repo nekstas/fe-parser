@@ -95,7 +95,7 @@ std::shared_ptr<ast::Expression> ast::ExpressionAstBuilder::BuildBinaryExpressio
     auto node = UnpackNamedNode(root, node_name);
 
     if (priority == kMaxExpressionPriority) {
-        return BuildExpressionAtom(node);
+        return BuildAtomExpression(node);
     }
 
     std::vector<std::shared_ptr<ast::Expression>> expressions = {
@@ -117,14 +117,10 @@ std::shared_ptr<ast::Expression> ast::ExpressionAstBuilder::BuildBinaryExpressio
     }
 }
 
-std::shared_ptr<ast::Expression> ast::ExpressionAstBuilder::BuildExpressionAtom(
+std::shared_ptr<ast::Expression> ast::ExpressionAstBuilder::BuildAtomExpression(
     syntax_tree::NodePtr root
 ) {
     auto [option, node] = UnpackVariantNode(root);
-    Require(
-        option < kExpressionAtomOptionsCount,
-        "BuildExpressionAtom: Unknown option of atom of expression."
-    );
 
     switch (option) {
         case 0:
@@ -139,7 +135,7 @@ std::shared_ptr<ast::Expression> ast::ExpressionAstBuilder::BuildExpressionAtom(
             return BuildUnaryExpression(node);
     }
 
-    throw std::logic_error{"Expected more case handlers of atom expression."};
+    throw AstBuilderError{"Expected more case handlers of atom expression."};
 }
 
 std::shared_ptr<ast::NumberExpression> ast::ExpressionAstBuilder::BuildNumberExpression(

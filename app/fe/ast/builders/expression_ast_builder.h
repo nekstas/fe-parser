@@ -7,7 +7,6 @@ namespace ast {
 class ExpressionAstBuilder : public BasicAstBuilder {
 protected:
     static constexpr size_t kMaxExpressionPriority = 4;
-    static constexpr size_t kExpressionAtomOptionsCount = 5;
 
 public:
     ExpressionAstBuilder();
@@ -36,7 +35,7 @@ protected:
         syntax_tree::NodePtr root, size_t priority
     );
 
-    std::shared_ptr<ast::Expression> BuildExpressionAtom(syntax_tree::NodePtr root);
+    std::shared_ptr<ast::Expression> BuildAtomExpression(syntax_tree::NodePtr root);
 
     std::shared_ptr<ast::NumberExpression> BuildNumberExpression(syntax_tree::NodePtr root);
 

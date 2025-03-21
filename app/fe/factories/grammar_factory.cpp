@@ -185,7 +185,7 @@ Grammar fe::GrammarFactory::Create() const {
     //    grammar.AddRule("program", MakeRule<NamedRule>("module"));
     grammar.AddRule(
         "program",
-        MakeRule<SequenceRule>({MakeRule<NamedRule>("expression"), VirtualRules::NewLine()})
+        MakeRule<SequenceRule>({MakeRule<NamedRule>("statement"), VirtualRules::NewLine()})
     );
 
     grammar.SetMainRule("program");

@@ -100,4 +100,6 @@ add_executable(fe_parser main.cpp
         app/fe/ast/builders/expression_ast_builder.h
         app/fe/ast/builders/full_ast_builder.cpp
         app/fe/ast/builders/full_ast_builder.h
+        app/fe/ast/builders/statement_ast_builder.cpp
+        app/fe/ast/builders/statement_ast_builder.h
 )

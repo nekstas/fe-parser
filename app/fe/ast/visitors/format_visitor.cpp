@@ -74,3 +74,11 @@ void ast::FormatVisitor::Visit(const ast::BinaryExpression& binary_expression) {
 
     result_ = new_result;
 }
+
+void ast::FormatVisitor::Visit(const ast::DefineVariableStatement& statement) {
+    auto name = statement.GetName();
+    auto expression = statement.GetExpression();
+
+    expression->Accept(*this);
+    result_ = (FormatStream() << "let " << name << " := " << result_);
+}
