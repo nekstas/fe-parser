@@ -19,6 +19,7 @@ public:
     virtual void Visit(const CommonImportStatement& statement) = 0;
     virtual void Visit(const ImportAsStatement& statement) = 0;
     virtual void Visit(const ImportListStatement& statement) = 0;
+    virtual void Visit(const Module& module) = 0;
 
 private:
 };

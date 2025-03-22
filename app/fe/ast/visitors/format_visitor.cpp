@@ -4,6 +4,7 @@
 #include "../../factories/expressions_info_factory.h"
 #include "../expressions/number_expression.h"
 #include "../expressions/variable_expression.h"
+#include "../module.h"
 #include "../statements/common_import_statement.h"
 #include "../statements/define_function_statement.h"
 #include "../statements/define_variable_statement.h"
@@ -126,4 +127,18 @@ void ast::FormatVisitor::Visit(const ast::ImportListStatement& statement) {
     result_ = (FormatStream() << "import " << name << " " << identifiers_str);
 }
 
+void ast::FormatVisitor::Visit(const ast::Module& module) {
+    auto statements = module.GetStatements();
+    FormatStream new_result;
+
+    for (auto statement : statements) {
+        statement->Accept(*this);
+        new_result << result_ << "\n";
+    }
+
+    result_ = new_result;
+}
+
+// TODO: Rewrite FormatVisitor with only one FormatStream (common).
 // TODO: Add indents processing.
+// TODO: Move \n write in statements Visit method.

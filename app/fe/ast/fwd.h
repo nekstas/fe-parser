@@ -5,6 +5,7 @@ namespace ast {
 class Node;
 class Expression;
 class Statement;
+class Module;
 
 class AtomExpresison;
 class NumberExpression;

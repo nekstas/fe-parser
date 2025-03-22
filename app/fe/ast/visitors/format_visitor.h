@@ -22,6 +22,7 @@ public:
     void Visit(const CommonImportStatement& statement) override;
     void Visit(const ImportAsStatement& statement) override;
     void Visit(const ImportListStatement& statement) override;
+    void Visit(const Module& module) override;
 
     const std::string& GetResult() const {
         return result_;

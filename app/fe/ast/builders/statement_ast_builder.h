@@ -10,6 +10,8 @@ public:
     StatementAstBuilder() = default;
 
 protected:
+    std::shared_ptr<ast::Module> BuildModule(syntax_tree::NodePtr root);
+
     std::shared_ptr<ast::Statement> BuildStatement(syntax_tree::NodePtr root);
 
     std::shared_ptr<ast::DefineVariableStatement> BuildDefineVariableStatement(
