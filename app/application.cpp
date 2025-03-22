@@ -36,13 +36,13 @@ int32_t Application::Run() {
 
     TokensPreprocessor preprocessor(tokens);
     Tokens new_tokens = preprocessor.Process();
-    DebugTokensList("Tokens from Preprocessor.", new_tokens);
+    //    DebugTokensList("Tokens from Preprocessor.", new_tokens);
 
     Parser parser = fe::ParserFactory().Create(new_tokens);
     syntax_tree::NodePtr syntax_tree = parser.Parse();
 
-    std::cerr << "SyntaxTree from Parser.\n";
-    std::cerr << syntax_tree::Node::GetStringRepresentation(syntax_tree) << "\n";
+//    std::cerr << "SyntaxTree from Parser.\n";
+//    std::cerr << syntax_tree::Node::GetStringRepresentation(syntax_tree) << "\n";
 
     ast::FullAstBuilder ast_builder;
     ast::NodePtr ast_result = ast_builder.Build(syntax_tree);

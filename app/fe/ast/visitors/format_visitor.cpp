@@ -9,7 +9,6 @@
 #include "../statements/define_function_statement.h"
 #include "../statements/define_module_statement.h"
 #include "../statements/define_variable_statement.h"
-#include "../statements/import_as_statement.h"
 #include "../statements/import_list_statement.h"
 
 ast::FormatVisitor::FormatVisitor() : expressions_info_(fe::ExpressionsInfoFactory().Create()) {
@@ -98,6 +97,7 @@ void ast::FormatVisitor::Visit(const ast::DefineVariableStatement& statement) {
 
     result_ << indent_ << "let " << name << " := ";
     expression->Accept(*this);
+    result_ << "\n";
 }
 
 void ast::FormatVisitor::Visit(const ast::DefineFunctionStatement& statement) {
@@ -113,6 +113,8 @@ void ast::FormatVisitor::Visit(const ast::DefineFunctionStatement& statement) {
 
     if (where_module) {
         FormatWherePart(where_module);
+    } else {
+        result_ << "\n";
     }
 }
 
@@ -125,13 +127,13 @@ void ast::FormatVisitor::Visit(const ast::DefineModuleStatement& statement) {
 
 void ast::FormatVisitor::Visit(const ast::CommonImportStatement& statement) {
     auto name = statement.GetName();
-    result_ << indent_ << "import " << name;
+    result_ << indent_ << "import " << name << "\n";
 }
 
 void ast::FormatVisitor::Visit(const ast::ImportAsStatement& statement) {
     auto name = statement.GetName();
     auto alias = statement.GetAlias();
-    result_ << indent_ << "import " << name << " as " << alias;
+    result_ << indent_ << "import " << name << " as " << alias << "\n";
 }
 
 void ast::FormatVisitor::Visit(const ast::ImportListStatement& statement) {
@@ -140,6 +142,7 @@ void ast::FormatVisitor::Visit(const ast::ImportListStatement& statement) {
 
     result_ << indent_ << "import " << name;
     FormatIdentifiersList(list);
+    result_ << "\n";
 }
 
 void ast::FormatVisitor::Visit(const ast::Module& module) {
@@ -147,7 +150,6 @@ void ast::FormatVisitor::Visit(const ast::Module& module) {
 
     for (auto statement : statements) {
         statement->Accept(*this);
-        result_ << "\n";
     }
 }
 
