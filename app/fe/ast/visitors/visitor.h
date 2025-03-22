@@ -17,6 +17,8 @@ public:
     virtual void Visit(const DefineVariableStatement& statement) = 0;
     virtual void Visit(const DefineFunctionStatement& statement) = 0;
     virtual void Visit(const CommonImportStatement& statement) = 0;
+    virtual void Visit(const ImportAsStatement& statement) = 0;
+    virtual void Visit(const ImportListStatement& statement) = 0;
 
 private:
 };

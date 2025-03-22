@@ -4,6 +4,7 @@
 
 #include "../expressions/call_expression.h"
 #include "../expressions_info.h"
+#include "../statements/import_as_statement.h"
 #include "visitor.h"
 
 namespace ast {
@@ -19,6 +20,8 @@ public:
     void Visit(const DefineVariableStatement& statement) override;
     void Visit(const DefineFunctionStatement& statement) override;
     void Visit(const CommonImportStatement& statement) override;
+    void Visit(const ImportAsStatement& statement) override;
+    void Visit(const ImportListStatement& statement) override;
 
     const std::string& GetResult() const {
         return result_;

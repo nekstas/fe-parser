@@ -3,6 +3,8 @@
 #include "../statements/common_import_statement.h"
 #include "../statements/define_function_statement.h"
 #include "../statements/define_variable_statement.h"
+#include "../statements/import_as_statement.h"
+#include "../statements/import_list_statement.h"
 
 std::shared_ptr<ast::Statement> ast::StatementAstBuilder::BuildStatement(syntax_tree::NodePtr root
 ) {
@@ -57,6 +59,32 @@ std::shared_ptr<ast::ImportStatement> ast::StatementAstBuilder::BuildImportState
         return MakeNode<CommonImportStatement>(name);
     }
 
-    // TODO: check more cases here (as and (name_1, ..., name_n))
-    return MakeNode<CommonImportStatement>("<not-working-now>");
+    auto [option, child] = UnpackVariantNode(additional_part);
+
+    switch (option) {
+        case 0:
+            return BuildImportAsStatement(name, child);
+        case 1:
+            return BuildImportListStatement(name, child);
+    }
+
+    throw AstBuilderError{"Expected more case handlers of import statement."};
+}
+
+std::shared_ptr<ast::ImportStatement> ast::StatementAstBuilder::BuildImportAsStatement(
+    const std::string& name, syntax_tree::NodePtr root
+) {
+    auto node = UnpackNamedNode(root, "as_part");
+    auto alias = GetIdentifier(GetChild(node, 1));
+    return MakeNode<ImportAsStatement>(name, alias);
+}
+
+std::shared_ptr<ast::ImportStatement> ast::StatementAstBuilder::BuildImportListStatement(
+    const std::string& name, syntax_tree::NodePtr root
+) {
+    auto list = GetIdentifierArgsList(root);
+
+    Require(!list.empty(), "Can't import empty list of identifiers from another module.");
+
+    return MakeNode<ImportListStatement>(name, list);
 }

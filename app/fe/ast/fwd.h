@@ -17,6 +17,8 @@ class DefineFunctionStatement;
 
 class ImportStatement;
 class CommonImportStatement;
+class ImportAsStatement;
+class ImportListStatement;
 
 class Visitor;
 

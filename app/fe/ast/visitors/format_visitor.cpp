@@ -7,6 +7,8 @@
 #include "../statements/common_import_statement.h"
 #include "../statements/define_function_statement.h"
 #include "../statements/define_variable_statement.h"
+#include "../statements/import_as_statement.h"
+#include "../statements/import_list_statement.h"
 
 ast::FormatVisitor::FormatVisitor() : expressions_info_(fe::ExpressionsInfoFactory().Create()) {
 }
@@ -108,6 +110,20 @@ void ast::FormatVisitor::Visit(const ast::CommonImportStatement& statement) {
     auto name = statement.GetName();
 
     result_ = "import " + name;
+}
+
+void ast::FormatVisitor::Visit(const ast::ImportAsStatement& statement) {
+    auto name = statement.GetName();
+    auto alias = statement.GetAlias();
+    result_ = "import " + name + " as " + alias;
+}
+
+void ast::FormatVisitor::Visit(const ast::ImportListStatement& statement) {
+    auto name = statement.GetName();
+    auto list = statement.GetList();
+
+    auto identifiers_str = FormatIdentifiersList(list);
+    result_ = (FormatStream() << "import " << name << " " << identifiers_str);
 }
 
 // TODO: Add indents processing.

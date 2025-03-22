@@ -22,6 +22,14 @@ protected:
 
     std::shared_ptr<ast::ImportStatement> BuildImportStatement(syntax_tree::NodePtr root);
 
+    std::shared_ptr<ast::ImportStatement> BuildImportAsStatement(
+        const std::string& name, syntax_tree::NodePtr root
+    );
+
+    std::shared_ptr<ast::ImportStatement> BuildImportListStatement(
+        const std::string& name, syntax_tree::NodePtr root
+    );
+
 protected:
 };
 
