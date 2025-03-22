@@ -15,6 +15,7 @@ class BinaryExpresison;
 
 class DefineVariableStatement;
 class DefineFunctionStatement;
+class DefineModuleStatement;
 
 class ImportStatement;
 class CommonImportStatement;

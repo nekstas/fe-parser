@@ -10,6 +10,9 @@
 namespace ast {
 
 class FormatVisitor : public Visitor {
+private:
+    static constexpr std::string kOneIndent = "  ";
+
 public:
     FormatVisitor();
 
@@ -19,27 +22,32 @@ public:
     void Visit(const BinaryExpression& binary_expression) override;
     void Visit(const DefineVariableStatement& statement) override;
     void Visit(const DefineFunctionStatement& statement) override;
+    void Visit(const DefineModuleStatement& statement) override;
     void Visit(const CommonImportStatement& statement) override;
     void Visit(const ImportAsStatement& statement) override;
     void Visit(const ImportListStatement& statement) override;
     void Visit(const Module& module) override;
-
-    const std::string& GetResult() const {
-        return result_;
+    std::string GetResult() const {
+        return result_.str();
     }
 
 private:
+    void FormatBraces(std::shared_ptr<Expression> expression, bool condition);
+
     void ProcessPartOfBinaryExpression(
-        FormatStream& new_result, std::shared_ptr<Expression> expression,
-        const ast::ExpressionsInfo::Info& info, ExpressionsInfo::Associativity place
+        std::shared_ptr<Expression> expression, const ast::ExpressionsInfo::Info& info,
+        ExpressionsInfo::Associativity place
     );
 
-    std::string FormatExpressionsList(const std::vector<std::shared_ptr<Expression>>& list);
+    void FormatExpressionsList(const std::vector<std::shared_ptr<Expression>>& list);
 
-    std::string FormatIdentifiersList(const std::vector<std::string>& list);
+    void FormatIdentifiersList(const std::vector<std::string>& list);
+
+    void FormatWherePart(std::shared_ptr<Module> module);
 
 private:
-    std::string result_;
+    std::stringstream result_;
+    std::string indent_;
     ExpressionsInfo expressions_info_;
 };
 

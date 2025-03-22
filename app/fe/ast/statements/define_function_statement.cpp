@@ -9,6 +9,13 @@ ast::DefineFunctionStatement::DefineFunctionStatement(
     : name_(name), args_(args), expression_(expression) {
 }
 
+ast::DefineFunctionStatement::DefineFunctionStatement(
+    const std::string& name, const std::vector<std::string>& args,
+    std::shared_ptr<Expression> expression, std::shared_ptr<Module> where_module
+)
+    : name_(name), args_(args), expression_(expression), where_module_(where_module) {
+}
+
 void ast::DefineFunctionStatement::Accept(ast::Visitor& visitor) {
     visitor.Visit(*this);
 }
@@ -23,4 +30,8 @@ const std::vector<std::string>& ast::DefineFunctionStatement::GetArgs() const {
 
 std::shared_ptr<ast::Expression> ast::DefineFunctionStatement::GetExpression() const {
     return expression_;
+}
+
+std::shared_ptr<ast::Module> ast::DefineFunctionStatement::GetWhereModule() const {
+    return where_module_;
 }

@@ -114,4 +114,6 @@ add_executable(fe_parser main.cpp
         app/fe/ast/statements/import_list_statement.h
         app/fe/ast/module.cpp
         app/fe/ast/module.h
+        app/fe/ast/statements/define_module_statement.cpp
+        app/fe/ast/statements/define_module_statement.h
 )

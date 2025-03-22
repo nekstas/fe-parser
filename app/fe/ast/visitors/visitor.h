@@ -16,6 +16,7 @@ public:
     virtual void Visit(const BinaryExpression& binary_expression) = 0;
     virtual void Visit(const DefineVariableStatement& statement) = 0;
     virtual void Visit(const DefineFunctionStatement& statement) = 0;
+    virtual void Visit(const DefineModuleStatement& statement) = 0;
     virtual void Visit(const CommonImportStatement& statement) = 0;
     virtual void Visit(const ImportAsStatement& statement) = 0;
     virtual void Visit(const ImportListStatement& statement) = 0;
