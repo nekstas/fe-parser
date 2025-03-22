@@ -181,12 +181,7 @@ Grammar fe::GrammarFactory::Create() const {
         )
     );
 
-    // TODO: return program rule to "module" rule
-    //    grammar.AddRule("program", MakeRule<NamedRule>("module"));
-    grammar.AddRule(
-        "program",
-        MakeRule<SequenceRule>({MakeRule<NamedRule>("statement"), VirtualRules::NewLine()})
-    );
+    grammar.AddRule("program", MakeRule<NamedRule>("module"));
 
     grammar.SetMainRule("program");
     return grammar;
