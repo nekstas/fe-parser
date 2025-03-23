@@ -9,6 +9,13 @@
 
 namespace ast {
 
+class FormatVisitorUnknownImportTypeError : public std::runtime_error {
+public:
+    FormatVisitorUnknownImportTypeError()
+        : std::runtime_error{"FormatVisitor: Unknown type of import statement."} {
+    }
+};
+
 class FormatVisitor : public Visitor {
 private:
     static constexpr std::string kOneIndent = "  ";

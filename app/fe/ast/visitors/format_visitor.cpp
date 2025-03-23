@@ -1,5 +1,9 @@
 #include "format_visitor.h"
 
+#include <algorithm>
+#include <map>
+#include <set>
+
 #include "../../../../utils/utils.h"
 #include "../../factories/expressions_info_factory.h"
 #include "../expressions/number_expression.h"
@@ -10,6 +14,89 @@
 #include "../statements/define_module_statement.h"
 #include "../statements/define_variable_statement.h"
 #include "../statements/import_list_statement.h"
+
+namespace {
+
+struct ModuleInfo {
+    std::vector<std::shared_ptr<ast::ImportStatement>> imports;
+    std::vector<std::shared_ptr<ast::Statement>> other_statements;
+    bool has_modules = false;
+};
+
+enum class ImportType { COMMON_IMPORT, IMPORT_AS, IMPORT_LIST };
+
+ImportType GetImportType(std::shared_ptr<ast::ImportStatement> statement) {
+    if (ast::Is<ast::CommonImportStatement>(statement)) {
+        return ImportType::COMMON_IMPORT;
+    } else if (ast::Is<ast::ImportAsStatement>(statement)) {
+        return ImportType::IMPORT_AS;
+    } else if (ast::Is<ast::ImportListStatement>(statement)) {
+        return ImportType::IMPORT_LIST;
+    }
+    throw ast::FormatVisitorUnknownImportTypeError{};
+}
+
+bool CompareImports(
+    std::shared_ptr<ast::ImportStatement> lhs, std::shared_ptr<ast::ImportStatement> rhs
+) {
+    auto lhs_type = GetImportType(lhs);
+    auto rhs_type = GetImportType(rhs);
+
+    if (lhs_type != rhs_type) {
+        return lhs_type < rhs_type;
+    }
+
+    if (lhs->GetName() != rhs->GetName()) {
+        return lhs->GetName() < rhs->GetName();
+    }
+
+    if (lhs_type == ImportType::IMPORT_AS) {
+        auto lhs_as = ast::Cast<ast::ImportAsStatement>(lhs);
+        auto rhs_as = ast::Cast<ast::ImportAsStatement>(rhs);
+
+        return lhs_as->GetAlias() < rhs_as->GetAlias();
+    }
+
+    return false;
+}
+
+ModuleInfo GetModuleInfo(const ast::Module& module) {
+    ModuleInfo module_info;
+
+    std::map<std::string, std::set<std::string>> import_data;
+
+    for (auto statement : module.GetStatements()) {
+        if (ast::Is<ast::ImportStatement>(statement)) {
+            if (!ast::Is<ast::ImportListStatement>(statement)) {
+                module_info.imports.push_back(ast::Cast<ast::ImportStatement>(statement));
+            } else {
+                auto list_import = ast::Cast<ast::ImportListStatement>(statement);
+                auto module_name = list_import->GetName();
+                auto list = list_import->GetList();
+                auto& set = import_data[module_name];
+                set.insert(list.begin(), list.end());
+            }
+        } else {
+            module_info.other_statements.push_back(statement);
+            module_info.has_modules |= ast::Is<ast::DefineModuleStatement>(statement);
+        }
+    }
+
+    for (const auto& [name, set_of_identifiers] : import_data) {
+        std::vector<std::string> list_of_identifiers(
+            set_of_identifiers.begin(), set_of_identifiers.end()
+        );
+        module_info.imports.push_back(
+            ast::MakeNode<ast::ImportListStatement>(name, list_of_identifiers)
+        );
+    }
+
+    std::stable_sort(module_info.imports.begin(), module_info.imports.end(), CompareImports);
+
+    return module_info;
+}
+
+}  // namespace
 
 ast::FormatVisitor::FormatVisitor() : expressions_info_(fe::ExpressionsInfoFactory().Create()) {
 }
@@ -140,16 +227,29 @@ void ast::FormatVisitor::Visit(const ast::ImportListStatement& statement) {
     auto name = statement.GetName();
     auto list = statement.GetList();
 
-    result_ << indent_ << "import " << name;
+    result_ << indent_ << "import " << name << " ";
     FormatIdentifiersList(list);
     result_ << "\n";
 }
 
 void ast::FormatVisitor::Visit(const ast::Module& module) {
-    auto statements = module.GetStatements();
+    auto module_info = GetModuleInfo(module);
+    size_t imports_count = module_info.imports.size();
+    size_t statements_count = module_info.other_statements.size();
 
-    for (auto statement : statements) {
+    for (auto statement : module_info.imports) {
         statement->Accept(*this);
+    }
+
+    if (module_info.has_modules && imports_count > 0 && statements_count > 0) {
+        result_ << "\n";
+    }
+
+    for (size_t i = 0; i < statements_count; ++i) {
+        module_info.other_statements[i]->Accept(*this);
+        if (module_info.has_modules && i != statements_count - 1) {
+            result_ << "\n";
+        }
     }
 }
 
