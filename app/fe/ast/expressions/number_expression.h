@@ -12,9 +12,9 @@ public:
 
     void Accept(Visitor& visitor) override;
 
-    const std::string& GetValue() const {
-        return number_;
-    }
+    const std::string& GetValue() const;
+
+    bool IsNegative() const;
 
 private:
     std::string number_;

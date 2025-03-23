@@ -8,3 +8,11 @@ void ast::NumberExpression::Accept(ast::Visitor& visitor) {
 
 ast::NumberExpression::NumberExpression(const std::string& number) : number_(number) {
 }
+
+const std::string& ast::NumberExpression::GetValue() const {
+    return number_;
+}
+
+bool ast::NumberExpression::IsNegative() const {
+    return number_.front() == '-';
+}

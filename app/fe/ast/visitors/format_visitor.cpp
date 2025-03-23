@@ -77,6 +77,10 @@ ModuleInfo GetModuleInfo(const ast::Module& module) {
                 set.insert(list.begin(), list.end());
             }
         } else {
+            if (ast::Is<ast::DefineFunctionStatement>(statement)) {
+                auto define_statement = ast::Cast<ast::DefineFunctionStatement>(statement);
+                module_info.has_modules |= static_cast<bool>(define_statement->GetWhereModule());
+            }
             module_info.other_statements.push_back(statement);
             module_info.has_modules |= ast::Is<ast::DefineModuleStatement>(statement);
         }
@@ -104,6 +108,7 @@ ast::FormatVisitor::FormatVisitor() : expressions_info_(fe::ExpressionsInfoFacto
 void ast::FormatVisitor::FormatBraces(std::shared_ptr<Expression> expression, bool condition) {
     if (condition) {
         result_ << "(";
+        is_first_atom_ = true;
         expression->Accept(*this);
         result_ << ")";
     } else {
@@ -118,13 +123,15 @@ void ast::FormatVisitor::FormatExpressionsList(const std::vector<std::shared_ptr
         if (i != 0) {
             result_ << ", ";
         }
+
+        is_first_atom_ = true;
         list[i]->Accept(*this);
     }
     result_ << ")";
 }
 
 void ast::FormatVisitor::FormatIdentifiersList(const std::vector<std::string>& list) {
-    result_ << "(" + utils::Join(list, ", ") + ")";
+    result_ << "(" << utils::Join(list, ", ") << ")";
 }
 
 void ast::FormatVisitor::FormatWherePart(std::shared_ptr<Module> module) {
@@ -135,7 +142,12 @@ void ast::FormatVisitor::FormatWherePart(std::shared_ptr<Module> module) {
 }
 
 void ast::FormatVisitor::Visit(const ast::NumberExpression& number) {
-    result_ << number.GetValue();
+    if (!is_first_atom_ && number.IsNegative()) {
+        result_ << "(" << number.GetValue() << ")";
+    } else {
+        result_ << number.GetValue();
+    }
+    is_first_atom_ = false;
 }
 
 void ast::FormatVisitor::Visit(const ast::VariableExpression& variable) {
@@ -183,6 +195,7 @@ void ast::FormatVisitor::Visit(const ast::DefineVariableStatement& statement) {
     auto expression = statement.GetExpression();
 
     result_ << indent_ << "let " << name << " := ";
+    is_first_atom_ = true;
     expression->Accept(*this);
     result_ << "\n";
 }
@@ -196,6 +209,7 @@ void ast::FormatVisitor::Visit(const ast::DefineFunctionStatement& statement) {
     result_ << indent_ << "let " << name;
     FormatIdentifiersList(args);
     result_ << " := ";
+    is_first_atom_ = true;
     expression->Accept(*this);
 
     if (where_module) {
@@ -252,5 +266,3 @@ void ast::FormatVisitor::Visit(const ast::Module& module) {
         }
     }
 }
-
-// TODO: handle -number case (braces or not?)

@@ -55,6 +55,7 @@ private:
 private:
     std::stringstream result_;
     std::string indent_;
+    bool is_first_atom_ = true;
     ExpressionsInfo expressions_info_;
 };
 
