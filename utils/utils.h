@@ -12,4 +12,6 @@ std::string Join(const std::vector<std::string>& strings, const std::string& del
 
 std::string ReadFile(const std::string& filename);
 
+void WriteFile(const std::string& filename, const std::string& content);
+
 }  // namespace utils
