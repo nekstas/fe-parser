@@ -26,8 +26,8 @@ add_executable(fe_parser main.cpp
         core/tokenizer/parsers/operator_parser.h
         core/algo/search_set.hpp
         core/tokenizer/parsers/whitespace_parser.cpp
-        core/tokenizer/parsers/name_parser.h
-        core/tokenizer/parsers/name_parser.cpp
+        core/tokenizer/parsers/name_keyword_parser.h
+        core/tokenizer/parsers/name_keyword_parser.cpp
         core/tokenizer/tokens/name_token.h
         core/tokens_preprocessor/tokens_preprocessor.cpp
         core/tokens_preprocessor/line_indent.h

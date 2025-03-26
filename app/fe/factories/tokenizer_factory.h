@@ -12,6 +12,8 @@ public:
 
 private:
     void AddOperatorParser(Tokenizer& tokenizer) const;
+
+    void AddNameKeywordParser(Tokenizer& tokenizer) const;
 };
 
 };  // namespace fe

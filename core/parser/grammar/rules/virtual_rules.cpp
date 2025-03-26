@@ -1,7 +1,7 @@
 #include "virtual_rules.h"
 
 #include "../../../tokenizer/tokens/close_bracket_token.h"
-#include "../../../tokenizer/tokens/name_token.h"
+#include "../../../tokenizer/tokens/keyword_token.h"
 #include "../../../tokenizer/tokens/new_line_token.h"
 #include "../../../tokenizer/tokens/open_bracket_token.h"
 #include "../../../tokenizer/tokens/operator_token.h"
@@ -21,7 +21,7 @@ grammar_rules::GrammarRule grammar_rules::VirtualRules::SeparatorRule(
 }
 
 grammar_rules::GrammarRule grammar_rules::VirtualRules::KeywordRule(const std::string& name) {
-    return MakeRule<TokenValueRule<NameToken>>(name);
+    return MakeRule<TokenValueRule<KeywordToken>>(name);
 }
 
 grammar_rules::GrammarRule grammar_rules::VirtualRules::OperatorRule(const std::string& code) {

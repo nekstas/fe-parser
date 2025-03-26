@@ -1,7 +1,7 @@
 #include "tokenizer_factory.h"
 
 #include "../../../core/tokenizer/parsers/integer_parser.h"
-#include "../../../core/tokenizer/parsers/name_parser.h"
+#include "../../../core/tokenizer/parsers/name_keyword_parser.h"
 #include "../../../core/tokenizer/parsers/operator_parser.h"
 #include "../../../core/tokenizer/parsers/whitespace_parser.h"
 
@@ -9,7 +9,7 @@ Tokenizer fe::TokenizerFactory::Create(const std::string& code) const {
     Tokenizer tokenizer{CodeStream(code)};
     tokenizer.AddParser<WhitespaceParser>();
     tokenizer.AddParser<IntegerParser>();
-    tokenizer.AddParser<NameParser>();
+    AddNameKeywordParser(tokenizer);
     AddOperatorParser(tokenizer);
     return tokenizer;
 }
@@ -27,4 +27,14 @@ void fe::TokenizerFactory::AddOperatorParser(Tokenizer& tokenizer) const {
     operators.Add(".");
     operators.Add(":=");
     tokenizer.AddParser<OperatorParser>(operators);
+}
+
+void fe::TokenizerFactory::AddNameKeywordParser(Tokenizer& tokenizer) const {
+    SearchSet keywords;
+    keywords.Add("let");
+    keywords.Add("as");
+    keywords.Add("where");
+    keywords.Add("module");
+    keywords.Add("import");
+    tokenizer.AddParser<NameKeywordParser>(keywords);
 }
