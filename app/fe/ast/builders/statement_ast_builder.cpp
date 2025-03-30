@@ -29,7 +29,8 @@ std::shared_ptr<ast::Module> ast::StatementAstBuilder::BuildModule(syntax_tree::
     return MakeNode<ast::Module>(statements);
 }
 
-std::shared_ptr<ast::Statement> ast::StatementAstBuilder::BuildStatement(syntax_tree::NodePtr root
+std::shared_ptr<ast::Statement> ast::StatementAstBuilder::BuildStatement(
+    syntax_tree::NodePtr root
 ) {
     auto node = UnpackNamedNode(root, "statement");
     auto [option, child] = UnpackVariantNode(node);

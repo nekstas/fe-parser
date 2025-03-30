@@ -116,7 +116,8 @@ void ast::FormatVisitor::FormatBraces(std::shared_ptr<Expression> expression, bo
     }
 }
 
-void ast::FormatVisitor::FormatExpressionsList(const std::vector<std::shared_ptr<Expression>>& list
+void ast::FormatVisitor::FormatExpressionsList(
+    const std::vector<std::shared_ptr<Expression>>& list
 ) {
     result_ << "(";
     for (size_t i = 0; i < list.size(); ++i) {

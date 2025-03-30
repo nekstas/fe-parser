@@ -6,14 +6,16 @@
 grammar_rules::VariantRule::VariantRule(std::vector<GrammarRule> rules) : rules_(rules) {
     for (size_t i = 0; i < rules_.size(); ++i) {
         if (!rules_[i]) {
-            throw EmptyRuleError{FormatStream()
-                                 << "There is an empty rule for VariantRule (option=" << i << ")."};
+            throw EmptyRuleError{
+                FormatStream() << "There is an empty rule for VariantRule (option=" << i << ")."
+            };
         }
     }
 }
 
-syntax_tree::NodePtr grammar_rules::VariantRule::Parse(TokensStream& tokens,
-                                                       const Grammar& grammar) {
+syntax_tree::NodePtr grammar_rules::VariantRule::Parse(
+    TokensStream& tokens, const Grammar& grammar
+) {
     size_t current_pos = tokens.GetPos();
     for (size_t i = 0; i < rules_.size(); ++i) {
         syntax_tree::NodePtr result = rules_[i]->Parse(tokens, grammar);

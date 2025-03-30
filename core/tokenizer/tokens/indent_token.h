@@ -37,8 +37,10 @@ public:
             case IndentType::TAB:
                 return kTabChar;
             default:
-                throw UnknownIndentType{FormatStream() << "There is not a char for indent type ["
-                                                       << static_cast<size_t>(type) << "]"};
+                throw UnknownIndentType{
+                    FormatStream()
+                    << "There is not a char for indent type [" << static_cast<size_t>(type) << "]"
+                };
         }
     }
 
@@ -49,9 +51,10 @@ public:
             case IndentType::TAB:
                 return "Tab";
             default:
-                throw UnknownIndentType{FormatStream()
-                                        << "There is not string representation for indent type ["
-                                        << static_cast<size_t>(type) << "]"};
+                throw UnknownIndentType{
+                    FormatStream() << "There is not string representation for indent type ["
+                                   << static_cast<size_t>(type) << "]"
+                };
         }
     }
 

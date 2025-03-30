@@ -24,7 +24,8 @@ protected:
         syntax_tree::NodePtr root
     );
 
-    std::shared_ptr<ast::DefineModuleStatement> BuildDefineModuleStatement(syntax_tree::NodePtr root
+    std::shared_ptr<ast::DefineModuleStatement> BuildDefineModuleStatement(
+        syntax_tree::NodePtr root
     );
 
     std::shared_ptr<ast::ImportStatement> BuildImportStatement(syntax_tree::NodePtr root);

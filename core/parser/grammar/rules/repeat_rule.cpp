@@ -9,8 +9,9 @@ grammar_rules::RepeatRule::RepeatRule(grammar_rules::GrammarRule rule, bool acce
         throw EmptyRuleError{"There is an empty rule for OptionalRule."};
     }
 }
-syntax_tree::NodePtr grammar_rules::RepeatRule::Parse(TokensStream& tokens,
-                                                      const Grammar& grammar) {
+syntax_tree::NodePtr grammar_rules::RepeatRule::Parse(
+    TokensStream& tokens, const Grammar& grammar
+) {
     std::vector<syntax_tree::NodePtr> sequence;
 
     while (true) {

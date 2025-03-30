@@ -8,8 +8,9 @@
 struct RuleAlreadyExistsError : public std::runtime_error {
 public:
     RuleAlreadyExistsError(const std::string& name)
-        : std::runtime_error{FormatStream()
-                             << "Rule with name \"" << name << "\" already exists."} {
+        : std::runtime_error{
+              FormatStream() << "Rule with name \"" << name << "\" already exists."
+          } {
     }
 };
 

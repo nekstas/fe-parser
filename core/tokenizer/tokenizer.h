@@ -12,8 +12,10 @@
 class TokenizerUnknownSequence : public std::runtime_error {
 public:
     TokenizerUnknownSequence(size_t pos, char ch)
-        : std::runtime_error{FormatStream() << "Unknown char or sequence of chars. Pos: " << pos
-                                            << ", char: " << ch << "\n"} {
+        : std::runtime_error{
+              FormatStream() << "Unknown char or sequence of chars. Pos: " << pos
+                             << ", char: " << ch << "\n"
+          } {
     }
 };
 

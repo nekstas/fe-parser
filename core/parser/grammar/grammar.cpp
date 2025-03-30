@@ -4,8 +4,9 @@ void Grammar::AddRule(const std::string& name, const grammar_rules::GrammarRule&
     if (rules_.contains(name)) {
         throw RuleAlreadyExistsError{name};
     } else if (!rule) {
-        throw EmptyRuleError{FormatStream() << "Attempt to add empty rule to grammar with name \""
-                                            << name << "\""};
+        throw EmptyRuleError{
+            FormatStream() << "Attempt to add empty rule to grammar with name \"" << name << "\""
+        };
     }
 
     rules_[name] = rule;

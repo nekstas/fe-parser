@@ -9,8 +9,9 @@ grammar_rules::OptionalRule::OptionalRule(grammar_rules::GrammarRule rule) : rul
     }
 }
 
-syntax_tree::NodePtr grammar_rules::OptionalRule::Parse(TokensStream& tokens,
-                                                        const Grammar& grammar) {
+syntax_tree::NodePtr grammar_rules::OptionalRule::Parse(
+    TokensStream& tokens, const Grammar& grammar
+) {
     size_t current_pos = tokens.GetPos();
     syntax_tree::NodePtr result = rule_->Parse(tokens, grammar);
     if (result) {

@@ -10,7 +10,8 @@ public:
     OptionalChildNodeBadAccessError()
         : std::runtime_error{
               "OptionalNode has not an inner node, but there was an attempt to get an inner "
-              "node."} {
+              "node."
+          } {
     }
 };
 

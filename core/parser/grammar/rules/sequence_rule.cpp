@@ -8,13 +8,15 @@ grammar_rules::SequenceRule::SequenceRule(std::initializer_list<GrammarRule> rul
     for (size_t i = 0; i < rules_.size(); ++i) {
         if (!rules_[i]) {
             throw EmptyRuleError{
-                FormatStream() << "There is an empty rule for SequenceRule (option=" << i << ")."};
+                FormatStream() << "There is an empty rule for SequenceRule (option=" << i << ")."
+            };
         }
     }
 }
 
-syntax_tree::NodePtr grammar_rules::SequenceRule::Parse(TokensStream& tokens,
-                                                        const Grammar& grammar) {
+syntax_tree::NodePtr grammar_rules::SequenceRule::Parse(
+    TokensStream& tokens, const Grammar& grammar
+) {
     std::vector<syntax_tree::NodePtr> result(rules_.size());
     for (size_t i = 0; i < rules_.size(); ++i) {
         result[i] = rules_[i]->Parse(tokens, grammar);

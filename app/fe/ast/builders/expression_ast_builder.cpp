@@ -41,7 +41,8 @@ std::string ast::ExpressionAstBuilder::GetUnaryOperator(syntax_tree::NodePtr roo
     return token.GetCode();
 }
 
-std::vector<std::string> ast::ExpressionAstBuilder::GetIdentifierArgsList(syntax_tree::NodePtr root
+std::vector<std::string> ast::ExpressionAstBuilder::GetIdentifierArgsList(
+    syntax_tree::NodePtr root
 ) {
     auto node = UnpackNamedNode(root, "identifier_args_list");
     auto list = UnpackOptionalNode(GetChild(node, 1));

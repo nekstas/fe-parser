@@ -9,9 +9,7 @@ class FullAstBuilder : public StatementAstBuilder {
 public:
     FullAstBuilder() = default;
 
-    NodePtr Build(syntax_tree::NodePtr root) {
-        return BuildModule(root);
-    }
+    NodePtr Build(syntax_tree::NodePtr root);
 
 protected:
 };

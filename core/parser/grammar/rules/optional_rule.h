@@ -15,4 +15,3 @@ private:
 };
 
 };  // namespace grammar_rules
-
