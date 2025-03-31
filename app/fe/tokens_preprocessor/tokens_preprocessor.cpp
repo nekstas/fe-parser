@@ -1,9 +1,9 @@
 #include "tokens_preprocessor.h"
 
-#include "../../app/fe/tokenizer/tokens/close_bracket_token.h"
-#include "../../app/fe/tokenizer/tokens/indent_token.h"
-#include "../../app/fe/tokenizer/tokens/new_line_token.h"
-#include "../../app/fe/tokenizer/tokens/open_bracket_token.h"
+#include "../tokenizer/tokens/close_bracket_token.h"
+#include "../tokenizer/tokens/indent_token.h"
+#include "../tokenizer/tokens/new_line_token.h"
+#include "../tokenizer/tokens/open_bracket_token.h"
 
 TokensPreprocessor::TokensPreprocessor(const TokensStream& tokens) : tokens_(tokens) {
 }

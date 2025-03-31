@@ -27,11 +27,11 @@ add_executable(fe_parser main.cpp
         app/fe/tokenizer/parsers/name_keyword_parser.h
         app/fe/tokenizer/parsers/name_keyword_parser.cpp
         app/fe/tokenizer/tokens/name_token.h
-        core/tokens_preprocessor/tokens_preprocessor.cpp
-        core/tokens_preprocessor/line_indent.h
+        app/fe/tokens_preprocessor/tokens_preprocessor.cpp
+        app/fe/tokens_preprocessor/line_indent.h
         utils/container_stream.hpp
         utils/useful_streams.h
-        core/tokens_preprocessor/line_indent.cpp
+        app/fe/tokens_preprocessor/line_indent.cpp
         app/fe/tokenizer/tokens/open_bracket_token.h
         app/fe/tokenizer/tokens/close_bracket_token.h
         core/parser/parser.cpp

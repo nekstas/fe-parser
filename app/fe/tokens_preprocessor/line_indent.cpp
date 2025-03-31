@@ -1,6 +1,6 @@
 #include "line_indent.h"
 
-#include "../../utils/format_stream.h"
+#include "../../../utils/format_stream.h"
 
 MixedIndentError::MixedIndentError(const LineIndent& indent)
     : std::runtime_error(FormatStream() << "Mixed " << indent << " can't be used.") {

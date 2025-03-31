@@ -2,10 +2,10 @@
 
 #include <vector>
 
-#include "../../utils/container_stream.hpp"
-#include "../../utils/format_stream.h"
-#include "../../utils/useful_streams.h"
-#include "../tokenizer/abstract_token.h"
+#include "../../../core/tokenizer/abstract_token.h"
+#include "../../../utils/container_stream.hpp"
+#include "../../../utils/format_stream.h"
+#include "../../../utils/useful_streams.h"
 #include "line_indent.h"
 
 using Tokens = std::vector<Token>;
