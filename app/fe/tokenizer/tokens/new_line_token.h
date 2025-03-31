@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 
-#include "../../../utils/format_stream.h"
-#include "abstract_token.h"
+#include "../../../../core/tokenizer/abstract_token.h"
+#include "../../../../utils/format_stream.h"
 
 struct NewLineToken : public AbstractToken {
 public:

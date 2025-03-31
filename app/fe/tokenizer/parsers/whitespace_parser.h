@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../utils/useful_streams.h"
-#include "abstract_parser.h"
+#include "../../../../core/tokenizer/abstract_parser.h"
+#include "../../../../utils/useful_streams.h"
 
 class WhitespaceParser : public AbstractParser {
 public:

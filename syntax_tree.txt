@@ -1,0 +1,524 @@
+[NamedNode]: name="module"
+ [RepeatNode]: nodes_count=2
+  [SequenceNode]:
+   [NamedNode]: name="statement"
+    [VariantNode]: option=3
+     [NamedNode]: name="define_module_statement"
+      [SequenceNode]:
+       [TokenNode]: token="NAME {module}"
+       [NamedNode]: name="identifier"
+        [TokenNode]: token="NAME {MyLinalg}"
+       [NamedNode]: name="where_part"
+        [SequenceNode]:
+         [TokenNode]: token="NAME {where}"
+         [TokenNode]: token="OPEN_BRACKET"
+         [NamedNode]: name="module"
+          [RepeatNode]: nodes_count=4
+           [SequenceNode]:
+            [NamedNode]: name="statement"
+             [VariantNode]: option=0
+              [NamedNode]: name="import_statement"
+               [SequenceNode]:
+                [TokenNode]: token="NAME {import}"
+                [NamedNode]: name="extended_identifier"
+                 [SequenceNode]:
+                  [NamedNode]: name="identifier"
+                   [TokenNode]: token="NAME {Unused}"
+                  [RepeatNode]: nodes_count=0
+                [OptionalNode]: has_node=false
+            [TokenNode]: token="NEW_LINE"
+           [SequenceNode]:
+            [NamedNode]: name="statement"
+             [VariantNode]: option=2
+              [NamedNode]: name="define_function_statement"
+               [SequenceNode]:
+                [TokenNode]: token="NAME {let}"
+                [NamedNode]: name="identifier"
+                 [TokenNode]: token="NAME {solve}"
+                [NamedNode]: name="identifier_args_list"
+                 [SequenceNode]:
+                  [TokenNode]: token="OPERATOR "(""
+                  [OptionalNode]: has_node=true
+                   [SequenceNode]:
+                    [NamedNode]: name="identifier"
+                     [TokenNode]: token="NAME {A}"
+                    [RepeatNode]: nodes_count=1
+                     [SequenceNode]:
+                      [TokenNode]: token="OPERATOR ",""
+                      [NamedNode]: name="identifier"
+                       [TokenNode]: token="NAME {b}"
+                  [TokenNode]: token="OPERATOR ")""
+                [TokenNode]: token="OPERATOR ":=""
+                [NamedNode]: name="expression"
+                 [NamedNode]: name="expression_p1"
+                  [SequenceNode]:
+                   [NamedNode]: name="expression_p2"
+                    [SequenceNode]:
+                     [NamedNode]: name="expression_p3"
+                      [SequenceNode]:
+                       [NamedNode]: name="expression_p4"
+                        [VariantNode]: option=1
+                         [NamedNode]: name="function_call"
+                          [SequenceNode]:
+                           [NamedNode]: name="extended_identifier"
+                            [SequenceNode]:
+                             [NamedNode]: name="identifier"
+                              [TokenNode]: token="NAME {LA}"
+                             [RepeatNode]: nodes_count=1
+                              [SequenceNode]:
+                               [TokenNode]: token="OPERATOR ".""
+                               [NamedNode]: name="identifier"
+                                [TokenNode]: token="NAME {solve}"
+                           [NamedNode]: name="expression_args_list"
+                            [SequenceNode]:
+                             [TokenNode]: token="OPERATOR "(""
+                             [OptionalNode]: has_node=true
+                              [SequenceNode]:
+                               [NamedNode]: name="expression"
+                                [NamedNode]: name="expression_p1"
+                                 [SequenceNode]:
+                                  [NamedNode]: name="expression_p2"
+                                   [SequenceNode]:
+                                    [NamedNode]: name="expression_p3"
+                                     [SequenceNode]:
+                                      [NamedNode]: name="expression_p4"
+                                       [VariantNode]: option=2
+                                        [NamedNode]: name="variable"
+                                         [NamedNode]: name="extended_identifier"
+                                          [SequenceNode]:
+                                           [NamedNode]: name="identifier"
+                                            [TokenNode]: token="NAME {A}"
+                                           [RepeatNode]: nodes_count=0
+                                      [RepeatNode]: nodes_count=0
+                                    [RepeatNode]: nodes_count=0
+                                  [RepeatNode]: nodes_count=0
+                               [RepeatNode]: nodes_count=1
+                                [SequenceNode]:
+                                 [TokenNode]: token="OPERATOR ",""
+                                 [NamedNode]: name="expression"
+                                  [NamedNode]: name="expression_p1"
+                                   [SequenceNode]:
+                                    [NamedNode]: name="expression_p2"
+                                     [SequenceNode]:
+                                      [NamedNode]: name="expression_p3"
+                                       [SequenceNode]:
+                                        [NamedNode]: name="expression_p4"
+                                         [VariantNode]: option=2
+                                          [NamedNode]: name="variable"
+                                           [NamedNode]: name="extended_identifier"
+                                            [SequenceNode]:
+                                             [NamedNode]: name="identifier"
+                                              [TokenNode]: token="NAME {b}"
+                                             [RepeatNode]: nodes_count=0
+                                        [RepeatNode]: nodes_count=0
+                                      [RepeatNode]: nodes_count=0
+                                    [RepeatNode]: nodes_count=0
+                             [TokenNode]: token="OPERATOR ")""
+                       [RepeatNode]: nodes_count=0
+                     [RepeatNode]: nodes_count=0
+                   [RepeatNode]: nodes_count=0
+                [OptionalNode]: has_node=false
+            [TokenNode]: token="NEW_LINE"
+           [SequenceNode]:
+            [NamedNode]: name="statement"
+             [VariantNode]: option=1
+              [NamedNode]: name="define_variable_statement"
+               [SequenceNode]:
+                [TokenNode]: token="NAME {let}"
+                [NamedNode]: name="identifier"
+                 [TokenNode]: token="NAME {d}"
+                [TokenNode]: token="OPERATOR ":=""
+                [NamedNode]: name="expression"
+                 [NamedNode]: name="expression_p1"
+                  [SequenceNode]:
+                   [NamedNode]: name="expression_p2"
+                    [SequenceNode]:
+                     [NamedNode]: name="expression_p3"
+                      [SequenceNode]:
+                       [NamedNode]: name="expression_p4"
+                        [VariantNode]: option=2
+                         [NamedNode]: name="variable"
+                          [NamedNode]: name="extended_identifier"
+                           [SequenceNode]:
+                            [NamedNode]: name="identifier"
+                             [TokenNode]: token="NAME {e}"
+                            [RepeatNode]: nodes_count=0
+                       [RepeatNode]: nodes_count=0
+                     [RepeatNode]: nodes_count=0
+                   [RepeatNode]: nodes_count=0
+            [TokenNode]: token="NEW_LINE"
+           [SequenceNode]:
+            [NamedNode]: name="statement"
+             [VariantNode]: option=0
+              [NamedNode]: name="import_statement"
+               [SequenceNode]:
+                [TokenNode]: token="NAME {import}"
+                [NamedNode]: name="extended_identifier"
+                 [SequenceNode]:
+                  [NamedNode]: name="identifier"
+                   [TokenNode]: token="NAME {numpy}"
+                  [RepeatNode]: nodes_count=1
+                   [SequenceNode]:
+                    [TokenNode]: token="OPERATOR ".""
+                    [NamedNode]: name="identifier"
+                     [TokenNode]: token="NAME {linalg}"
+                [OptionalNode]: has_node=true
+                 [VariantNode]: option=0
+                  [NamedNode]: name="as_part"
+                   [SequenceNode]:
+                    [TokenNode]: token="NAME {as}"
+                    [NamedNode]: name="identifier"
+                     [TokenNode]: token="NAME {LA}"
+            [TokenNode]: token="NEW_LINE"
+         [TokenNode]: token="CLOSE_BRACKET"
+   [TokenNode]: token="NEW_LINE"
+  [SequenceNode]:
+   [NamedNode]: name="statement"
+    [VariantNode]: option=2
+     [NamedNode]: name="define_function_statement"
+      [SequenceNode]:
+       [TokenNode]: token="NAME {let}"
+       [NamedNode]: name="identifier"
+        [TokenNode]: token="NAME {some_root}"
+       [NamedNode]: name="identifier_args_list"
+        [SequenceNode]:
+         [TokenNode]: token="OPERATOR "(""
+         [OptionalNode]: has_node=true
+          [SequenceNode]:
+           [NamedNode]: name="identifier"
+            [TokenNode]: token="NAME {a}"
+           [RepeatNode]: nodes_count=2
+            [SequenceNode]:
+             [TokenNode]: token="OPERATOR ",""
+             [NamedNode]: name="identifier"
+              [TokenNode]: token="NAME {b}"
+            [SequenceNode]:
+             [TokenNode]: token="OPERATOR ",""
+             [NamedNode]: name="identifier"
+              [TokenNode]: token="NAME {c}"
+         [TokenNode]: token="OPERATOR ")""
+       [TokenNode]: token="OPERATOR ":=""
+       [NamedNode]: name="expression"
+        [NamedNode]: name="expression_p1"
+         [SequenceNode]:
+          [NamedNode]: name="expression_p2"
+           [SequenceNode]:
+            [NamedNode]: name="expression_p3"
+             [SequenceNode]:
+              [NamedNode]: name="expression_p4"
+               [VariantNode]: option=3
+                [NamedNode]: name="brackets_expression"
+                 [SequenceNode]:
+                  [TokenNode]: token="OPERATOR "(""
+                  [NamedNode]: name="expression"
+                   [NamedNode]: name="expression_p1"
+                    [SequenceNode]:
+                     [NamedNode]: name="expression_p2"
+                      [SequenceNode]:
+                       [NamedNode]: name="expression_p3"
+                        [SequenceNode]:
+                         [NamedNode]: name="expression_p4"
+                          [VariantNode]: option=2
+                           [NamedNode]: name="variable"
+                            [NamedNode]: name="extended_identifier"
+                             [SequenceNode]:
+                              [NamedNode]: name="identifier"
+                               [TokenNode]: token="NAME {b}"
+                              [RepeatNode]: nodes_count=0
+                         [RepeatNode]: nodes_count=0
+                       [RepeatNode]: nodes_count=0
+                     [RepeatNode]: nodes_count=1
+                      [SequenceNode]:
+                       [VariantNode]: option=0
+                        [TokenNode]: token="OPERATOR "+""
+                       [NamedNode]: name="expression_p2"
+                        [SequenceNode]:
+                         [NamedNode]: name="expression_p3"
+                          [SequenceNode]:
+                           [NamedNode]: name="expression_p4"
+                            [VariantNode]: option=1
+                             [NamedNode]: name="function_call"
+                              [SequenceNode]:
+                               [NamedNode]: name="extended_identifier"
+                                [SequenceNode]:
+                                 [NamedNode]: name="identifier"
+                                  [TokenNode]: token="NAME {math}"
+                                 [RepeatNode]: nodes_count=1
+                                  [SequenceNode]:
+                                   [TokenNode]: token="OPERATOR ".""
+                                   [NamedNode]: name="identifier"
+                                    [TokenNode]: token="NAME {sqrt}"
+                               [NamedNode]: name="expression_args_list"
+                                [SequenceNode]:
+                                 [TokenNode]: token="OPERATOR "(""
+                                 [OptionalNode]: has_node=true
+                                  [SequenceNode]:
+                                   [NamedNode]: name="expression"
+                                    [NamedNode]: name="expression_p1"
+                                     [SequenceNode]:
+                                      [NamedNode]: name="expression_p2"
+                                       [SequenceNode]:
+                                        [NamedNode]: name="expression_p3"
+                                         [SequenceNode]:
+                                          [NamedNode]: name="expression_p4"
+                                           [VariantNode]: option=3
+                                            [NamedNode]: name="brackets_expression"
+                                             [SequenceNode]:
+                                              [TokenNode]: token="OPERATOR "(""
+                                              [NamedNode]: name="expression"
+                                               [NamedNode]: name="expression_p1"
+                                                [SequenceNode]:
+                                                 [NamedNode]: name="expression_p2"
+                                                  [SequenceNode]:
+                                                   [NamedNode]: name="expression_p3"
+                                                    [SequenceNode]:
+                                                     [NamedNode]: name="expression_p4"
+                                                      [VariantNode]: option=1
+                                                       [NamedNode]: name="function_call"
+                                                        [SequenceNode]:
+                                                         [NamedNode]: name="extended_identifier"
+                                                          [SequenceNode]:
+                                                           [NamedNode]: name="identifier"
+                                                            [TokenNode]: token="NAME {discriminant}"
+                                                           [RepeatNode]: nodes_count=0
+                                                         [NamedNode]: name="expression_args_list"
+                                                          [SequenceNode]:
+                                                           [TokenNode]: token="OPERATOR "(""
+                                                           [OptionalNode]: has_node=true
+                                                            [SequenceNode]:
+                                                             [NamedNode]: name="expression"
+                                                              [NamedNode]: name="expression_p1"
+                                                               [SequenceNode]:
+                                                                [NamedNode]: name="expression_p2"
+                                                                 [SequenceNode]:
+                                                                  [NamedNode]: name="expression_p3"
+                                                                   [SequenceNode]:
+                                                                    [NamedNode]: name="expression_p4"
+                                                                     [VariantNode]: option=2
+                                                                      [NamedNode]: name="variable"
+                                                                       [NamedNode]: name="extended_identifier"
+                                                                        [SequenceNode]:
+                                                                         [NamedNode]: name="identifier"
+                                                                          [TokenNode]: token="NAME {a}"
+                                                                         [RepeatNode]: nodes_count=0
+                                                                    [RepeatNode]: nodes_count=0
+                                                                  [RepeatNode]: nodes_count=0
+                                                                [RepeatNode]: nodes_count=0
+                                                             [RepeatNode]: nodes_count=2
+                                                              [SequenceNode]:
+                                                               [TokenNode]: token="OPERATOR ",""
+                                                               [NamedNode]: name="expression"
+                                                                [NamedNode]: name="expression_p1"
+                                                                 [SequenceNode]:
+                                                                  [NamedNode]: name="expression_p2"
+                                                                   [SequenceNode]:
+                                                                    [NamedNode]: name="expression_p3"
+                                                                     [SequenceNode]:
+                                                                      [NamedNode]: name="expression_p4"
+                                                                       [VariantNode]: option=2
+                                                                        [NamedNode]: name="variable"
+                                                                         [NamedNode]: name="extended_identifier"
+                                                                          [SequenceNode]:
+                                                                           [NamedNode]: name="identifier"
+                                                                            [TokenNode]: token="NAME {b}"
+                                                                           [RepeatNode]: nodes_count=0
+                                                                      [RepeatNode]: nodes_count=0
+                                                                    [RepeatNode]: nodes_count=0
+                                                                  [RepeatNode]: nodes_count=0
+                                                              [SequenceNode]:
+                                                               [TokenNode]: token="OPERATOR ",""
+                                                               [NamedNode]: name="expression"
+                                                                [NamedNode]: name="expression_p1"
+                                                                 [SequenceNode]:
+                                                                  [NamedNode]: name="expression_p2"
+                                                                   [SequenceNode]:
+                                                                    [NamedNode]: name="expression_p3"
+                                                                     [SequenceNode]:
+                                                                      [NamedNode]: name="expression_p4"
+                                                                       [VariantNode]: option=2
+                                                                        [NamedNode]: name="variable"
+                                                                         [NamedNode]: name="extended_identifier"
+                                                                          [SequenceNode]:
+                                                                           [NamedNode]: name="identifier"
+                                                                            [TokenNode]: token="NAME {c}"
+                                                                           [RepeatNode]: nodes_count=0
+                                                                      [RepeatNode]: nodes_count=0
+                                                                    [RepeatNode]: nodes_count=0
+                                                                  [RepeatNode]: nodes_count=0
+                                                           [TokenNode]: token="OPERATOR ")""
+                                                     [RepeatNode]: nodes_count=0
+                                                   [RepeatNode]: nodes_count=0
+                                                 [RepeatNode]: nodes_count=0
+                                              [TokenNode]: token="OPERATOR ")""
+                                          [RepeatNode]: nodes_count=0
+                                        [RepeatNode]: nodes_count=0
+                                      [RepeatNode]: nodes_count=0
+                                   [RepeatNode]: nodes_count=0
+                                 [TokenNode]: token="OPERATOR ")""
+                           [RepeatNode]: nodes_count=0
+                         [RepeatNode]: nodes_count=0
+                  [TokenNode]: token="OPERATOR ")""
+              [RepeatNode]: nodes_count=0
+            [RepeatNode]: nodes_count=1
+             [SequenceNode]:
+              [VariantNode]: option=1
+               [TokenNode]: token="OPERATOR "/""
+              [NamedNode]: name="expression_p3"
+               [SequenceNode]:
+                [NamedNode]: name="expression_p4"
+                 [VariantNode]: option=2
+                  [NamedNode]: name="variable"
+                   [NamedNode]: name="extended_identifier"
+                    [SequenceNode]:
+                     [NamedNode]: name="identifier"
+                      [TokenNode]: token="NAME {a}"
+                     [RepeatNode]: nodes_count=0
+                [RepeatNode]: nodes_count=0
+          [RepeatNode]: nodes_count=0
+       [OptionalNode]: has_node=true
+        [NamedNode]: name="where_part"
+         [SequenceNode]:
+          [TokenNode]: token="NAME {where}"
+          [TokenNode]: token="OPEN_BRACKET"
+          [NamedNode]: name="module"
+           [RepeatNode]: nodes_count=2
+            [SequenceNode]:
+             [NamedNode]: name="statement"
+              [VariantNode]: option=2
+               [NamedNode]: name="define_function_statement"
+                [SequenceNode]:
+                 [TokenNode]: token="NAME {let}"
+                 [NamedNode]: name="identifier"
+                  [TokenNode]: token="NAME {discriminant}"
+                 [NamedNode]: name="identifier_args_list"
+                  [SequenceNode]:
+                   [TokenNode]: token="OPERATOR "(""
+                   [OptionalNode]: has_node=true
+                    [SequenceNode]:
+                     [NamedNode]: name="identifier"
+                      [TokenNode]: token="NAME {a}"
+                     [RepeatNode]: nodes_count=2
+                      [SequenceNode]:
+                       [TokenNode]: token="OPERATOR ",""
+                       [NamedNode]: name="identifier"
+                        [TokenNode]: token="NAME {b}"
+                      [SequenceNode]:
+                       [TokenNode]: token="OPERATOR ",""
+                       [NamedNode]: name="identifier"
+                        [TokenNode]: token="NAME {c}"
+                   [TokenNode]: token="OPERATOR ")""
+                 [TokenNode]: token="OPERATOR ":=""
+                 [NamedNode]: name="expression"
+                  [NamedNode]: name="expression_p1"
+                   [SequenceNode]:
+                    [NamedNode]: name="expression_p2"
+                     [SequenceNode]:
+                      [NamedNode]: name="expression_p3"
+                       [SequenceNode]:
+                        [NamedNode]: name="expression_p4"
+                         [VariantNode]: option=3
+                          [NamedNode]: name="brackets_expression"
+                           [SequenceNode]:
+                            [TokenNode]: token="OPERATOR "(""
+                            [NamedNode]: name="expression"
+                             [NamedNode]: name="expression_p1"
+                              [SequenceNode]:
+                               [NamedNode]: name="expression_p2"
+                                [SequenceNode]:
+                                 [NamedNode]: name="expression_p3"
+                                  [SequenceNode]:
+                                   [NamedNode]: name="expression_p4"
+                                    [VariantNode]: option=2
+                                     [NamedNode]: name="variable"
+                                      [NamedNode]: name="extended_identifier"
+                                       [SequenceNode]:
+                                        [NamedNode]: name="identifier"
+                                         [TokenNode]: token="NAME {b}"
+                                        [RepeatNode]: nodes_count=0
+                                   [RepeatNode]: nodes_count=1
+                                    [SequenceNode]:
+                                     [TokenNode]: token="OPERATOR "^""
+                                     [NamedNode]: name="expression_p4"
+                                      [VariantNode]: option=0
+                                       [NamedNode]: name="number"
+                                        [TokenNode]: token="INTEGER {2}"
+                                 [RepeatNode]: nodes_count=0
+                               [RepeatNode]: nodes_count=0
+                            [TokenNode]: token="OPERATOR ")""
+                        [RepeatNode]: nodes_count=0
+                      [RepeatNode]: nodes_count=0
+                    [RepeatNode]: nodes_count=1
+                     [SequenceNode]:
+                      [VariantNode]: option=1
+                       [TokenNode]: token="OPERATOR "-""
+                      [NamedNode]: name="expression_p2"
+                       [SequenceNode]:
+                        [NamedNode]: name="expression_p3"
+                         [SequenceNode]:
+                          [NamedNode]: name="expression_p4"
+                           [VariantNode]: option=0
+                            [NamedNode]: name="number"
+                             [TokenNode]: token="INTEGER {4}"
+                          [RepeatNode]: nodes_count=0
+                        [RepeatNode]: nodes_count=1
+                         [SequenceNode]:
+                          [VariantNode]: option=0
+                           [TokenNode]: token="OPERATOR "*""
+                          [NamedNode]: name="expression_p3"
+                           [SequenceNode]:
+                            [NamedNode]: name="expression_p4"
+                             [VariantNode]: option=3
+                              [NamedNode]: name="brackets_expression"
+                               [SequenceNode]:
+                                [TokenNode]: token="OPERATOR "(""
+                                [NamedNode]: name="expression"
+                                 [NamedNode]: name="expression_p1"
+                                  [SequenceNode]:
+                                   [NamedNode]: name="expression_p2"
+                                    [SequenceNode]:
+                                     [NamedNode]: name="expression_p3"
+                                      [SequenceNode]:
+                                       [NamedNode]: name="expression_p4"
+                                        [VariantNode]: option=2
+                                         [NamedNode]: name="variable"
+                                          [NamedNode]: name="extended_identifier"
+                                           [SequenceNode]:
+                                            [NamedNode]: name="identifier"
+                                             [TokenNode]: token="NAME {a}"
+                                            [RepeatNode]: nodes_count=0
+                                       [RepeatNode]: nodes_count=0
+                                     [RepeatNode]: nodes_count=1
+                                      [SequenceNode]:
+                                       [VariantNode]: option=0
+                                        [TokenNode]: token="OPERATOR "*""
+                                       [NamedNode]: name="expression_p3"
+                                        [SequenceNode]:
+                                         [NamedNode]: name="expression_p4"
+                                          [VariantNode]: option=2
+                                           [NamedNode]: name="variable"
+                                            [NamedNode]: name="extended_identifier"
+                                             [SequenceNode]:
+                                              [NamedNode]: name="identifier"
+                                               [TokenNode]: token="NAME {c}"
+                                              [RepeatNode]: nodes_count=0
+                                         [RepeatNode]: nodes_count=0
+                                   [RepeatNode]: nodes_count=0
+                                [TokenNode]: token="OPERATOR ")""
+                            [RepeatNode]: nodes_count=0
+                 [OptionalNode]: has_node=false
+             [TokenNode]: token="NEW_LINE"
+            [SequenceNode]:
+             [NamedNode]: name="statement"
+              [VariantNode]: option=0
+               [NamedNode]: name="import_statement"
+                [SequenceNode]:
+                 [TokenNode]: token="NAME {import}"
+                 [NamedNode]: name="extended_identifier"
+                  [SequenceNode]:
+                   [NamedNode]: name="identifier"
+                    [TokenNode]: token="NAME {math}"
+                   [RepeatNode]: nodes_count=0
+                 [OptionalNode]: has_node=false
+             [TokenNode]: token="NEW_LINE"
+          [TokenNode]: token="CLOSE_BRACKET"
+   [TokenNode]: token="NEW_LINE"

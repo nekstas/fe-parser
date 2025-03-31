@@ -1,6 +1,6 @@
 #pragma once
-#include "../../../utils/format_stream.h"
-#include "abstract_token.h"
+#include "../../../../core/tokenizer/abstract_token.h"
+#include "../../../../utils/format_stream.h"
 
 class UnknownIndentType : public std::logic_error {
     using std::logic_error::logic_error;

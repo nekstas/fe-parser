@@ -1,0 +1,21 @@
+module MyLinalg where
+   import Unused
+
+   let    d    :=        e()
+   let test1 := a    .   b     . c . d  (a.d.e.f  ,       2      ,      3, -    4, (aaa.bbb.c.d))
+   let test2 := 1 + 2 - 3 + 4 * 5 + 2 ^ 3 ^ 4 + 10 + (20 + 30 / 2)
+   let test3 := ((1 + 2) + (3 + 4)) + (1 - 2) - (3 - 4)
+   let test4 := a(b,c.d.e+1--2*3/4^5)
+   let test5(   aaaa, b,       d, a0) := 1 + 2 + 3
+
+   let solve(A, b  )   :=   LA.solve( A  ,  b  )
+
+   import numpy.linalg as LA
+
+
+let some_root(a , b  , c  ) :=   (  b +   math.sqrt(( discriminant(a, b, c ) ) )) / a where
+
+  let discriminant(   a, b,c   ) := (b ^ 2) - 4 * (a * c)
+
+
+  import math

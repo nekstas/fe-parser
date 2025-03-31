@@ -1,0 +1,31 @@
+import M2 as abc
+import M2 as cba
+import M1 (f1, f2, f4, f6)
+import M1.M2 (f3, f5)
+
+module MyLinalg where
+  import Unused
+  import numpy.linalg as LA
+  let x := -5
+  let x := -5 + 5 + (-5) - (-5)
+  let d := e()
+  let test1 := a.b.c.d(a.d.e.f, 2, 3, -4, aaa.bbb.c.d)
+  let test2 := 1 + 2 - 3 + 4 * 5 + 2 ^ 3 ^ 4 + 10 + 20 + 30 / 2
+  let test3 := 1 + 2 + 3 + 4 + 1 - 2 - (3 - 4)
+  let test4 := a(b, c.d.e + 1 - (-2) * 3 / 4 ^ 5)
+  let test5(aaaa, b, d, a0) := 1 + 2 + 3
+  let solve(A, b) := LA.solve(A, b)
+
+let some_root(a, b, c) := (b + math.sqrt(discriminant(a, b, c))) / a where
+  import math
+  let discriminant(a, b, c) := b ^ 2 - 4 * a * c
+
+module MyWorld where
+  import a
+  import b
+  import c as d
+
+  let a() := 10 where
+    let b := c
+
+  let b := -1 + func(-1 + (-1), -1 - (-1), -1 * (-1), -1 / (-1), -1 ^ (-1))

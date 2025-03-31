@@ -1,10 +1,10 @@
 #include "expression_ast_builder.h"
 
-#include "../../../../core/tokenizer/tokens/integer_token.h"
-#include "../../../../core/tokenizer/tokens/name_token.h"
-#include "../../../../core/tokenizer/tokens/operator_token.h"
 #include "../../../../utils/utils.h"
 #include "../../factories/expressions_info_factory.h"
+#include "../../tokenizer/tokens/integer_token.h"
+#include "../../tokenizer/tokens/name_token.h"
+#include "../../tokenizer/tokens/operator_token.h"
 #include "../expressions/binary_expression.h"
 #include "../expressions/call_expression.h"
 #include "../expressions/number_expression.h"

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../../../utils/useful_streams.h"
-#include "../../../utils/utils.h"
-#include "../../algo/search_set.hpp"
+#include "../../../../core/algo/search_set.hpp"
+#include "../../../../core/tokenizer/abstract_parser.h"
+#include "../../../../utils/useful_streams.h"
+#include "../../../../utils/utils.h"
 #include "../tokens/operator_token.h"
-#include "abstract_parser.h"
 
 class OperatorParser : public AbstractParser {
 public:

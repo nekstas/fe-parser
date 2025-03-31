@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../utils/useful_streams.h"
-#include "../tokenizer/tokens/abstract_token.h"
+#include "../tokenizer/abstract_token.h"
 #include "grammar/grammar.h"
 #include "grammar/syntax_tree/node.h"
 

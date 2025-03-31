@@ -4,10 +4,9 @@
 #include <vector>
 
 #include "../../utils/format_stream.h"
-#include "../../utils/istream.h"
 #include "../../utils/useful_streams.h"
-#include "parsers/abstract_parser.h"
-#include "tokens/abstract_token.h"
+#include "abstract_parser.h"
+#include "abstract_token.h"
 
 class TokenizerUnknownSequence : public std::runtime_error {
 public:

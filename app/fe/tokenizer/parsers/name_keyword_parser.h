@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../../utils/useful_streams.h"
-#include "../../algo/search_set.hpp"
-#include "abstract_parser.h"
+#include "../../../../core/algo/search_set.hpp"
+#include "../../../../core/tokenizer/abstract_parser.h"
+#include "../../../../utils/useful_streams.h"
 
 class NameKeywordParser : public AbstractParser {
 private:

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../utils/istream.h"
-#include "../tokens/abstract_token.h"
+#include "../../utils/useful_streams.h"
+#include "abstract_token.h"
 
 class AbstractParser {
 public:

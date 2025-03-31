@@ -1,6 +1,6 @@
 #pragma once
-#include "../../../utils/format_stream.h"
-#include "abstract_token.h"
+#include "../../../../core/tokenizer/abstract_token.h"
+#include "../../../../utils/format_stream.h"
 
 struct IntegerToken : public AbstractToken {
 public:

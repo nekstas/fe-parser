@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../../utils/container_stream.hpp"
-#include "../../../utils/useful_streams.h"
-#include "abstract_parser.h"
+#include "../../../../core/tokenizer/abstract_parser.h"
+#include "../../../../utils/container_stream.hpp"
+#include "../../../../utils/useful_streams.h"
 
 class IntegerParser : public AbstractParser {
 public:

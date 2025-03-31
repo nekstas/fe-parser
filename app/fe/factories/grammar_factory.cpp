@@ -8,8 +8,8 @@
 #include "../../../core/parser/grammar/rules/token_value_rule.hpp"
 #include "../../../core/parser/grammar/rules/variant_rule.h"
 #include "../../../core/parser/grammar/rules/virtual_rules.h"
-#include "../../../core/tokenizer/tokens/integer_token.h"
-#include "../../../core/tokenizer/tokens/name_token.h"
+#include "../tokenizer/tokens/integer_token.h"
+#include "../tokenizer/tokens/name_token.h"
 
 Grammar fe::GrammarFactory::Create() const {
     using grammar_rules::MakeRule;
