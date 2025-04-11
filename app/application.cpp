@@ -4,7 +4,7 @@
 
 #include "../core/parser/parser.h"
 #include "../core/tokenizer/tokenizer.h"
-#include "../core/tokens_preprocessor/tokens_preprocessor.h"
+#include "fe/tokens_preprocessor/tokens_preprocessor.h"
 #include "../utils/utils.h"
 #include "fe/ast/builders/full_ast_builder.h"
 #include "fe/ast/visitors/format_visitor.h"
