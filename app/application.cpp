@@ -4,12 +4,12 @@
 
 #include "../core/parser/parser.h"
 #include "../core/tokenizer/tokenizer.h"
-#include "fe/tokens_preprocessor/tokens_preprocessor.h"
 #include "../utils/utils.h"
 #include "fe/ast/builders/full_ast_builder.h"
 #include "fe/ast/visitors/format_visitor.h"
 #include "fe/factories/parser_factory.h"
 #include "fe/factories/tokenizer_factory.h"
+#include "fe/tokens_preprocessor/tokens_preprocessor.h"
 
 int32_t Application::Run(size_t argc, char** argv) {
     try {
