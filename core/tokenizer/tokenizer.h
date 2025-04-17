@@ -8,6 +8,8 @@
 #include "abstract_parser.h"
 #include "abstract_token.h"
 
+namespace lex {
+
 class TokenizerUnknownSequence : public std::runtime_error {
 public:
     TokenizerUnknownSequence(size_t pos, char ch)
@@ -37,3 +39,5 @@ private:
     CodeStream input_;
     std::vector<TokenizerParser> parsers_;
 };
+
+}

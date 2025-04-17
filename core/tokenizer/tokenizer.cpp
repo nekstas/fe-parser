@@ -1,9 +1,9 @@
 #include "tokenizer.h"
 
-Tokenizer::Tokenizer(const CodeStream& input) : input_(input) {
+lex::Tokenizer::Tokenizer(const CodeStream& input) : input_(input) {
 }
 
-Tokens Tokenizer::Tokenize() {
+lex::Tokens lex::Tokenizer::Tokenize() {
     Tokens tokens;
 
     while (!IsEnd()) {
@@ -27,6 +27,6 @@ Tokens Tokenizer::Tokenize() {
     return tokens;
 }
 
-bool Tokenizer::IsEnd() {
+bool lex::Tokenizer::IsEnd() {
     return input_.Eof();
 }

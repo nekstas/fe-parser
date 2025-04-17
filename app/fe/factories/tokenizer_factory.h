@@ -8,12 +8,12 @@ class TokenizerFactory {
 public:
     TokenizerFactory() = default;
 
-    Tokenizer Create(const std::string& code) const;
+    lex::Tokenizer Create(const std::string& code) const;
 
 private:
-    void AddOperatorParser(Tokenizer& tokenizer) const;
+    void AddOperatorParser(lex::Tokenizer& tokenizer) const;
 
-    void AddNameKeywordParser(Tokenizer& tokenizer) const;
+    void AddNameKeywordParser(lex::Tokenizer& tokenizer) const;
 };
 
 };  // namespace fe

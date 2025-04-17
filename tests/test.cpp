@@ -2,7 +2,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-//#include "../app/fe/factories/tokenizer_factory.h"
+#include "../app/fe/factories/tokenizer_factory.h"
 #include "../app/fe/tokenizer/parsers/integer_parser.h"
 #include "../app/fe/tokenizer/parsers/name_keyword_parser.h"
 #include "../app/fe/tokenizer/parsers/operator_parser.h"
@@ -131,6 +131,6 @@ TEST_CASE("Tokenizer Parsers") {
     }
 }
 
-//TEST_CASE("Tokenizer") {
-//    Tokenizer tokenizer = TokenizerFactory().Create();
-//}
+TEST_CASE("Tokenizer") {
+    lex::Tokenizer tokenizer = fe::TokenizerFactory().Create("");
+}
