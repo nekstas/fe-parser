@@ -15,26 +15,11 @@ Tokenizer fe::TokenizerFactory::Create(const std::string& code) const {
 }
 
 void fe::TokenizerFactory::AddOperatorParser(Tokenizer& tokenizer) const {
-    SearchSet operators;
-    operators.Add("+");
-    operators.Add("-");
-    operators.Add("*");
-    operators.Add("/");
-    operators.Add("^");
-    operators.Add("(");
-    operators.Add(")");
-    operators.Add(",");
-    operators.Add(".");
-    operators.Add(":=");
+    SearchSet operators({"+", "-", "*", "/", "^", "(", ")", ",", ".", ":="});
     tokenizer.AddParser<OperatorParser>(operators);
 }
 
 void fe::TokenizerFactory::AddNameKeywordParser(Tokenizer& tokenizer) const {
-    SearchSet keywords;
-    keywords.Add("let");
-    keywords.Add("as");
-    keywords.Add("where");
-    keywords.Add("module");
-    keywords.Add("import");
+    SearchSet keywords({"let", "as", "where", "module", "import"});
     tokenizer.AddParser<NameKeywordParser>(keywords);
 }

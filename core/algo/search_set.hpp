@@ -21,6 +21,12 @@ public:
     SearchSet() {
     }
 
+    explicit SearchSet(const std::set<std::string>& elements) {
+        for (const std::string& elem : elements) {
+            Add(elem);
+        }
+    }
+
     void Add(const std::string& key) {
         if (Contains(key)) {
             throw KeyAlreadyExistsError{key};
