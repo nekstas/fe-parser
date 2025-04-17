@@ -13,6 +13,11 @@
 #include "../app/fe/tokenizer/tokens/name_token.h"
 #include "../app/fe/tokenizer/tokens/new_line_token.h"
 
+template <typename TokenType>
+bool CheckEquals(Token token, const TokenType& expected) {
+    return IsToken<TokenType>(token) && *ConvertTokenTo<TokenType>(token) == expected;
+}
+
 template <typename ParserType>
 class ParserChecker {
 public:
@@ -29,9 +34,7 @@ public:
         CodeStream stream{code};
         Token token = parser_.TryParse(stream);
 
-        return token && IsToken<TokenType>(token) &&
-               *ConvertTokenTo<TokenType>(token) == expected_token &&
-               stream.GetPos() == expected_pos;
+        return CheckEquals(token, expected_token) && stream.GetPos() == expected_pos;
     }
 
 private:
@@ -132,5 +135,64 @@ TEST_CASE("Tokenizer Parsers") {
 }
 
 TEST_CASE("Tokenizer") {
-    lex::Tokenizer tokenizer = fe::TokenizerFactory().Create("");
+    lex::Tokenizer tokenizer = fe::TokenizerFactory().Create();
+
+    REQUIRE_NOTHROW(tokenizer.Tokenize(""));
+    REQUIRE(tokenizer.Tokenize("").empty());
+
+    REQUIRE_THROWS_AS(tokenizer.Tokenize("@"), lex::TokenizerUnknownSequence);
+    REQUIRE_THROWS_AS(tokenizer.Tokenize("~"), lex::TokenizerUnknownSequence);
+    REQUIRE_THROWS_AS(tokenizer.Tokenize("!"), lex::TokenizerUnknownSequence);
+    REQUIRE_THROWS_AS(tokenizer.Tokenize("&"), lex::TokenizerUnknownSequence);
+    REQUIRE_THROWS_AS(tokenizer.Tokenize("abcdef + 2 + 3^4?"), lex::TokenizerUnknownSequence);
+
+    SECTION("All types of tokens") {
+        auto code = "abc as 3 + \n\t_";
+        REQUIRE_NOTHROW(tokenizer.Tokenize(code));
+        auto tokens = tokenizer.Tokenize(code);
+        REQUIRE(tokens.size() == 11);
+        CHECK(CheckEquals(tokens[0], NameToken{"abc"}));
+        CHECK(CheckEquals(tokens[1], IndentToken{IndentType::SPACE}));
+        CHECK(CheckEquals(tokens[2], KeywordToken{"as"}));
+        CHECK(CheckEquals(tokens[3], IndentToken{IndentType::SPACE}));
+        CHECK(CheckEquals(tokens[4], IntegerToken{"3"}));
+        CHECK(CheckEquals(tokens[5], IndentToken{IndentType::SPACE}));
+        CHECK(CheckEquals(tokens[6], OperatorToken{"+"}));
+        CHECK(CheckEquals(tokens[7], IndentToken{IndentType::SPACE}));
+        CHECK(CheckEquals(tokens[8], NewLineToken{}));
+        CHECK(CheckEquals(tokens[9], IndentToken{IndentType::TAB}));
+        CHECK(CheckEquals(tokens[10], NameToken{"_"}));
+    }
+
+    SECTION("Basic arithmetic") {
+        auto code = "1+2-3*4/5^6";
+        REQUIRE_NOTHROW(tokenizer.Tokenize(code));
+        auto tokens = tokenizer.Tokenize(code);
+        REQUIRE(tokens.size() == 11);
+        CHECK(CheckEquals(tokens[0], IntegerToken{"1"}));
+        CHECK(CheckEquals(tokens[1], OperatorToken{"+"}));
+        CHECK(CheckEquals(tokens[2], IntegerToken{"2"}));
+        CHECK(CheckEquals(tokens[3], OperatorToken{"-"}));
+        CHECK(CheckEquals(tokens[4], IntegerToken{"3"}));
+        CHECK(CheckEquals(tokens[5], OperatorToken{"*"}));
+        CHECK(CheckEquals(tokens[6], IntegerToken{"4"}));
+        CHECK(CheckEquals(tokens[7], OperatorToken{"/"}));
+        CHECK(CheckEquals(tokens[8], IntegerToken{"5"}));
+        CHECK(CheckEquals(tokens[9], OperatorToken{"^"}));
+        CHECK(CheckEquals(tokens[10], IntegerToken{"6"}));
+    }
+
+    SECTION("Basic arithmetic") {
+        auto code = "\t  a \t3";
+        REQUIRE_NOTHROW(tokenizer.Tokenize(code));
+        auto tokens = tokenizer.Tokenize(code);
+        REQUIRE(tokens.size() == 7);
+        CHECK(CheckEquals(tokens[0], IndentToken{IndentType::TAB}));
+        CHECK(CheckEquals(tokens[1], IndentToken{IndentType::SPACE}));
+        CHECK(CheckEquals(tokens[2], IndentToken{IndentType::SPACE}));
+        CHECK(CheckEquals(tokens[3], NameToken{"a"}));
+        CHECK(CheckEquals(tokens[4], IndentToken{IndentType::SPACE}));
+        CHECK(CheckEquals(tokens[5], IndentToken{IndentType::TAB}));
+        CHECK(CheckEquals(tokens[6], IntegerToken{"3"}));
+    }
 }
