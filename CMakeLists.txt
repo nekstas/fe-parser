@@ -3,8 +3,9 @@ project(fe_parser)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(fe_parser main.cpp
-        app/application.cpp
+add_subdirectory(lib/Catch2)
+
+set(FE_PARSER_SOURCES app/application.cpp
         app/application.h
         core/tokenizer/tokenizer.cpp
         core/tokenizer/tokenizer.h
@@ -113,5 +114,9 @@ add_executable(fe_parser main.cpp
         app/fe/ast/module.cpp
         app/fe/ast/module.h
         app/fe/ast/statements/define_module_statement.cpp
-        app/fe/ast/statements/define_module_statement.h
-)
+        app/fe/ast/statements/define_module_statement.h)
+
+add_executable(fe_parser main.cpp ${FE_PARSER_SOURCES})
+
+add_executable(tests tests/test.cpp ${FE_PARSER_SOURCES})
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
