@@ -13,7 +13,9 @@ Tokens TokensPreprocessor::Process(const TokensStream& tokens) {
     while (!tokens_.Eof()) {
         LineIndent indent = CalculateLineIndent();
 
-        if (IsToken<NewLineToken>(tokens_.Peek())) {
+        if (tokens_.Eof()) {
+            break;
+        } else if (IsToken<NewLineToken>(tokens_.Peek())) {
             tokens_.Ignore();
             continue;
         } else if (!indent.IsNormal()) {

@@ -1,5 +1,3 @@
-#include <histedit.h>
-
 #include <catch2/catch_test_macros.hpp>
 
 #include "../app/fe/factories/tokenizer_factory.h"
@@ -7,11 +5,13 @@
 #include "../app/fe/tokenizer/parsers/name_keyword_parser.h"
 #include "../app/fe/tokenizer/parsers/operator_parser.h"
 #include "../app/fe/tokenizer/parsers/whitespace_parser.h"
+#include "../app/fe/tokenizer/tokens/close_bracket_token.h"
 #include "../app/fe/tokenizer/tokens/indent_token.h"
 #include "../app/fe/tokenizer/tokens/integer_token.h"
 #include "../app/fe/tokenizer/tokens/keyword_token.h"
 #include "../app/fe/tokenizer/tokens/name_token.h"
 #include "../app/fe/tokenizer/tokens/new_line_token.h"
+#include "../app/fe/tokenizer/tokens/open_bracket_token.h"
 #include "../app/fe/tokens_preprocessor/tokens_preprocessor.h"
 
 template <typename TokenType>
@@ -183,7 +183,7 @@ TEST_CASE("Tokenizer") {
         CHECK(CheckEquals(tokens[10], IntegerToken{"6"}));
     }
 
-    SECTION("Basic arithmetic") {
+    SECTION("Indents") {
         auto code = "\t  a \t3";
         REQUIRE_NOTHROW(tokenizer.Tokenize(code));
         auto tokens = tokenizer.Tokenize(code);
@@ -201,13 +201,6 @@ TEST_CASE("Tokenizer") {
 TEST_CASE("TokensPreprocessor") {
     lex::Tokenizer tokenizer = fe::TokenizerFactory().Create();
     TokensPreprocessor tokens_preprocessor;
-
-    auto get_tokens = [&](const std::string& code) {
-        REQUIRE_NOTHROW(tokenizer.Tokenize(code));
-        auto tokens = tokenizer.Tokenize(code);
-        REQUIRE_NOTHROW(tokens_preprocessor.Process(tokens));
-        return tokens_preprocessor.Process(tokens);
-    };
 
     SECTION("LineIndent") {
         SECTION("IsNormal") {
@@ -257,5 +250,123 @@ TEST_CASE("TokensPreprocessor") {
             CHECK(!LineIndent{1, 0}.IsGreater({0, 0}));
             CHECK(LineIndent{0, 1}.IsGreater({0, 0}));
         }
+    }
+
+    auto get_tokens = [&](const std::string& code) {
+        REQUIRE_NOTHROW(tokenizer.Tokenize(code));
+        auto tokens = tokenizer.Tokenize(code);
+        REQUIRE_NOTHROW(tokens_preprocessor.Process(tokens));
+        return tokens_preprocessor.Process(tokens);
+    };
+
+    auto require_error = [&](const std::string& code) {
+        REQUIRE_NOTHROW(tokenizer.Tokenize(code));
+        auto tokens = tokenizer.Tokenize(code);
+        REQUIRE_THROWS(tokens_preprocessor.Process(tokens));
+    };
+
+    SECTION("Empty line") {
+        CHECK(get_tokens("").empty());
+        CHECK(get_tokens("  ").empty());
+        CHECK(get_tokens("\t\t").empty());
+        CHECK(get_tokens("\n").empty());
+        CHECK(get_tokens("  \n").empty());
+        CHECK(get_tokens("\t\t\n").empty());
+        CHECK(get_tokens("     \t\t\t  \t \n").empty());
+        CHECK(get_tokens("\n\n\n").empty());
+    }
+
+    SECTION("No inner indents") {
+        auto tokens = get_tokens("1   +\t\t 2\t  -    3   *   4   /  5 ^  6    ");
+        REQUIRE(tokens.size() == 12);
+        CHECK(CheckEquals(tokens[0], IntegerToken{"1"}));
+        CHECK(CheckEquals(tokens[1], OperatorToken{"+"}));
+        CHECK(CheckEquals(tokens[2], IntegerToken{"2"}));
+        CHECK(CheckEquals(tokens[3], OperatorToken{"-"}));
+        CHECK(CheckEquals(tokens[4], IntegerToken{"3"}));
+        CHECK(CheckEquals(tokens[5], OperatorToken{"*"}));
+        CHECK(CheckEquals(tokens[6], IntegerToken{"4"}));
+        CHECK(CheckEquals(tokens[7], OperatorToken{"/"}));
+        CHECK(CheckEquals(tokens[8], IntegerToken{"5"}));
+        CHECK(CheckEquals(tokens[9], OperatorToken{"^"}));
+        CHECK(CheckEquals(tokens[10], IntegerToken{"6"}));
+        CHECK(CheckEquals(tokens[11], NewLineToken{}));
+    }
+
+    SECTION("Multiple lines") {
+        auto tokens = get_tokens("\n1\n2\n\n3\n\n\n4\n5\n\n");
+        REQUIRE(tokens.size() == 10);
+        CHECK(CheckEquals(tokens[0], IntegerToken{"1"}));
+        CHECK(CheckEquals(tokens[1], NewLineToken{}));
+        CHECK(CheckEquals(tokens[2], IntegerToken{"2"}));
+        CHECK(CheckEquals(tokens[3], NewLineToken{}));
+        CHECK(CheckEquals(tokens[4], IntegerToken{"3"}));
+        CHECK(CheckEquals(tokens[5], NewLineToken{}));
+        CHECK(CheckEquals(tokens[6], IntegerToken{"4"}));
+        CHECK(CheckEquals(tokens[7], NewLineToken{}));
+        CHECK(CheckEquals(tokens[8], IntegerToken{"5"}));
+        CHECK(CheckEquals(tokens[9], NewLineToken{}));
+    }
+
+    SECTION("Simple indent") {
+        for (const std::string& code :
+             std::vector{"\t1 + 2", "  1\t+\t2", "\t1 + 2\n", "  1\t+\t2\n"}) {
+            auto tokens = get_tokens(code);
+            REQUIRE(tokens.size() == 7);
+            CHECK(CheckEquals(tokens[0], OpenBracketToken{}));
+            CHECK(CheckEquals(tokens[1], IntegerToken{"1"}));
+            CHECK(CheckEquals(tokens[2], OperatorToken{"+"}));
+            CHECK(CheckEquals(tokens[3], IntegerToken{"2"}));
+            CHECK(CheckEquals(tokens[4], NewLineToken{}));
+            CHECK(CheckEquals(tokens[5], CloseBracketToken{}));
+            CHECK(CheckEquals(tokens[6], NewLineToken{}));
+        }
+    }
+
+    SECTION("Different indents") {
+        for (const std::string& code : std::vector{"1\n\t2\n3", "1\n   2\n3", "1\n   2    \t\n3"}) {
+            auto tokens = get_tokens(code);
+            REQUIRE(tokens.size() == 8);
+            CHECK(CheckEquals(tokens[0], IntegerToken{"1"}));
+            CHECK(CheckEquals(tokens[1], OpenBracketToken{}));
+            CHECK(CheckEquals(tokens[2], IntegerToken{"2"}));
+            CHECK(CheckEquals(tokens[3], NewLineToken{}));
+            CHECK(CheckEquals(tokens[4], CloseBracketToken{}));
+            CHECK(CheckEquals(tokens[5], NewLineToken{}));
+            CHECK(CheckEquals(tokens[6], IntegerToken{"3"}));
+            CHECK(CheckEquals(tokens[7], NewLineToken{}));
+        }
+    }
+
+    SECTION("Nested blocks") {
+        for (const std::string& code : std::vector{
+                 "1\n  2\n    3\n  4\n5\n", "1\n\t2\n\t\t3\n\t4\n5\n",
+                 "1\n    2\n      3\n    4\n5\n"
+             }) {
+            auto tokens = get_tokens(code);
+            REQUIRE(tokens.size() == 14);
+            CHECK(CheckEquals(tokens[0], IntegerToken{"1"}));
+            CHECK(CheckEquals(tokens[1], OpenBracketToken{}));
+            CHECK(CheckEquals(tokens[2], IntegerToken{"2"}));
+            CHECK(CheckEquals(tokens[3], OpenBracketToken{}));
+            CHECK(CheckEquals(tokens[4], IntegerToken{"3"}));
+            CHECK(CheckEquals(tokens[5], NewLineToken{}));
+            CHECK(CheckEquals(tokens[6], CloseBracketToken{}));
+            CHECK(CheckEquals(tokens[7], NewLineToken{}));
+            CHECK(CheckEquals(tokens[8], IntegerToken{"4"}));
+            CHECK(CheckEquals(tokens[9], NewLineToken{}));
+            CHECK(CheckEquals(tokens[10], CloseBracketToken{}));
+            CHECK(CheckEquals(tokens[11], NewLineToken{}));
+            CHECK(CheckEquals(tokens[12], IntegerToken{"5"}));
+            CHECK(CheckEquals(tokens[13], NewLineToken{}));
+        }
+    }
+
+    SECTION("Errors") {
+        require_error(" a");
+        require_error("  a\n\tb");
+        require_error("    a\n\tb");
+        require_error("a\n  b\n\tc\n  d\ne");
+        require_error("a\n\tb\n  c\n\td\ne");
     }
 }
