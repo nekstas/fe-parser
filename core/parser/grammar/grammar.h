@@ -23,7 +23,7 @@ class Grammar {
 public:
     Grammar() = default;
 
-    void AddRule(const std::string& name, const grammar_rules::GrammarRule& rule);
+    void AddRule(const std::string& name, grammar_rules::GrammarRule rule);
 
     grammar_rules::GrammarRule GetRule(const std::string& name) const;
 

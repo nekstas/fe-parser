@@ -1,5 +1,19 @@
 #include <catch2/catch_test_macros.hpp>
 
+#include "../../../core/parser/grammar/rules/named_rule.h"
+#include "../../../core/parser/grammar/rules/optional_rule.h"
+#include "../../../core/parser/grammar/rules/repeat_rule.h"
+#include "../../../core/parser/grammar/rules/sequence_rule.h"
+#include "../../../core/parser/grammar/rules/token_type_rule.hpp"
+#include "../../../core/parser/grammar/rules/token_value_rule.hpp"
+#include "../../../core/parser/grammar/rules/variant_rule.h"
+#include "../../../core/parser/grammar/rules/virtual_rules.h"
+#include "../../../core/parser/grammar/syntax_tree/named_node.h"
+#include "../../../core/parser/grammar/syntax_tree/optional_node.h"
+#include "../../../core/parser/grammar/syntax_tree/repeat_node.h"
+#include "../../../core/parser/grammar/syntax_tree/sequence_node.h"
+#include "../../../core/parser/grammar/syntax_tree/variant_node.h"
+#include "../app/fe/ast/node.h"
 #include "../app/fe/factories/tokenizer_factory.h"
 #include "../app/fe/tokenizer/parsers/integer_parser.h"
 #include "../app/fe/tokenizer/parsers/name_keyword_parser.h"
@@ -13,10 +27,42 @@
 #include "../app/fe/tokenizer/tokens/new_line_token.h"
 #include "../app/fe/tokenizer/tokens/open_bracket_token.h"
 #include "../app/fe/tokens_preprocessor/tokens_preprocessor.h"
+#include "../core/parser/grammar/grammar.h"
+#include "../core/parser/grammar/rules/token_type_rule.hpp"
 
 template <typename TokenType>
 bool CheckEquals(Token token, const TokenType& expected) {
     return IsToken<TokenType>(token) && *ConvertTokenTo<TokenType>(token) == expected;
+}
+
+syntax_tree::NodePtr BuildSyntaxTree(
+    const std::string& code, grammar_rules::GrammarRule rule, const Grammar& grammar
+) {
+    lex::Tokenizer tokenizer = fe::TokenizerFactory().Create();
+    TokensPreprocessor tokens_preprocessor;
+    auto tokens = tokenizer.Tokenize(code);
+    TokensStream new_tokens(tokens_preprocessor.Process(tokens));
+    return rule->Parse(new_tokens, grammar);
+}
+
+template <typename NodeType>
+bool CheckNodeType(
+    const std::string& code, grammar_rules::GrammarRule rule, const Grammar& grammar = {}
+) {
+    return syntax_tree::Is<NodeType>(BuildSyntaxTree(code, rule, grammar));
+}
+
+template <typename NodeType>
+std::shared_ptr<NodeType> RequireNode(
+    const std::string& code, grammar_rules::GrammarRule rule, const Grammar& grammar = {}
+) {
+    return syntax_tree::Cast<NodeType>(BuildSyntaxTree(code, rule, grammar));
+}
+
+bool CheckEmptyNode(
+    const std::string& code, grammar_rules::GrammarRule rule, const Grammar& grammar = {}
+) {
+    return !BuildSyntaxTree(code, rule, grammar);
 }
 
 template <typename ParserType>
@@ -370,3 +416,114 @@ TEST_CASE("TokensPreprocessor") {
         require_error("a\n\tb\n  c\n\td\ne");
     }
 }
+
+TEST_CASE("Grammar rule classes") {
+    using grammar_rules::MakeRule;
+    using grammar_rules::NamedRule;
+    using grammar_rules::OptionalRule;
+    using grammar_rules::RepeatRule;
+    using grammar_rules::SequenceRule;
+    using grammar_rules::TokenTypeRule;
+    using grammar_rules::TokenValueRule;
+    using grammar_rules::VariantRule;
+    using grammar_rules::VirtualRules;
+
+    using syntax_tree::NamedNode;
+    using syntax_tree::OptionalNode;
+    using syntax_tree::RepeatNode;
+    using syntax_tree::SequenceNode;
+    using syntax_tree::TokenNode;
+    using syntax_tree::VariantNode;
+
+    REQUIRE_THROWS_AS(
+        syntax_tree::Cast<SequenceNode>(syntax_tree::MakeNode<TokenNode>(MakeToken<IntegerToken>("1"
+        ))),
+        syntax_tree::ImpossibleNodeCastError
+    );
+    REQUIRE_THROWS_AS(
+        syntax_tree::Cast<SequenceNode>(nullptr), syntax_tree::ImpossibleNodeCastError
+    );
+
+    SECTION("Grammar") {
+        Grammar grammar;
+        REQUIRE_THROWS_AS(grammar.AddRule("", nullptr), EmptyRuleError);
+        REQUIRE_NOTHROW(grammar.AddRule("abc", MakeRule<TokenTypeRule<NameToken>>()));
+        REQUIRE_THROWS_AS(
+            grammar.AddRule("abc", MakeRule<TokenTypeRule<NameToken>>()), RuleAlreadyExistsError
+        );
+    }
+
+    SECTION("TokenTypeRule") {
+        CHECK(CheckEmptyNode("", MakeRule<TokenTypeRule<NameToken>>()));
+        CHECK(CheckNodeType<TokenNode>("a", MakeRule<TokenTypeRule<NameToken>>()));
+        CHECK(CheckNodeType<TokenNode>("a b", MakeRule<TokenTypeRule<NameToken>>()));
+        CHECK(CheckNodeType<TokenNode>("a 2", MakeRule<TokenTypeRule<NameToken>>()));
+        CHECK(CheckEmptyNode("as", MakeRule<TokenTypeRule<NameToken>>()));
+        CHECK(CheckEmptyNode("1", MakeRule<TokenTypeRule<NameToken>>()));
+    }
+
+    SECTION("TokenValueRule") {
+        CHECK(CheckEmptyNode("", MakeRule<TokenValueRule<NameToken>>("a")));
+        CHECK(CheckNodeType<TokenNode>("a", MakeRule<TokenValueRule<NameToken>>("a")));
+        CHECK(CheckNodeType<TokenNode>("a +", MakeRule<TokenValueRule<NameToken>>("a")));
+        CHECK(CheckEmptyNode("b", MakeRule<TokenValueRule<NameToken>>("a")));
+        CHECK(CheckEmptyNode("as", MakeRule<TokenValueRule<NameToken>>("a")));
+        CHECK(CheckEmptyNode("as", MakeRule<TokenValueRule<NameToken>>("as")));
+        CHECK(CheckNodeType<TokenNode>("as", MakeRule<TokenValueRule<KeywordToken>>("as")));
+        CHECK(CheckEmptyNode("1", MakeRule<TokenValueRule<NameToken>>("a")));
+        CHECK(CheckEmptyNode("1", MakeRule<TokenValueRule<NameToken>>("def")));
+    }
+
+    SECTION("NamedRule") {
+        Grammar grammar;
+        grammar.AddRule("my_rule", MakeRule<TokenTypeRule<IntegerToken>>());
+        CHECK(CheckEmptyNode("", MakeRule<NamedRule>("my_rule"), grammar));
+        CHECK(CheckNodeType<NamedNode>("123", MakeRule<NamedRule>("my_rule"), grammar));
+        CHECK(CheckNodeType<NamedNode>("123 as", MakeRule<NamedRule>("my_rule"), grammar));
+        CHECK(CheckEmptyNode("abc", MakeRule<NamedRule>("my_rule"), grammar));
+        REQUIRE_THROWS_AS(
+            CheckNodeType<NamedNode>("123", MakeRule<NamedRule>("my_rule")), EmptyRuleError
+        );
+    }
+
+    SECTION("SequenceRule") {
+        auto rule = MakeRule<SequenceRule>(
+            {MakeRule<TokenTypeRule<NameToken>>(), MakeRule<TokenValueRule<IntegerToken>>("1")}
+        );
+        CHECK(CheckEmptyNode("", rule));
+        CHECK(CheckEmptyNode("1", rule));
+        CHECK(CheckEmptyNode("a1", rule));
+        CHECK(CheckNodeType<SequenceNode>("a 1", rule));
+        CHECK(CheckEmptyNode("a 2", rule));
+        CHECK(CheckNodeType<SequenceNode>("a 1 bcd 123", rule));
+        CHECK(CheckNodeType<SequenceNode>("bcd 1 a", rule));
+        CHECK(CheckNodeType<SequenceNode>("bcd 123 a", MakeRule<SequenceRule>({})));
+        CHECK(CheckNodeType<SequenceNode>("", MakeRule<SequenceRule>({})));
+    }
+
+    SECTION("VariantRule") {
+        auto rule = MakeRule<VariantRule>(
+            {MakeRule<TokenTypeRule<NameToken>>(), MakeRule<TokenValueRule<IntegerToken>>("1")}
+        );
+        CHECK(CheckEmptyNode("", rule));
+        CHECK(CheckNodeType<VariantNode>("1", rule));
+        CHECK(CheckNodeType<VariantNode>("a1", rule));
+        CHECK(CheckNodeType<VariantNode>("a 1", rule));
+        CHECK(CheckNodeType<VariantNode>("1 1", rule));
+        CHECK(CheckEmptyNode("+ 1", rule));
+        CHECK(CheckEmptyNode("a", MakeRule<VariantRule>({})));
+        CHECK(CheckEmptyNode("", MakeRule<VariantRule>({})));
+    }
+
+    SECTION("OptionalRule") {
+        auto rule = MakeRule<OptionalRule>(MakeRule<TokenTypeRule<OperatorToken>>());
+        REQUIRE(RequireNode<OptionalNode>("+", rule)->HasNode());
+        REQUIRE(!RequireNode<OptionalNode>("abc", rule)->HasNode());
+        REQUIRE(!RequireNode<OptionalNode>("1", rule)->HasNode());
+    }
+}
+
+//TEST_CASE("Simple grammar parsing") {
+//    Grammar grammar;
+//    grammar.AddRule("E", );
+//}
