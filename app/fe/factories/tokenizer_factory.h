@@ -8,7 +8,7 @@ class TokenizerFactory {
 public:
     TokenizerFactory() = default;
 
-    lex::Tokenizer Create(const std::string& code) const;
+    lex::Tokenizer Create() const;
 
 private:
     void AddOperatorParser(lex::Tokenizer& tokenizer) const;

@@ -1,12 +1,10 @@
 #include "tokenizer.h"
 
-lex::Tokenizer::Tokenizer(const CodeStream& input) : input_(input) {
-}
-
-lex::Tokens lex::Tokenizer::Tokenize() {
+lex::Tokens lex::Tokenizer::Tokenize(const CodeStream& input) {
+    input_ = input;
     Tokens tokens;
 
-    while (!IsEnd()) {
+    while (!input_.Eof()) {
         Token token{};
         size_t saved_pos = input_.GetPos();
 
@@ -25,8 +23,4 @@ lex::Tokens lex::Tokenizer::Tokenize() {
     }
 
     return tokens;
-}
-
-bool lex::Tokenizer::IsEnd() {
-    return input_.Eof();
 }

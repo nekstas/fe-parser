@@ -35,8 +35,8 @@ void Application::FormatFile(const std::string& input_file, const std::string& o
     std::string code = utils::ReadFile(input_file);
 
     std::cout << "Trying to tokenize input code...\n";
-    lex::Tokenizer tokenizer = fe::TokenizerFactory().Create(code);
-    lex::Tokens tokens = tokenizer.Tokenize();
+    lex::Tokenizer tokenizer = fe::TokenizerFactory().Create();
+    lex::Tokens tokens = tokenizer.Tokenize(code);
 
     std::cout << "Preprocess input tokens...\n";
     TokensPreprocessor preprocessor(tokens);

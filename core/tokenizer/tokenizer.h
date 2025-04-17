@@ -24,11 +24,9 @@ using Tokens = std::vector<Token>;
 
 class Tokenizer {
 public:
-    Tokenizer(const CodeStream& input);
+    Tokenizer() = default;
 
-    Tokens Tokenize();
-
-    bool IsEnd();
+    Tokens Tokenize(const CodeStream& input);
 
     template <typename Parser, typename... Args>
     void AddParser(Args&&... args) {

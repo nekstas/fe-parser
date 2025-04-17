@@ -8,6 +8,7 @@ class ContainerStream {
     using ElementType = std::remove_reference_t<decltype(T()[0])>;
 
 public:
+    ContainerStream() = default;
     ContainerStream(const T& values) : values_(values) {
     }
 

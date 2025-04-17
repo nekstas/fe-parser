@@ -5,8 +5,8 @@
 #include "../tokenizer/parsers/operator_parser.h"
 #include "../tokenizer/parsers/whitespace_parser.h"
 
-lex::Tokenizer fe::TokenizerFactory::Create(const std::string& code) const {
-    lex::Tokenizer tokenizer{CodeStream(code)};
+lex::Tokenizer fe::TokenizerFactory::Create() const {
+    lex::Tokenizer tokenizer;
     tokenizer.AddParser<WhitespaceParser>();
     tokenizer.AddParser<IntegerParser>();
     AddNameKeywordParser(tokenizer);
