@@ -26,6 +26,7 @@ class Tokenizer {
 public:
     Tokenizer() = default;
 
+    Tokens Tokenize(const std::string& input);
     Tokens Tokenize(const CodeStream& input);
 
     template <typename Parser, typename... Args>

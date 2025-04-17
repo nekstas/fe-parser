@@ -9,7 +9,7 @@ class ContainerStream {
 
 public:
     ContainerStream() = default;
-    ContainerStream(const T& values) : values_(values) {
+    explicit ContainerStream(const T& values) : values_(values) {
     }
 
     bool Eof() const {

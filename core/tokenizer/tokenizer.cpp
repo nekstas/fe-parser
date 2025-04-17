@@ -24,3 +24,7 @@ lex::Tokens lex::Tokenizer::Tokenize(const CodeStream& input) {
 
     return tokens;
 }
+
+lex::Tokens lex::Tokenizer::Tokenize(const std::string& input) {
+    return Tokenize(CodeStream{input});
+}
