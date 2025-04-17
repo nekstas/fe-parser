@@ -28,7 +28,7 @@
 #include "../app/fe/tokenizer/tokens/open_bracket_token.h"
 #include "../app/fe/tokens_preprocessor/tokens_preprocessor.h"
 #include "../core/parser/grammar/grammar.h"
-#include "../core/parser/grammar/rules/token_type_rule.hpp"
+#include "../core/parser/parser.h"
 
 template <typename TokenType>
 bool CheckEquals(Token token, const TokenType& expected) {
@@ -523,7 +523,85 @@ TEST_CASE("Grammar rule classes") {
     }
 }
 
-//TEST_CASE("Simple grammar parsing") {
-//    Grammar grammar;
-//    grammar.AddRule("E", );
-//}
+TEST_CASE("Simple grammar parsing") {
+    using grammar_rules::MakeRule;
+    using grammar_rules::NamedRule;
+    using grammar_rules::OptionalRule;
+    using grammar_rules::SequenceRule;
+    using grammar_rules::TokenValueRule;
+
+    using syntax_tree::NamedNode;
+    using syntax_tree::OptionalNode;
+    using syntax_tree::SequenceNode;
+
+    Grammar grammar;
+    grammar.AddRule(
+        "E", MakeRule<OptionalRule>(MakeRule<SequenceRule>(
+                 {MakeRule<TokenValueRule<OperatorToken>>("("), MakeRule<NamedRule>("E"),
+                  MakeRule<TokenValueRule<OperatorToken>>(")"), MakeRule<NamedRule>("E")}
+             ))
+    );
+
+    REQUIRE_THROWS_AS(Parser(grammar).Parse({}), MainRuleDoesNotExistError);
+
+    grammar.SetMainRule("E");
+    Parser parser(grammar);
+
+    auto get_tokens = [&](const std::string& code) {
+        lex::Tokenizer tokenizer = fe::TokenizerFactory().Create();
+        REQUIRE_NOTHROW(tokenizer.Tokenize(code));
+        auto tokens = tokenizer.Tokenize(code);
+        return parser.Parse(tokens);
+    };
+
+    auto named = [&](syntax_tree::NodePtr root) {
+        return syntax_tree::Cast<NamedNode>(root)->GetChildren().at(0);
+    };
+    auto optional = [&](syntax_tree::NodePtr root, bool has_node) -> syntax_tree::NodePtr {
+        auto node = syntax_tree::Cast<OptionalNode>(root);
+        REQUIRE(node->HasNode() == has_node);
+        if (node->HasNode()) {
+            return node->GetChildren().at(0);
+        }
+        return nullptr;
+    };
+    auto sequence = [&](syntax_tree::NodePtr root) {
+        return syntax_tree::Cast<SequenceNode>(root)->GetChildren();
+    };
+
+    SECTION("Extra tokens") {
+        REQUIRE_THROWS_AS(get_tokens("+"), ExtraTokensInCodeError);
+        REQUIRE_THROWS_AS(get_tokens("("), ExtraTokensInCodeError);
+        REQUIRE_THROWS_AS(get_tokens(")"), ExtraTokensInCodeError);
+        REQUIRE_THROWS_AS(get_tokens("(()"), ExtraTokensInCodeError);
+        REQUIRE_THROWS_AS(get_tokens("()a"), ExtraTokensInCodeError);
+    }
+
+    SECTION("Empty") {
+        auto tree = get_tokens("");
+        optional(tree, false);
+    }
+
+    SECTION("Single") {
+        auto tree = get_tokens("()");
+        auto nodes = sequence(optional(tree, true));
+        optional(named(nodes.at(1)), false);
+        optional(named(nodes.at(3)), false);
+    }
+
+    SECTION("Complex") {
+        auto tree = get_tokens("(())()()");
+        auto nodes1 = sequence(optional(tree, true));
+
+        auto nodes2 = sequence(optional(named(nodes1.at(1)), true));
+        optional(named(nodes2.at(1)), false);
+        optional(named(nodes2.at(3)), false);
+
+        auto nodes3 = sequence(optional(named(nodes1.at(3)), true));
+        optional(named(nodes3.at(1)), false);
+
+        auto nodes4 = sequence(optional(named(nodes3.at(3)), true));
+        optional(named(nodes4.at(1)), false);
+        optional(named(nodes4.at(3)), false);
+    }
+}

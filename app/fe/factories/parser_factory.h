@@ -8,7 +8,7 @@ class ParserFactory {
 public:
     ParserFactory() = default;
 
-    Parser Create(const std::vector<Token>& tokens) const;
+    Parser Create() const;
 };
 
 };  // namespace fe

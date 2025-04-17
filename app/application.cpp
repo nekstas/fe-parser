@@ -43,8 +43,8 @@ void Application::FormatFile(const std::string& input_file, const std::string& o
     Tokens new_tokens = preprocessor.Process(tokens);
 
     std::cout << "Parsing tokens into syntax tree...\n";
-    Parser parser = fe::ParserFactory().Create(new_tokens);
-    syntax_tree::NodePtr syntax_tree = parser.Parse();
+    Parser parser = fe::ParserFactory().Create();
+    syntax_tree::NodePtr syntax_tree = parser.Parse(new_tokens);
 
     if (!syntax_tree) {
         throw std::runtime_error{"Can't process empty syntax tree."};

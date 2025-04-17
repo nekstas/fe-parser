@@ -19,9 +19,9 @@ public:
 
 class Parser {
 public:
-    Parser(const Grammar& grammar, const std::vector<Token>& tokens);
+    Parser(const Grammar& grammar);
 
-    syntax_tree::NodePtr Parse();
+    syntax_tree::NodePtr Parse(const std::vector<Token>& tokens);
 
 private:
     Grammar grammar_;

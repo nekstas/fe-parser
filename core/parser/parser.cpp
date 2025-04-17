@@ -1,10 +1,10 @@
 #include "parser.h"
 
-Parser::Parser(const Grammar& grammar, const std::vector<Token>& tokens)
-    : grammar_(grammar), tokens_(tokens) {
+Parser::Parser(const Grammar& grammar) : grammar_(grammar) {
 }
 
-syntax_tree::NodePtr Parser::Parse() {
+syntax_tree::NodePtr Parser::Parse(const std::vector<Token>& tokens) {
+    tokens_ = TokensStream{tokens};
     grammar_rules::GrammarRule main_rule = grammar_.GetMainRule();
     if (!main_rule) {
         throw MainRuleDoesNotExistError{};
