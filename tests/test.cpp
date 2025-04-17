@@ -12,6 +12,7 @@
 #include "../app/fe/tokenizer/tokens/keyword_token.h"
 #include "../app/fe/tokenizer/tokens/name_token.h"
 #include "../app/fe/tokenizer/tokens/new_line_token.h"
+#include "../app/fe/tokens_preprocessor/tokens_preprocessor.h"
 
 template <typename TokenType>
 bool CheckEquals(Token token, const TokenType& expected) {
@@ -194,5 +195,67 @@ TEST_CASE("Tokenizer") {
         CHECK(CheckEquals(tokens[4], IndentToken{IndentType::SPACE}));
         CHECK(CheckEquals(tokens[5], IndentToken{IndentType::TAB}));
         CHECK(CheckEquals(tokens[6], IntegerToken{"3"}));
+    }
+}
+
+TEST_CASE("TokensPreprocessor") {
+    lex::Tokenizer tokenizer = fe::TokenizerFactory().Create();
+    TokensPreprocessor tokens_preprocessor;
+
+    auto get_tokens = [&](const std::string& code) {
+        REQUIRE_NOTHROW(tokenizer.Tokenize(code));
+        auto tokens = tokenizer.Tokenize(code);
+        REQUIRE_NOTHROW(tokens_preprocessor.Process(tokens));
+        return tokens_preprocessor.Process(tokens);
+    };
+
+    SECTION("LineIndent") {
+        SECTION("IsNormal") {
+            CHECK(LineIndent{0, 0}.IsNormal());
+            CHECK(LineIndent{1, 0}.IsNormal());
+            CHECK(LineIndent{4, 0}.IsNormal());
+            CHECK(LineIndent{0, 1}.IsNormal());
+            CHECK(LineIndent{0, 4}.IsNormal());
+            CHECK(!LineIndent{1, 1}.IsNormal());
+            CHECK(!LineIndent{4, 4}.IsNormal());
+            CHECK(!LineIndent{4, 1}.IsNormal());
+        }
+
+        SECTION("IsCorrectWith") {
+            CHECK(LineIndent{0, 0}.IsCorrectWith({0, 0}));
+            CHECK(LineIndent{0, 0}.IsCorrectWith({4, 0}));
+            CHECK(LineIndent{0, 0}.IsCorrectWith({0, 1}));
+            CHECK(LineIndent{4, 0}.IsCorrectWith({0, 0}));
+            CHECK(LineIndent{0, 1}.IsCorrectWith({0, 0}));
+            CHECK(!LineIndent{0, 1}.IsCorrectWith({1, 0}));
+            CHECK(!LineIndent{1, 0}.IsCorrectWith({0, 1}));
+            CHECK(!LineIndent{4, 1}.IsCorrectWith({1, 0}));
+            CHECK(!LineIndent{1, 0}.IsCorrectWith({4, 1}));
+            CHECK(!LineIndent{4, 1}.IsCorrectWith({1, 2}));
+            CHECK(!LineIndent{1, 2}.IsCorrectWith({4, 1}));
+        }
+
+        SECTION("IsLess") {
+            REQUIRE_THROWS_AS((LineIndent{0, 1}.IsLess({1, 0})), DifferentIndentTypesError);
+            CHECK(LineIndent{0, 1}.IsLess({0, 10}));
+            CHECK(!LineIndent{0, 7}.IsLess({0, 3}));
+            CHECK(LineIndent{1, 0}.IsLess({10, 0}));
+            CHECK(!LineIndent{7, 0}.IsLess({3, 0}));
+        }
+
+        SECTION("IsGreater") {
+            REQUIRE_THROWS_AS((LineIndent{0, 1}.IsGreater({1, 0})), MixedIndentError);
+            CHECK(!LineIndent{0, 1}.IsGreater({0, 10}));
+            CHECK(LineIndent{0, 7}.IsGreater({0, 3}));
+            CHECK(LineIndent{0, 3}.IsGreater({0, 2}));
+            CHECK(LineIndent{0, 2}.IsGreater({0, 1}));
+            CHECK(!LineIndent{1, 0}.IsGreater({10, 0}));
+            CHECK(LineIndent{7, 0}.IsGreater({3, 0}));
+            CHECK(!LineIndent{2, 0}.IsGreater({1, 0}));
+            CHECK(LineIndent{3, 0}.IsGreater({1, 0}));
+            CHECK(LineIndent{2, 0}.IsGreater({0, 0}));
+            CHECK(!LineIndent{1, 0}.IsGreater({0, 0}));
+            CHECK(LineIndent{0, 1}.IsGreater({0, 0}));
+        }
     }
 }
