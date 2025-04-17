@@ -6,6 +6,7 @@
 #include "../tokenizer/tokens/open_bracket_token.h"
 
 Tokens TokensPreprocessor::Process(const TokensStream& tokens) {
+    tokens_ = tokens;
     indents_ = {{0, 0}};
     result_.clear();
 
