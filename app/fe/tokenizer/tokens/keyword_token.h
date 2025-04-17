@@ -5,7 +5,7 @@
 
 struct KeywordToken : public AbstractToken {
 public:
-    KeywordToken(const std::string& name) : name_(name) {
+    explicit KeywordToken(const std::string& name) : name_(name) {
     }
 
     std::string GetName() const {

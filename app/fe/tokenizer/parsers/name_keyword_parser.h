@@ -9,7 +9,7 @@ private:
     static constexpr char kUnderscoreChar = '_';
 
 public:
-    NameKeywordParser(const SearchSet& keywords);
+    explicit NameKeywordParser(const SearchSet& keywords);
 
 public:
     virtual Token TryParse(CodeStream& stream) const override;

@@ -5,7 +5,7 @@
 
 struct NameToken : public AbstractToken {
 public:
-    NameToken(const std::string& name) : name_(name) {
+    explicit NameToken(const std::string& name) : name_(name) {
     }
 
     std::string GetName() const {

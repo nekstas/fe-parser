@@ -8,7 +8,7 @@
 
 class OperatorParser : public AbstractParser {
 public:
-    OperatorParser(const SearchSet& operators);
+    explicit OperatorParser(const SearchSet& operators);
 
     virtual Token TryParse(CodeStream& stream) const override;
 

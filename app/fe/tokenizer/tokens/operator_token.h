@@ -4,7 +4,7 @@
 
 struct OperatorToken : public AbstractToken {
 public:
-    OperatorToken(const std::string& code) : code_(code) {
+    explicit OperatorToken(const std::string& code) : code_(code) {
     }
 
     std::string GetCode() const {

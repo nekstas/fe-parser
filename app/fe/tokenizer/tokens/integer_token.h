@@ -4,7 +4,7 @@
 
 struct IntegerToken : public AbstractToken {
 public:
-    IntegerToken(const std::string& number) : number_(number) {
+    explicit IntegerToken(const std::string& number) : number_(number) {
     }
 
 public:

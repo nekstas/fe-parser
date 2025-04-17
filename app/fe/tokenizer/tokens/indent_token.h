@@ -14,7 +14,7 @@ public:
     static constexpr char kTabChar = '\t';
 
 public:
-    IndentToken(IndentType type) : type_(type) {
+    explicit IndentToken(IndentType type) : type_(type) {
     }
 
     std::string ToString() const override {
