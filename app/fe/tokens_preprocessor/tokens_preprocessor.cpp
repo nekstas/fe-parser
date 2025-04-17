@@ -5,11 +5,9 @@
 #include "../tokenizer/tokens/new_line_token.h"
 #include "../tokenizer/tokens/open_bracket_token.h"
 
-TokensPreprocessor::TokensPreprocessor(const TokensStream& tokens) : tokens_(tokens) {
-}
-
-Tokens TokensPreprocessor::Process() {
+Tokens TokensPreprocessor::Process(const TokensStream& tokens) {
     indents_ = {{0, 0}};
+    result_.clear();
 
     while (!tokens_.Eof()) {
         LineIndent indent = CalculateLineIndent();
@@ -87,4 +85,8 @@ void TokensPreprocessor::ProcessLineWithoutIndent() {
 void TokensPreprocessor::AddCloseBracket() {
     result_.push_back(MakeToken<CloseBracketToken>());
     result_.push_back(MakeToken<NewLineToken>());
+}
+
+Tokens TokensPreprocessor::Process(const Tokens& tokens) {
+    return Process(TokensStream{tokens});
 }

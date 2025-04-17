@@ -12,9 +12,10 @@ using Tokens = std::vector<Token>;
 
 class TokensPreprocessor {
 public:
-    TokensPreprocessor(const TokensStream& tokens);
+    TokensPreprocessor() = default;
 
-    Tokens Process();
+    Tokens Process(const TokensStream& tokens);
+    Tokens Process(const Tokens& tokens);
 
 private:
     LineIndent CalculateLineIndent();

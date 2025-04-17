@@ -39,8 +39,8 @@ void Application::FormatFile(const std::string& input_file, const std::string& o
     lex::Tokens tokens = tokenizer.Tokenize(code);
 
     std::cout << "Preprocess input tokens...\n";
-    TokensPreprocessor preprocessor(tokens);
-    Tokens new_tokens = preprocessor.Process();
+    TokensPreprocessor preprocessor;
+    Tokens new_tokens = preprocessor.Process(tokens);
 
     std::cout << "Parsing tokens into syntax tree...\n";
     Parser parser = fe::ParserFactory().Create(new_tokens);
