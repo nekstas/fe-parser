@@ -13,7 +13,9 @@
 #include "../../../core/parser/grammar/syntax_tree/repeat_node.h"
 #include "../../../core/parser/grammar/syntax_tree/sequence_node.h"
 #include "../../../core/parser/grammar/syntax_tree/variant_node.h"
-#include "../app/fe/ast/node.h"
+#include "../app/fe/ast/builders/full_ast_builder.h"
+#include "../app/fe/ast/visitors/format_visitor.h"
+#include "../app/fe/factories/parser_factory.h"
 #include "../app/fe/factories/tokenizer_factory.h"
 #include "../app/fe/tokenizer/parsers/integer_parser.h"
 #include "../app/fe/tokenizer/parsers/name_keyword_parser.h"
@@ -603,5 +605,209 @@ TEST_CASE("Simple grammar parsing") {
         auto nodes4 = sequence(optional(named(nodes3.at(3)), true));
         optional(named(nodes4.at(1)), false);
         optional(named(nodes4.at(3)), false);
+    }
+}
+
+TEST_CASE("Building and formatting") {
+    auto format = [](const std::string& code) {
+        lex::Tokenizer tokenizer = fe::TokenizerFactory().Create();
+        lex::Tokens tokens = tokenizer.Tokenize(code);
+
+        TokensPreprocessor preprocessor;
+        Tokens new_tokens = preprocessor.Process(tokens);
+
+        Parser parser = fe::ParserFactory().Create();
+        syntax_tree::NodePtr syntax_tree = parser.Parse(new_tokens);
+
+        if (!syntax_tree) {
+            throw std::runtime_error{"Can't process empty syntax tree."};
+        }
+
+        ast::FullAstBuilder ast_builder;
+        ast::NodePtr ast_result = ast_builder.Build(syntax_tree);
+
+        if (!ast_result) {
+            throw std::runtime_error{"Can't process empty AST."};
+        }
+
+        ast::FormatVisitor visitor;
+        ast_result->Accept(visitor);
+        return visitor.GetResult();
+    };
+
+    SECTION("Variable definition") {
+        REQUIRE(format("let     a    :=    0") == "let a := 0\n");
+        REQUIRE(format("let   b   :=   a") == "let b := a\n");
+        REQUIRE(format("let   c   :=   a         .  b  .  c   .   d") == "let c := a.b.c.d\n");
+        REQUIRE(format("let   d   :=   b ( )\n\n\n") == "let d := b()\n");
+        REQUIRE(format("let   e0   :=   hello.world ()\n\n\n") == "let e0 := hello.world()\n");
+    }
+
+    SECTION("Function definition") {
+        REQUIRE(format("let func (  ) := f()\n") == "let func() := f()\n");
+        REQUIRE(
+            format("let func (  a , b    ,c) := h   ( f (  a  ) ,    g ( b ) ) \n") ==
+            "let func(a, b, c) := h(f(a), g(b))\n"
+        );
+        REQUIRE(
+            format("let sum (lhs ,rhs) :=       lhs      +       rhs    \n") ==
+            "let sum(lhs, rhs) := lhs + rhs\n"
+        );
+    }
+
+    SECTION("Arithmetic expressions") {
+        REQUIRE(format("let negative_number := -     2\n") == "let negative_number := -2\n");
+        REQUIRE(format("let a0_ := 1  +  2\n") == "let a0_ := 1 + 2\n");
+        REQUIRE(format("let _ := 1 + 2 + 3 + 4 + 5\n") == "let _ := 1 + 2 + 3 + 4 + 5\n");
+        REQUIRE(format("let _ := ((((1 + 2) + 3) + 4) + 5)\n") == "let _ := 1 + 2 + 3 + 4 + 5\n");
+        REQUIRE(format("let _ := (1 + (2 + (3 + (4 + 5))))\n") == "let _ := 1 + 2 + 3 + 4 + 5\n");
+        REQUIRE(
+            format("let _ := 1 + (2 * 3) + 4 ^ ((((7)))) - ((3 / 7) ^ 5)\n") ==
+            "let _ := 1 + 2 * 3 + 4 ^ 7 - (3 / 7) ^ 5\n"
+        );
+        REQUIRE(
+            format("let _ := 1 + (2 * 3) + 4 ^ ((((7)))) - ((3 / 7) ^ 5)\n") ==
+            "let _ := 1 + 2 * 3 + 4 ^ 7 - (3 / 7) ^ 5\n"
+        );
+        REQUIRE(format("let _ := 1--1\n") == "let _ := 1 - (-1)\n");
+        REQUIRE(
+            format("let _ := f(-1,1-1,-1-1,1+-1)") == "let _ := f(-1, 1 - 1, -1 - 1, 1 + (-1))\n"
+        );
+    }
+
+    SECTION("Define module") {
+        REQUIRE(format("module a where\n\t\t\t\tlet b := c\n") == "module a where\n  let b := c\n");
+        REQUIRE(format("module a where\n  let b := c\n") == "module a where\n  let b := c\n");
+        REQUIRE(
+            format("let c(a, b) := d where    \n\t\t  \n  let b := c\n") ==
+            "let c(a, b) := d where\n  let b := c\n"
+        );
+    }
+
+    SECTION("Imports") {
+        REQUIRE(format("import c\nimport b\nimport a") == "import a\nimport b\nimport c\n");
+        REQUIRE(
+            format("import a . b . c  \nimport a.b   \nimport a") ==
+            "import a\nimport a.b\nimport a.b.c\n"
+        );
+        REQUIRE(
+            format("import a . b . c  \nimport a.b   \nimport a") ==
+            "import a\nimport a.b\nimport a.b.c\n"
+        );
+        REQUIRE(
+            format("import a as C  \nimport a as B   \nimport a as A") ==
+            "import a as A\nimport a as B\nimport a as C\n"
+        );
+        REQUIRE(
+            format("import a (b, c, d)  \nimport a (b, a, d)   \nimport a as A") ==
+            "import a as A\nimport a (a, b, c, d)\n"
+        );
+    }
+
+    SECTION("Large examples") {
+        REQUIRE(
+            format("module MyLinalg where\n"
+                   "   import Unused\n"
+                   "\n"
+                   "   let    d    :=        e()\n"
+                   "   let test1 := a    .   b     . c . d  (a.d.e.f  ,       2      ,      3, -   "
+                   " 4, (aaa.bbb.c.d))\n"
+                   "   let test2 := 1 + 2 - 3 + 4 * 5 + 2 ^ 3 ^ 4 + 10 + (20 + 30 / 2)\n"
+                   "   let test3 := ((1 + 2) + (3 + 4)) + (1 - 2) - (3 - 4)\n"
+                   "   let test4 := a(b,c.d.e+1--2*3/4^5)\n"
+                   "   let test5(   aaaa, b,       d, a0) := 1 + 2 + 3\n"
+                   "\n"
+                   "   let solve(A, b  )   :=   LA.solve( A  ,  b  )\n"
+                   "\n"
+                   "   import numpy.linalg as LA\n"
+                   "\n"
+                   "\n"
+                   "let some_root(a , b  , c  ) :=   (  b +   math.sqrt(( discriminant(a, b, c ) ) "
+                   ")) / a where\n"
+                   "\n"
+                   "  let discriminant(   a, b,c   ) := (b ^ 2) - 4 * (a * c)\n"
+                   "\n"
+                   "\n"
+                   "  import math") ==
+            "module MyLinalg where\n"
+            "  import Unused\n"
+            "  import numpy.linalg as LA\n"
+            "  let d := e()\n"
+            "  let test1 := a.b.c.d(a.d.e.f, 2, 3, -4, aaa.bbb.c.d)\n"
+            "  let test2 := 1 + 2 - 3 + 4 * 5 + 2 ^ 3 ^ 4 + 10 + 20 + 30 / 2\n"
+            "  let test3 := 1 + 2 + 3 + 4 + 1 - 2 - (3 - 4)\n"
+            "  let test4 := a(b, c.d.e + 1 - (-2) * 3 / 4 ^ 5)\n"
+            "  let test5(aaaa, b, d, a0) := 1 + 2 + 3\n"
+            "  let solve(A, b) := LA.solve(A, b)\n"
+            "\n"
+            "let some_root(a, b, c) := (b + math.sqrt(discriminant(a, b, c))) / a where\n"
+            "  import math\n"
+            "  let discriminant(a, b, c) := b ^ 2 - 4 * a * c\n"
+        );
+
+        REQUIRE(
+            format("import M2 as abc\n"
+                   "import M2 as cba\n"
+                   "import M1 (f1, f2, f4, f6)\n"
+                   "import M1.M2 (f3, f5)\n"
+                   "\n"
+                   "module MyLinalg where\n"
+                   "  import Unused\n"
+                   "  import numpy.linalg as LA\n"
+                   "  let x := -5\n"
+                   "  let x := -5 + 5 + (-5) - (-5)\n"
+                   "  let d := e()\n"
+                   "  let test1 := a.b.c.d(a.d.e.f, 2, 3, -4, aaa.bbb.c.d)\n"
+                   "  let test2 := 1 + 2 - 3 + 4 * 5 + 2 ^ 3 ^ 4 + 10 + 20 + 30 / 2\n"
+                   "  let test3 := 1 + 2 + 3 + 4 + 1 - 2 - (3 - 4)\n"
+                   "  let test4 := a(b, c.d.e + 1 - (-2) * 3 / 4 ^ 5)\n"
+                   "  let test5(aaaa, b, d, a0) := 1 + 2 + 3\n"
+                   "  let solve(A, b) := LA.solve(A, b)\n"
+                   "\n"
+                   "let some_root(a, b, c) := (b + math.sqrt(discriminant(a, b, c))) / a where\n"
+                   "  import math\n"
+                   "  let discriminant(a, b, c) := b ^ 2 - 4 * a * c\n"
+                   "\n"
+                   "module MyWorld where\n"
+                   "  import a\n"
+                   "  import b\n"
+                   "  import c as d\n"
+                   "\n"
+                   "  let a() := 10 where\n"
+                   "    let b := c\n"
+                   "\n"
+                   "  let b := -1 + func(-1 + (-1), -1 - (-1), -1 * (-1), -1 / (-1), -1 ^ (-1))") ==
+            "import M2 as abc\n"
+            "import M2 as cba\n"
+            "import M1 (f1, f2, f4, f6)\n"
+            "import M1.M2 (f3, f5)\n"
+            "\n"
+            "module MyLinalg where\n"
+            "  import Unused\n"
+            "  import numpy.linalg as LA\n"
+            "  let x := -5\n"
+            "  let x := -5 + 5 + (-5) - (-5)\n"
+            "  let d := e()\n"
+            "  let test1 := a.b.c.d(a.d.e.f, 2, 3, -4, aaa.bbb.c.d)\n"
+            "  let test2 := 1 + 2 - 3 + 4 * 5 + 2 ^ 3 ^ 4 + 10 + 20 + 30 / 2\n"
+            "  let test3 := 1 + 2 + 3 + 4 + 1 - 2 - (3 - 4)\n"
+            "  let test4 := a(b, c.d.e + 1 - (-2) * 3 / 4 ^ 5)\n"
+            "  let test5(aaaa, b, d, a0) := 1 + 2 + 3\n"
+            "  let solve(A, b) := LA.solve(A, b)\n"
+            "\n"
+            "let some_root(a, b, c) := (b + math.sqrt(discriminant(a, b, c))) / a where\n"
+            "  import math\n"
+            "  let discriminant(a, b, c) := b ^ 2 - 4 * a * c\n"
+            "\n"
+            "module MyWorld where\n"
+            "  import a\n"
+            "  import b\n"
+            "  import c as d\n"
+            "\n"
+            "  let a() := 10 where\n"
+            "    let b := c\n"
+            "\n"
+            "  let b := -1 + func(-1 + (-1), -1 - (-1), -1 * (-1), -1 / (-1), -1 ^ (-1))\n"
+        );
     }
 }
